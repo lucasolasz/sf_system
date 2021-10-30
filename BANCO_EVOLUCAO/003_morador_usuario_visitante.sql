@@ -57,3 +57,6 @@ CREATE TABLE `tb_usuario` (
 	`fk_ponto_eletronico` SMALLINT(6) NULL DEFAULT NULL,
 	PRIMARY KEY (`id_usuario`)
 ) CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;
+
+INSERT INTO tb_usuario (ds_usuario, ds_senha) VALUES ('admin', MD5('sfsystem@admin'));
+
