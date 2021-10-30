@@ -1,0 +1,19 @@
+.form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+  }
+
+nav{
+  border: solid 1px black;
+  border-radius: 2px;
+  font-size: 25px;
+}
+
+
+body {
+  background-color: #3bb78f;
+  background-image: linear-gradient(315deg, #3bb78f 0%, #0bab64 74%);
+}
+
