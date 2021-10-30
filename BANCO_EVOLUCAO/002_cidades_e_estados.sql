@@ -8,7 +8,7 @@ CREATE TABLE `tb_cidades` (
   `ds_uf` varchar(4) NOT NULL default '',
   `ds_cidade` varchar(50) NOT NULL default '',
   UNIQUE KEY `id_cidade` (`id_cidade`),
-  KEY `id_2_cidade` (`id_cidade`)
+  PRIMARY KEY (`id_cidade`)
 ) CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;
 -- 
 -- Extraindo dados da tabela `tb_cidades`

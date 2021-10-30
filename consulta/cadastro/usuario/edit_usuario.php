@@ -58,15 +58,15 @@ if ($id_usuario == "") {
             <div class="row">
                 <div class="form-group col-md-4">
                     <label for="txtNomeUsuario">Nome Usuário</label>
-                    <input type="text" class="form-control" name="txtNomeUsuario" id="txtNomeUsuario" value="<?php echo utf8_encode($nome_usuario) ?>" placeholder="Digite o nome">
+                    <input type="text" class="form-control" name="txtNomeUsuario" id="txtNomeUsuario" value="<?php echo $nome_usuario ?>" placeholder="Digite o nome">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="txtEnderecoUsuario">Endereço</label>
-                    <input type="text" class="form-control" name="txtEnderecoUsuario" id="txtEnderecoUsuario" value="<?php echo utf8_encode($endereco_usuario) ?>" placeholder="Digite o Endereço">
+                    <input type="text" class="form-control" name="txtEnderecoUsuario" id="txtEnderecoUsuario" value="<?php echo $endereco_usuario ?>" placeholder="Digite o Endereço">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="txtComplemento">Complemento</label>
-                    <input type="text" class="form-control" name="txtComplemento" id="txtComplemento" value="<?php echo utf8_encode($complemento_usuario) ?>" placeholder="Digite o Complemento">
+                    <input type="text" class="form-control" name="txtComplemento" id="txtComplemento" value="<?php echo $complemento_usuario ?>" placeholder="Digite o Complemento">
                 </div>
             </div>
 
@@ -103,7 +103,22 @@ if ($id_usuario == "") {
                     <label for="cboCidade">Cidade</label>
                     <select class="form-select" id="cboCidade" name="cboCidade">
                         <option value=""></option>
-                        <option value="">Rio de Janeiro</option>
+                        <?php
+
+                        // $sql = "SELECT * FROM tb_cidades";
+                        // $results = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
+
+                        // if ($results->num_rows) {
+                        //     while ($dados = $results->fetch_array()) {
+                        //         $id_cidade = $dados['id_estado'];
+                        //         $ds_cidade =  $dados['ds_estado'];
+                                
+                        //         echo "<option value=$id_cidade>$ds_cidade</option>";
+                        //     }
+                        
+                        // } else
+                        //     echo "Nenhum Estado encontrado";   
+                        ?>
                     </select>
                 </div>
             </div>
