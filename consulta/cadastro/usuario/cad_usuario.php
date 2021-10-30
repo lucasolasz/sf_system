@@ -29,18 +29,19 @@ $results = $conn->query($sql);
         <input type="hidden" name="hidOpcaoExcluir" id="hidOpcaoExcluir" value="">
         <input type="hidden" name="hidIdUsuario" id="hidIdUsuario" value="">
 
+        <p class="text-center text-light py-3" style="background-color: success;">
+            <?php if (isset($_SESSION['mensagem'])) {
+                echo $_SESSION['mensagem'];
+                unset($_SESSION['mensagem']);
+            } ?>
+        </p> 
 
-
-
-        <div class="container py-3">
+        <div class="container">
             <h2>Cadastro Usuário</h2>
             <button type="button" class="btn btn-success btn-sm" name="btnAdicionarUsuario" id="btnAdicionarUsuario" onClick="">
                 <img src="../../../bootstrap-icons/plus-circle-fill.svg" alt="" height="30px" width="30px"> Novo Usuário&nbsp;
             </button>
         </div>
-
-
-
 
         <div class="container">
             <table class="table table-success table-striped" id="tableMorador">
@@ -55,7 +56,7 @@ $results = $conn->query($sql);
                     <?php if ($results->num_rows) {
                         while ($dados = $results->fetch_array()) { ?>
                             <tr>
-                                <td><?php echo utf8_encode($dados['ds_nome_usuario']); ?></td>
+                                <td><?php echo $dados['ds_nome_usuario']; ?></td>
                                 <td><?php echo $dados['ds_usuario']; ?></td>
                                 <td>
                                     <button type="button" class="btn btn-warning btn-sm" name="btnEditar" id="btnEditar" onClick="editarUsuario(<?php echo $dados['id_usuario']; ?>)">
@@ -71,7 +72,7 @@ $results = $conn->query($sql);
                     <?php }
                     } else
                         echo "Nenhum usuário encontrado";
-                        mysqli_close($conn);
+                    mysqli_close($conn);
                     ?>
                 </tbody>
             </table>
@@ -79,9 +80,8 @@ $results = $conn->query($sql);
     </form>
 
     <script>
-
         function editarUsuario(id_usuario) {
-            
+
             $("#hidIdUsuario").val(id_usuario);
             var form = document.getElementById("form_sf_system");
             form.action = "edit_usuario.php";

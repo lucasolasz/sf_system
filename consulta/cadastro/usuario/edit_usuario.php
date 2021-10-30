@@ -89,6 +89,7 @@ if ($id_usuario == "") {
                                 }
                             } else
                                 echo "Nenhum Estado encontrado";
+                                mysqli_close($conn);
                             ?>
                         </select>
                     </div>
@@ -107,7 +108,8 @@ if ($id_usuario == "") {
                             //         echo "<option value=$id_cidade>$ds_cidade</option>";
                             //     }
                             // } else
-                            //     echo "Nenhum Estado encontrado";   
+                            //     echo "Nenhum Estado encontrado"; 
+                            //     mysqli_close($conn);  
                             ?>
                         </select>
                     </div>
@@ -164,7 +166,8 @@ if ($id_usuario == "") {
         <script>
 
             $("#btnSalvarNovoUsuario").click(function () {
-
+                
+                $("#hidIdUsuario").val(<?php echo $id_usuario ?>);
                 var form = document.getElementById("form_sf_system");
                 form.action = "grava_usuario.php";
                 form.submit();
