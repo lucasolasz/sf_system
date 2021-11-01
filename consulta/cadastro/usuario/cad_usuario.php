@@ -24,17 +24,19 @@ $results = $conn->query($sql);
 
     <form name="form_sf_system" id="form_sf_system" method="POST">
 
-        <input type="hidden" name="hidOpcaoAdicionar" id="hidOpcaoAdicionar" value="">
-        <input type="hidden" name="hidOpcaoEditar" id="hidOpcaoEditar" value="">
-        <input type="hidden" name="hidOpcaoExcluir" id="hidOpcaoExcluir" value="">
         <input type="hidden" name="hidIdUsuario" id="hidIdUsuario" value="">
+        <input type="hidden" name="hidIdOperacaoDeletar" id="hidIdOperacaoDeletar" value="">
 
-        <p class="text-center text-light py-3" style="background-color: success;">
+
+        <p class="text-center text-light py-3">
             <?php if (isset($_SESSION['mensagem'])) {
                 echo $_SESSION['mensagem'];
-                unset($_SESSION['mensagem']);
+                unset(
+                    $_SESSION['mensagem'],
+                    $_SESSION['corMensagem']
+                );
             } ?>
-        </p> 
+        </p>
 
         <div class="container">
             <h2>Cadastro Usuário</h2>
@@ -63,7 +65,7 @@ $results = $conn->query($sql);
                                         <img src="../../../bootstrap-icons/pencil.svg" alt=""> Editar&nbsp;
                                     </button>
 
-                                    <button type="button" class="btn btn-danger btn-sm" name="btnExcluir" id="btnExcluir" onClick="">
+                                    <button type="button" class="btn btn-danger btn-sm" name="btnExcluir" id="btnExcluir" onClick="exlcuirUsuario(<?php echo $dados['id_usuario']; ?>)">
                                         <img src="../../../bootstrap-icons/trash.svg" alt=""> Excluir&nbsp;
                                     </button>
                                 </td>
@@ -72,7 +74,7 @@ $results = $conn->query($sql);
                     <?php }
                     } else
                         echo "Nenhum usuário encontrado";
-                    mysqli_close($conn);
+                        mysqli_close($conn);
                     ?>
                 </tbody>
             </table>
@@ -80,8 +82,20 @@ $results = $conn->query($sql);
     </form>
 
     <script>
+        
+        function exlcuirUsuario(id_usuario) {
+
+            $("#hidIdUsuario").val(id_usuario);
+            $("#hidIdOperacaoDeletar").val(true);
+            var form = document.getElementById("form_sf_system");
+            form.action = "grava_usuario.php";
+            form.submit();
+
+        };
+
         function editarUsuario(id_usuario) {
 
+           
             $("#hidIdUsuario").val(id_usuario);
             var form = document.getElementById("form_sf_system");
             form.action = "edit_usuario.php";
