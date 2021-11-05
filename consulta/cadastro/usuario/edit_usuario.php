@@ -6,8 +6,8 @@ require_once $_SESSION['caminhopadrao'] . "conexao.php";
 $id_usuario = $_POST["hidIdUsuario"];
 
 
-    // echo $opc_adicionar;
-    // __halt_compiler();
+// echo $opc_adicionar;
+// __halt_compiler();
 
 
 
@@ -26,11 +26,8 @@ if ($id_usuario == "") {
     $cep_usuario = "";
 
     $titulo_tela = "Novo Usuário";
-
-   
-
 } else {
-   
+
     $titulo_tela = "Editar Usuário";
 
     $sql = "SELECT * FROM tb_usuario WHERE id_usuario = " . $id_usuario;
@@ -42,6 +39,7 @@ if ($id_usuario == "") {
         $endereco_usuario = $dados['ds_endereco_usuario'];
         $complemento_usuario = $dados['ds_complemento_usuario'];
         $documento_usuario = $dados['ds_documento_usuario'];
+        $cep_usuario =  $dados['ds_cep_usuario'];
         $fk_estado = "";
         $fk_cidade = "";
         $fk_cargo = "";
@@ -51,11 +49,10 @@ if ($id_usuario == "") {
         $cep_usuario = $dados['ds_cep_usuario'];
     }
     mysqli_close($conn);
-
-   
-
 }
 
+// echo $id_usuario;
+// exit();
 
 ?>
 
@@ -65,14 +62,30 @@ if ($id_usuario == "") {
 
 <?php require_once $_SESSION['caminhopadrao'] . "header.php"; ?>
 
+<style>
+    /* Remove setas do campo DOCUMENTO que tem o tipo number. 
+
+    /* Chrome e outros */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
+
 <body>
 
     <?php require_once $_SESSION['caminhopadrao'] . "nav.php"; ?>
 
     <form name="form_sf_system" id="form_sf_system" method="POST">
 
-        <input type="hidden" name="hidIdUsuario" id="hidIdUsuario" value="<?php $id_usuario ?>">
-        
+        <input type="hidden" name="hidIdUsuario" id="hidIdUsuario" value="<?php echo $id_usuario ?>">
+
 
         <div class="container py-3">
             <h2><?php echo $titulo_tela ?></h2>
@@ -88,14 +101,14 @@ if ($id_usuario == "") {
                 </div>
                 <div class="form-group col-md-4">
                     <label for="txtComplemento">Complemento</label>
-                    <input type="text" class="form-control" name="txtComplemento" id="txtComplemento" value="<?php echo $complemento_usuario ?>" placeholder="Digite o Complemento">
+                    <input type="text" class="form-control" name="txtComplemento" id="txtComplemento" value="<?php echo $complemento_usuario ?>" maxlength="15" pattern="([0-9]{3})" placeholder="Digite o Complemento">
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group col-md-4">
                     <label for="txtDocumento">Documento</label>
-                    <input type="text" class="form-control" name="txtDocumento" id="txtDocumento" value="<?php echo $documento_usuario ?>" placeholder="Digite um documento">
+                    <input type="number" class="form-control" name="txtDocumento" id="txtDocumento" value="<?php echo $documento_usuario ?>" maxlength="15" placeholder="(RG ou CPF) Somente Números">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="cboEstado">Estado</label>
@@ -143,7 +156,7 @@ if ($id_usuario == "") {
 
             <div class="row">
 
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                     <label for="cboCargo">Cargo</label>
                     <select class="form-select" id="cboCargo" name="cboCargo">
                         <option value=""></option>
@@ -152,7 +165,7 @@ if ($id_usuario == "") {
                     </select>
                 </div>
 
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                     <label for="cboTipoUsuário">Tipo Usuário</label>
                     <select class="form-select" id="cboTipoUsuário" name="cboTipoUsuário">
                         <option value=""></option>
@@ -161,16 +174,25 @@ if ($id_usuario == "") {
                         <option value="">Super User</option>
                     </select>
                 </div>
+                <div class="form-group col-md-4">
+                    <label for="txtCep">CEP</label>
+                    <input type="text" class="form-control" name="txtCep" id="txtCep" value="<?php echo $cep_usuario ?>" placeholder="Ex.: 00000-000">
+                </div>
 
-                <div class="form-group col-md-3">
+            </div>
+
+            <div class="row">
+
+                <div class="form-group col-md-4">
                     <label for="txtUsuario">Usuario de Login</label>
-                    <input type="text" class="form-control" name="txtUsuario" id="txtUsuario" value="<?php echo $usuario ?>" placeholder="Usuario de login">
+                    <input type="text" class="form-control" name="txtUsuario" id="txtUsuario" value="<?php echo $usuario ?>" <?php if ($id_usuario != "") { ?> readonly <?php } ?> placeholder="Usuario de login">
                 </div>
-
-                <div class="form-group col-md-3">
-                    <label for="txtSenha">Senha</label>
-                    <input type="password" class="form-control" name="txtSenha" id="txtSenha" value="" placeholder="Digite senha de Login">
-                </div>
+                <?php if ($id_usuario == "") { ?>
+                    <div class="form-group col-md-4">
+                        <label for="txtSenha">Senha</label>
+                        <input type="password" class="form-control" name="txtSenha" id="txtSenha" value="" placeholder="Digite senha de Login">
+                    </div>
+                <?php } ?>
             </div>
 
             <br>
@@ -186,15 +208,21 @@ if ($id_usuario == "") {
 
 
         </div>
+
     </form>
 
 
     <script>
-      
-        
+        $(document).ready(function() {
+
+            $("#txtCep").mask("99.999-999");
+
+        });
+
+
         $("#btnSalvarNovoUsuario").click(function() {
 
-            $("#hidIdUsuario").val(<?php echo $id_usuario ?>);
+            // $("#hidIdUsuario").val(id_usuario);
             var form = document.getElementById("form_sf_system");
             form.action = "grava_usuario.php";
             form.submit();
@@ -209,6 +237,7 @@ if ($id_usuario == "") {
             form.submit();
 
         });
+
     </script>
 
 </body>
