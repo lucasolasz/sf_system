@@ -18,7 +18,6 @@ $fk_tipo_cargo = $_POST["cboTipoUsuário"];
 $ds_usuario = trim($_POST["txtUsuario"]);
 $ds_senha = trim($_POST["txtSenha"]);
 
-
 //Se vazio está adicionando 
 if ($id_usuario == "") {
 
@@ -35,34 +34,40 @@ if ($id_usuario == "") {
         $mensagem = "Falha ao criar usuário: <b>USUÁRIO DE LOGIN</b> já esta em uso. Utilize outro";
     } 
    
+    $sql = "INSERT INTO tb_usuario ("
+    . "ds_nome_usuario,"
+    . "ds_endereco_usuario,"
+    . "ds_complemento_usuario,"
+    . "ds_documento_usuario,"
+    . "fk_cidade,"
+    . "fk_estado,"
+    // . "fk_cargo_usuario"
+    . "ds_cep_usuario,"
+    . "ds_usuario,"
+    . "ds_senha"
+    // . "fk_tipo_usuario
+    . ") VALUES ("
+    . "'$ds_nome_usuario',"
+    . "'$ds_endereco',"
+    . "'$ds_complemento',"
+    . "'$ds_documento',"
+    . "'$fk_cidade',"
+    . "'$fk_estado',"
+    . "'$ds_cep',"
+    . "'$ds_usuario',"
+    . "md5('" . $ds_senha . "'))";
 
-    if ($mensagem == ""){
-
+    if (!mysqli_query($conn, $sql)){
         
+        //Mensagem Administrativa
+        // $mensagem = "Erro SQL: " . mysqli_error($conn);
+        $mensagem = "Erro ao INSERIR USUARIO. Contate o Administrador do Sistema";
 
-        $sql = "INSERT INTO tb_usuario ("
-        . "ds_nome_usuario,"
-        . "ds_endereco_usuario,"
-        . "ds_complemento_usuario,"
-        . "ds_documento_usuario,"
-        // . "fk_cidade"
-        // . "fk_estado"
-        // . "ds_cep_usuario"
-        // . "fk_cargo_usuario"
-        . "ds_cep_usuario,"
-        . "ds_usuario,"
-        . "ds_senha"
-        // . "fk_tipo_usuario
-        . ") VALUES ("
-        . "'$ds_nome_usuario',"
-        . "'$ds_endereco',"
-        . "'$ds_complemento',"
-        . "'$ds_documento',"
-        . "'$ds_cep',"
-        . "'$ds_usuario',"
-        . "md5('" . $ds_senha . "'))";
+        $_SESSION['mensagem'] = $mensagem;
+        $_SESSION['corMensagem'] = "danger";
+        header("Location: cad_usuario.php");
 
-        mysqli_query($conn, $sql);
+    } else {
 
         $mensagem = "Usuário cadastrado com sucesso!";
 
@@ -70,42 +75,42 @@ if ($id_usuario == "") {
         $_SESSION['corMensagem'] = "success";
         header("Location: cad_usuario.php");
 
-    } else {
-
-        $_SESSION['mensagem'] = $mensagem;
-        $_SESSION['corMensagem'] = "danger";
-        header("Location: cad_usuario.php");
-
-    }
- 
+    };
 
     
 } else {
     
    
     //Update dos dados do usuário
-    $sql = "UPDATE tb_usuario SET  "
-        . "ds_nome_usuario = "
-        . " '$ds_nome_usuario'"
+    $sql = "UPDATE tb_usuario SET"
+        . " ds_nome_usuario = '" . $ds_nome_usuario ."'"
+        . " , ds_endereco_usuario = '" . $ds_endereco ."'"
+        . " , ds_complemento_usuario = '" . $ds_complemento . "'"
+        . " , ds_documento_usuario = '" . $ds_documento . "'"
+        . " , fk_cidade = " . $fk_cidade
+        . " , fk_estado = " . $fk_estado
+        . " , ds_cep_usuario = '" . $ds_cep ."'"
         . " WHERE id_usuario = " . $id_usuario;
 
 
-    // echo $sql;
-    // exit();
-
     if (!mysqli_query($conn, $sql)) {
-        echo "Erro ao atualizar o banco";
-        echo "Erro SQL: " . mysqli_error($conn);
+        // echo "Erro ao atualizar o banco";
+        // echo "Erro SQL: " . mysqli_error($conn);
 
-        $_SESSION['mensagem'] = "Erro ao atualizar usuário! Contate o administrador do sistema.";
+        //Mensagem Administrativa
+        // $_SESSION['mensagem'] = "Erro Atualizar SQL: " . mysqli_error($conn);
+        $_SESSION['mensagem'] = "Erro ao ATUALIZAR USUÁRIO. Contate o Administrador do Sistema";
         $_SESSION['corMensagem'] = "danger";
         mysqli_close($conn);
         header("Location: cad_usuario.php");
         mysqli_close($conn);
+
     } else {
+        
         $_SESSION['mensagem'] = "Usuário atualizado com sucesso!";
         $_SESSION['corMensagem'] = "warning";
         mysqli_close($conn);
         header("Location: cad_usuario.php");
     };
+    
 } 
