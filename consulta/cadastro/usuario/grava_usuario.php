@@ -4,7 +4,6 @@ session_start();
 
 require_once $_SESSION['caminhopadrao'] . "conexao.php";
 
-// $operacao_deletar = $_POST["hidIdOperacaoDeletar"];
 $id_usuario = $_POST["hidIdUsuario"];
 $ds_nome_usuario = trim($_POST["txtNomeUsuario"]);
 $ds_endereco = trim($_POST["txtEnderecoUsuario"]);
@@ -14,7 +13,7 @@ $fk_estado = $_POST["cboEstado"];
 $fk_cidade = $_POST["cboCidade"];
 $ds_cep = $_POST["txtCep"];
 $fk_cargo = $_POST["cboCargo"];
-$fk_tipo_cargo = $_POST["cboTipoUsuário"];
+$fk_tipo_usuario = $_POST["cboTipoUsuario"];
 $ds_usuario = trim($_POST["txtUsuario"]);
 $ds_senha = trim($_POST["txtSenha"]);
 
@@ -23,19 +22,19 @@ if ($id_usuario == "") {
 
     $mensagem = "";
 
-    // Verifica se tem usuario semelhante no banco
-    $sql = "SELECT ds_usuario FROM tb_usuario WHERE ds_usuario = '$ds_usuario'";
-    if ($result = mysqli_query($conn, $sql)) {
-        //retorna quantidade de linhas da query
-        $rowcountUsuario = mysqli_num_rows($result);
-    }
+    // // Verifica se tem usuario semelhante no banco
+    // $sql = "SELECT ds_usuario FROM tb_usuario WHERE ds_usuario = '$ds_usuario'";
+    // if ($result = mysqli_query($conn, $sql)) {
+    //     //retorna quantidade de linhas da query
+    //     $rowcountUsuario = mysqli_num_rows($result);
+    // }
 
-    if ($rowcountUsuario > 0) {
-        $mensagem = "Falha ao criar usuário: <b>USUÁRIO DE LOGIN</b> já esta em uso. Utilize outro";
-        $_SESSION['mensagem'] = $mensagem;
-        $_SESSION['corMensagem'] = "danger";
-        header("Location: cad_usuario.php");
-    } else {
+    // if ($rowcountUsuario > 0) {
+    //     $mensagem = "Falha ao criar usuário: <b>USUÁRIO DE LOGIN</b> já esta em uso. Utilize outro";
+    //     $_SESSION['mensagem'] = $mensagem;
+    //     $_SESSION['corMensagem'] = "danger";
+    //     header("Location: cad_usuario.php");
+    // } else {
 
         $sql = "INSERT INTO tb_usuario ("
             . "ds_nome_usuario,"
@@ -45,10 +44,10 @@ if ($id_usuario == "") {
             . "fk_cidade,"
             . "fk_estado,"
             . "fk_cargo,"
+            . "fk_tipo_usuario,"
             . "ds_cep_usuario,"
             . "ds_usuario,"
             . "ds_senha"
-            // . "fk_tipo_usuario
             . ") VALUES ("
             . "'$ds_nome_usuario',"
             . "'$ds_endereco',"
@@ -57,17 +56,20 @@ if ($id_usuario == "") {
             . "'$fk_cidade',"
             . "'$fk_estado',"
             . "'$fk_cargo',"
+            . "'$fk_tipo_usuario',"
             . "'$ds_cep',"
             . "'$ds_usuario',"
             . "md5('" . $ds_senha . "'))";
 
+        // echo $sql;
+        // exit();
 
 
         if (!mysqli_query($conn, $sql)) {
 
             //Mensagem Administrativa
-            $mensagem = "Erro SQL: " . mysqli_error($conn);
-            // $mensagem = "Erro ao INSERIR USUARIO. Contate o Administrador do Sistema";
+            // $mensagem = "Erro SQL: " . mysqli_error($conn);
+            $mensagem = "Erro ao INSERIR USUARIO. Contate o Administrador do Sistema";
 
             $_SESSION['mensagem'] = $mensagem;
             $_SESSION['corMensagem'] = "danger";
@@ -80,7 +82,7 @@ if ($id_usuario == "") {
             $_SESSION['corMensagem'] = "success";
             header("Location: cad_usuario.php");
         };
-    }
+    // }
 } else {
 
 
@@ -93,6 +95,7 @@ if ($id_usuario == "") {
         . " , fk_cidade = " . $fk_cidade
         . " , fk_estado = " . $fk_estado
         . " , fk_cargo = " . $fk_cargo
+        . " , fk_tipo_usuario = " . $fk_tipo_usuario
         . " , ds_cep_usuario = '" . $ds_cep . "'"
         . " WHERE id_usuario = " . $id_usuario;
 

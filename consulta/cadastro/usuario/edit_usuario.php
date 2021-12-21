@@ -53,7 +53,7 @@ if ($id_usuario == "") {
         $id_cidade = $dados['id_cidade'];
         $ds_cidade = $dados['ds_cidade'];
         $fk_cargo = $dados['fk_cargo'];
-        $fk_tipo_usuario = "";
+        $fk_tipo_usuario = $dados['fk_tipo_usuario'];
         $usuario = $dados['ds_usuario'];
         $senha = "";
         $cep_usuario = $dados['ds_cep_usuario'];
@@ -106,7 +106,7 @@ if ($id_usuario == "") {
 
 
         <div class="container" id="containeralert">
-        
+
 
         </div>
 
@@ -122,22 +122,30 @@ if ($id_usuario == "") {
             <div class="row">
                 <div class="form-group col-md-4">
                     <label for="txtNomeUsuario">Nome Usuário</label>
-                    <input type="text" class="form-control" name="txtNomeUsuario" id="txtNomeUsuario" value="<?php echo $nome_usuario ?>" placeholder="Digite o nome">
+                    <input type="text" class="form-control" name="txtNomeUsuario" id="txtNomeUsuario" value="<?php if (isset($nome_usuario)) {
+                                                                                                                    echo $nome_usuario;
+                                                                                                                } ?>" placeholder="Digite o nome">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="txtEnderecoUsuario">Endereço</label>
-                    <input type="text" class="form-control" name="txtEnderecoUsuario" id="txtEnderecoUsuario" value="<?php echo $endereco_usuario ?>" placeholder="Digite o Endereço">
+                    <input type="text" class="form-control" name="txtEnderecoUsuario" id="txtEnderecoUsuario" value="<?php if (isset($endereco_usuario)) {
+                                                                                                                            echo $endereco_usuario;
+                                                                                                                        } ?>" placeholder="Digite o Endereço">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="txtComplemento">Complemento</label>
-                    <input type="text" class="form-control" name="txtComplemento" id="txtComplemento" value="<?php echo $complemento_usuario ?>" maxlength="15" pattern="([0-9]{3})" placeholder="Digite o Complemento">
+                    <input type="text" class="form-control" name="txtComplemento" id="txtComplemento" value="<?php if (isset($complemento_usuario)) {
+                                                                                                                    echo $complemento_usuario;
+                                                                                                                } ?>" maxlength="15" pattern="([0-9]{3})" placeholder="Digite o Complemento">
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group col-md-4">
                     <label for="txtDocumento">Documento</label>
-                    <input type="number" class="form-control" name="txtDocumento" id="txtDocumento" value="<?php echo $documento_usuario ?>" maxlength="15" placeholder="(RG ou CPF) Somente Números">
+                    <input type="number" class="form-control" name="txtDocumento" id="txtDocumento" value="<?php if (isset($documento_usuario)) {
+                                                                                                                echo $documento_usuario;
+                                                                                                            } ?>" maxlength="15" placeholder="(RG ou CPF) Somente Números">
                 </div>
 
                 <div class="form-group col-md-4">
@@ -171,7 +179,9 @@ if ($id_usuario == "") {
                     <label for="cboCidade">Cidade</label>
                     <select class="form-select" id="cboCidade" name="cboCidade">
                         <!-- Options alimentados via ajax -->
-                        <option value="<?php echo $id_cidade ?>"><?php echo $ds_cidade ?></option>
+                        <option value="<?php echo $id_cidade ?>"><?php if (isset($ds_cidade)) {
+                                                                        echo $ds_cidade;
+                                                                    } ?></option>
                     </select>
                 </div>
             </div>
@@ -183,7 +193,7 @@ if ($id_usuario == "") {
                     <select class="form-select" id="cboCargo" name="cboCargo">
                         <option value=""></option>
                         <?php
-                        $sql = "SELECT * FROM tb_cargo";
+                        $sql = "SELECT * FROM tb_cargo ORDER BY ds_cargo";
                         $results = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
 
                         if ($results->num_rows) {
@@ -206,17 +216,36 @@ if ($id_usuario == "") {
                 </div>
 
                 <div class="form-group col-md-4">
-                    <label for="cboTipoUsuário">Tipo Usuário</label>
-                    <select class="form-select" id="cboTipoUsuário" name="cboTipoUsuário">
+                    <label for="cboTipoUsuario">Tipo Usuário</label>
+                    <select class="form-select" id="cboTipoUsuario" name="cboTipoUsuario">
                         <option value=""></option>
-                        <option value="">Empregado</option>
-                        <option value="">Administrador</option>
-                        <option value="">Super User</option>
+                        <?php
+                        $sql = "SELECT * FROM tb_tipo_usuario ORDER BY ds_tipo_usuario";
+                        $results = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
+
+                        if ($results->num_rows) {
+                            while ($dados = $results->fetch_array()) {
+
+                                $id_tipo_usuario = $dados['id_tipo_usuario'];
+                                $ds_tipo_usuario = $dados['ds_tipo_usuario'];
+
+                                $tipo_usuario_selecionado = "";
+                                if ($id_tipo_usuario == $fk_tipo_usuario) {
+                                    $tipo_usuario_selecionado = "selected";
+                                }
+
+                                echo "<option $tipo_usuario_selecionado value=$id_tipo_usuario>$ds_tipo_usuario</option>";
+                            }
+                        } else
+                            echo "Nenhum Tipo de Usuário encontrado";
+                        ?>
                     </select>
                 </div>
                 <div class="form-group col-md-4">
                     <label for="txtCep">CEP</label>
-                    <input type="text" class="form-control" name="txtCep" id="txtCep" value="<?php echo $cep_usuario ?>" placeholder="Ex.: 00000-000">
+                    <input type="text" class="form-control" name="txtCep" id="txtCep" value="<?php if (isset($complemento_usuario)) {
+                                                                                                    echo $cep_usuario;
+                                                                                                } ?>" placeholder="Ex.: 00000-000">
                 </div>
 
             </div>
@@ -225,7 +254,9 @@ if ($id_usuario == "") {
 
                 <div class="form-group col-md-4">
                     <label for="txtUsuario">Usuario de Login</label>
-                    <input type="text" class="form-control" name="txtUsuario" id="txtUsuario" value="<?php echo $usuario ?>" <?php if ($id_usuario != "") { ?> readonly <?php } ?> placeholder="Usuario de login">
+                    <input type="text" class="form-control" name="txtUsuario" id="txtUsuario" value="<?php if (isset($complemento_usuario)) {
+                                                                                                            echo $usuario;
+                                                                                                        } ?>" <?php if ($id_usuario != "") { ?> readonly <?php } ?> placeholder="Usuario de login">
                 </div>
                 <!-- habilita o campo de senha quando for cadastrar usuario -->
                 <?php if ($id_usuario == "") { ?>
@@ -239,9 +270,15 @@ if ($id_usuario == "") {
             <br>
             <br>
 
-            <button type="button" class="btn btn-success btn-sm" name="btnSalvarNovoUsuario" id="btnSalvarNovoUsuario" onClick="">
-                <img src="../../../bootstrap-icons/check-square-fill.svg" alt="" height="30px" width="30px"> Salvar&nbsp;
-            </button>
+            <?php if ($id_usuario == "") { ?>
+                <button type="button" class="btn btn-success btn-sm" name="btnSalvarNovoUsuario" id="btnSalvarNovoUsuario" onClick="">
+                    <img src="../../../bootstrap-icons/check-square-fill.svg" alt="" height="30px" width="30px"> Salvar&nbsp;
+                </button>
+            <?php } else { ?>
+                <button type="button" class="btn btn-success btn-sm" name="btnEditarUsuario" id="btnEditarUsuario" onClick="">
+                    <img src="../../../bootstrap-icons/check-square-fill.svg" alt="" height="30px" width="30px"> Salvar&nbsp;
+                </button>
+            <?php } ?>
 
             <button type="button" class="btn btn-success btn-sm" name="btnCancelarNovoUsuario" id="btnCancelarNovoUsuario" onClick="">
                 <img src="../../../bootstrap-icons/arrow-left-square-fill.svg" alt="" height="30px" width="30px"> Cancelar&nbsp;
@@ -257,8 +294,6 @@ if ($id_usuario == "") {
         $(document).ready(function() {
 
             $("#txtCep").mask("99.999-999");
-
-            usuario_validado = false;
 
         });
 
@@ -302,32 +337,67 @@ if ($id_usuario == "") {
 
         }
 
+        function exibeMensagem(msg) {
+            mensagem = "<div class='alert alert-danger text-center' role='alert'>Falha ao criar usuário: " + msg + "</div>";
+            return mensagem
+        }
 
+        $("#btnEditarUsuario").click(function() {
+            var form = document.getElementById("form_sf_system");
+            form.action = "grava_usuario.php";
+            form.submit();
+        });
 
+        usuario_validado = false;
 
         $("#btnSalvarNovoUsuario").click(function() {
 
+            var ds_usuario = $("#txtUsuario").val();
+            var cboEstado = $("#cboEstado").val();
             var cboCargo = $("#cboCargo").val();
+            var cboTipoUsuario = $("#cboTipoUsuario").val();
 
-            //Verifica se cargo foi selecionado
-            if (cboCargo == ""){
-                mensagemPrrenchimento = "<b>Selecione um cargo</b>";
-                mensagem = "<div class='alert alert-danger text-center' role='alert'>Falha ao criar usuário: " + mensagemPrrenchimento + "</div>";
-                $("#containeralert").html(mensagem);
+            //Verifica se campos estão vazios para salvar
+            $("#containeralert").html("");
+            if (cboCargo == "") {
+                msg = "<b>Selecione um CARGO</b>";
+                $("#containeralert").html(exibeMensagem(msg));
                 return false;
             }
-            
-            ds_usuario = $("#txtUsuario").val();
-            validaUsuario(ds_usuario);
-            
-            //Se usuário for único, prossegue a atualização
-            if (usuario_validado){
 
-                // $("#hidIdUsuario").val(id_usuario);
-                var form = document.getElementById("form_sf_system");
-                form.action = "grava_usuario.php";
-                form.submit();
+            $("#containeralert").html("");
+            if (cboTipoUsuario == "") {
+                msg = "<b>Selecione um TIPO USUÁRIO</b>";
+                $("#containeralert").html(exibeMensagem(msg));
+                return false;
             }
+
+            $("#containeralert").html("");
+            if (cboEstado == "") {
+                msg = "<b>Selecione um ESTADO e uma CIDADE</b>";
+                $("#containeralert").html(exibeMensagem(msg));
+                return false;
+            }
+
+            $("#containeralert").html("");
+            if (ds_usuario == "") {
+                msg = "<b>Digite um USUÁRIO DE LOGIN</b>";
+                $("#containeralert").html(exibeMensagem(msg));
+                return false;
+            }
+
+            //Invoca a função via Ajax para verificar se existe usuário semelhante
+            validaUsuario(ds_usuario);
+
+
+            // //Se usuário for único, prossegue a atualização
+            // if (usuario_validado) {
+            //     console.log("oi")
+            //     var form = document.getElementById("form_sf_system");
+            //     form.action = "grava_usuario.php";
+            //     form.submit();
+            // }
+
 
         });
 
@@ -345,7 +415,11 @@ if ($id_usuario == "") {
                     // loading_hide();
                     $mensagem = data;
                     $("#containeralert").html($mensagem);
-                    usuario_validado = true;
+                    if ($mensagem == "") {
+                        var form = document.getElementById("form_sf_system");
+                        form.action = "grava_usuario.php";
+                        form.submit();
+                    }
                     //Define um tempo para o elemento sumir da tela.
                     // setTimeout(function(){
                     //     $("#containeralert").fadeOut('Slow');

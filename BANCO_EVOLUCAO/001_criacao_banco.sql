@@ -27,6 +27,11 @@ CREATE TABLE IF NOT EXISTS `tb_tipo_usuario` (
   PRIMARY KEY (`id_tipo_usuario`) USING BTREE
 )  CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;
 
+INSERT INTO tb_tipo_usuario (id_tipo_usuario, ds_tipo_usuario) VALUES(1, 'Administrador');
+INSERT INTO tb_tipo_usuario (id_tipo_usuario, ds_tipo_usuario) VALUES(2, 'Empregado');
+INSERT INTO tb_tipo_usuario (id_tipo_usuario, ds_tipo_usuario) VALUES(3, 'Super User');
+
+
 
 
 CREATE TABLE IF NOT EXISTS `tb_cargo` (
