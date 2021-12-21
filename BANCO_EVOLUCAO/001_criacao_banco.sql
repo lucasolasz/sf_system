@@ -36,16 +36,23 @@ CREATE TABLE IF NOT EXISTS `tb_cargo` (
 )  CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;
 
 
-CREATE TABLE IF NOT EXISTS `tb_ponto_eletronico` (
-  `id_ponto_eletronico` smallint(6) NOT NULL AUTO_INCREMENT UNIQUE,
-  `dt_entrada` TIMESTAMP NULL DEFAULT NULL,
-  `dt_entrada_almoco` TIMESTAMP NULL DEFAULT NULL,
-  `dt_saida_almoco` TIMESTAMP NULL DEFAULT NULL,
-  `dt_saida` TIMESTAMP NULL DEFAULT NULL,
-  `dt_hora_extra` TIMESTAMP NULL DEFAULT NULL,
-  `observacao_ponto_eletronico` TIMESTAMP NULL DEFAULT NULL,
-  PRIMARY KEY (`id_ponto_eletronico`) USING BTREE
-)  CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;
+--Insere os cargos
+INSERT INTO tb_cargo (id_cargo, ds_cargo) VALUES(1, 'Síndico');
+INSERT INTO tb_cargo (id_cargo, ds_cargo) VALUES(2, 'Jardineiro');
+INSERT INTO tb_cargo (id_cargo, ds_cargo) VALUES(3, 'Porteiro');
+
+
+
+-- CREATE TABLE IF NOT EXISTS `tb_ponto_eletronico` (
+--   `id_ponto_eletronico` smallint(6) NOT NULL AUTO_INCREMENT UNIQUE,
+--   `dt_entrada` TIMESTAMP NULL DEFAULT NULL,
+--   `dt_entrada_almoco` TIMESTAMP NULL DEFAULT NULL,
+--   `dt_saida_almoco` TIMESTAMP NULL DEFAULT NULL,
+--   `dt_saida` TIMESTAMP NULL DEFAULT NULL,
+--   `dt_hora_extra` TIMESTAMP NULL DEFAULT NULL,
+--   `observacao_ponto_eletronico` TIMESTAMP NULL DEFAULT NULL,
+--   PRIMARY KEY (`id_ponto_eletronico`) USING BTREE
+-- )  CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;
 
 
 

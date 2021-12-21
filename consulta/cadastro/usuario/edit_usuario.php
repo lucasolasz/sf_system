@@ -52,7 +52,7 @@ if ($id_usuario == "") {
         $fk_estado = $dados['fk_estado'];
         $id_cidade = $dados['id_cidade'];
         $ds_cidade = $dados['ds_cidade'];
-        $fk_cargo = "";
+        $fk_cargo = $dados['fk_cargo'];
         $fk_tipo_usuario = "";
         $usuario = $dados['ds_usuario'];
         $senha = "";
@@ -87,14 +87,13 @@ if ($id_usuario == "") {
     }
 
     #contentLoading {
-        position:absolute;
+        position: absolute;
         z-index: 1;
-        left:50%;
-        top:20%;
-        margin-left:-110px;
-        margin-top:-40px;
+        left: 50%;
+        top: 20%;
+        margin-left: -110px;
+        margin-top: -40px;
     }
-
 </style>
 
 <body>
@@ -106,10 +105,15 @@ if ($id_usuario == "") {
         <input type="hidden" name="hidIdUsuario" id="hidIdUsuario" value="<?php echo $id_usuario ?>">
 
 
+        <div class="container" id="containeralert">
+        
+
+        </div>
+
         <div class="container py-3">
 
             <!-- Div para mostrar o loading do ajax -->
-            <div id="contentLoading" >
+            <div id="contentLoading">
                 <div id="loading"></div>
             </div>
 
@@ -135,7 +139,7 @@ if ($id_usuario == "") {
                     <label for="txtDocumento">Documento</label>
                     <input type="number" class="form-control" name="txtDocumento" id="txtDocumento" value="<?php echo $documento_usuario ?>" maxlength="15" placeholder="(RG ou CPF) Somente Números">
                 </div>
-                
+
                 <div class="form-group col-md-4">
                     <label for="cboEstado">Estado</label>
                     <select class="form-select" id="cboEstado" name="cboEstado">
@@ -146,14 +150,13 @@ if ($id_usuario == "") {
 
                         if ($results->num_rows) {
                             while ($dados = $results->fetch_array()) {
-                                
+
                                 $id_estado = $dados['id_estado'];
                                 $ds_estado = $dados['ds_estado'];
 
                                 $estadoSelecionado = "";
-                                if ($id_estado == $fk_estado){
+                                if ($id_estado == $fk_estado) {
                                     $estadoSelecionado = "selected";
-                                  
                                 }
 
                                 echo "<option $estadoSelecionado value=$id_estado>$ds_estado</option>";
@@ -179,8 +182,26 @@ if ($id_usuario == "") {
                     <label for="cboCargo">Cargo</label>
                     <select class="form-select" id="cboCargo" name="cboCargo">
                         <option value=""></option>
-                        <option value="">Jardineiro</option>
-                        <option value="">Porteiro</option>
+                        <?php
+                        $sql = "SELECT * FROM tb_cargo";
+                        $results = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
+
+                        if ($results->num_rows) {
+                            while ($dados = $results->fetch_array()) {
+
+                                $id_cargo = $dados['id_cargo'];
+                                $ds_cargo = $dados['ds_cargo'];
+
+                                $cargo_selecionado = "";
+                                if ($id_cargo == $fk_cargo) {
+                                    $cargo_selecionado = "selected";
+                                }
+
+                                echo "<option $cargo_selecionado value=$id_cargo>$ds_cargo</option>";
+                            }
+                        } else
+                            echo "Nenhum Cargo encontrado";
+                        ?>
                     </select>
                 </div>
 
@@ -233,61 +254,110 @@ if ($id_usuario == "") {
 
 
     <script>
-       
         $(document).ready(function() {
 
             $("#txtCep").mask("99.999-999");
 
+            usuario_validado = false;
+
         });
 
-        $("#cboEstado").change(function(){	
-            
+        $("#cboEstado").change(function() {
+
             id_estado = $('#cboEstado').val();
             carregaCidades(id_estado);
-	    });
+        });
 
         // Ativa a imagem de load
-        function loading_show(){
-		    // console.log('apresentando ampulheta');
-		    $('#loading').html("<img src='/img/loading.gif'/>").fadeIn('fast');
-	    }
+        function loading_show() {
+            // console.log('apresentando ampulheta');
+            $('#loading').html("<img src='/img/loading.gif'/>").fadeIn('fast');
+        }
 
-         
+
         // Desativa a imagem de loading
-        function loading_hide(){
+        function loading_hide() {
             // console.log('escondendo ampulheta');
             $('#loading').fadeOut('fast');
-        } 
+        }
 
-        function carregaCidades(id_estado){
-        
+        function carregaCidades(id_estado) {
+
             $.ajax({
                 url: '/pesquisas_ajax/obter_lista_cidades.php',
                 type: 'POST',
                 data: "id_estado=" + id_estado,
-                beforeSend: function(){
+                beforeSend: function() {
                     // loading_show();
                 },
-                success: function(data){
+                success: function(data) {
                     // loading_hide();
                     $('#cboCidade').html(data);
                 },
-                error: function(data){
+                error: function(data) {
                     console.log("Ocorreu erro em carregar Cidades via AJAX.");
                     // $('#cboCidade').html("Houve um erro ao carregar");
                 }
             });
-        
+
         }
+
+
+
 
         $("#btnSalvarNovoUsuario").click(function() {
 
-            // $("#hidIdUsuario").val(id_usuario);
-            var form = document.getElementById("form_sf_system");
-            form.action = "grava_usuario.php";
-            form.submit();
+            var cboCargo = $("#cboCargo").val();
+
+            //Verifica se cargo foi selecionado
+            if (cboCargo == ""){
+                mensagemPrrenchimento = "<b>Selecione um cargo</b>";
+                mensagem = "<div class='alert alert-danger text-center' role='alert'>Falha ao criar usuário: " + mensagemPrrenchimento + "</div>";
+                $("#containeralert").html(mensagem);
+                return false;
+            }
+            
+            ds_usuario = $("#txtUsuario").val();
+            validaUsuario(ds_usuario);
+            
+            //Se usuário for único, prossegue a atualização
+            if (usuario_validado){
+
+                // $("#hidIdUsuario").val(id_usuario);
+                var form = document.getElementById("form_sf_system");
+                form.action = "grava_usuario.php";
+                form.submit();
+            }
 
         });
+
+
+        function validaUsuario(ds_usuario) {
+
+            $.ajax({
+                url: '/pesquisas_ajax/verifica_se_usuario_existe.php',
+                type: 'POST',
+                data: "ds_usuario=" + ds_usuario,
+                beforeSend: function() {
+                    // loading_show();
+                },
+                success: function(data) {
+                    // loading_hide();
+                    $mensagem = data;
+                    $("#containeralert").html($mensagem);
+                    usuario_validado = true;
+                    //Define um tempo para o elemento sumir da tela.
+                    // setTimeout(function(){
+                    //     $("#containeralert").fadeOut('Slow');
+                    // },4000)
+                },
+                error: function(data) {
+                    console.log("Ocorreu erro ao VALIDAR usuário via AJAX.");
+                    // $('#cboCidade').html("Houve um erro ao carregar");
+                }
+            });
+
+        }
 
 
         $("#btnCancelarNovoUsuario").click(function() {
@@ -297,7 +367,6 @@ if ($id_usuario == "") {
             form.submit();
 
         });
-
     </script>
 
 </body>
