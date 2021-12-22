@@ -29,7 +29,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">
+                        <a class="nav-link" href="/entrada_saida/visitas_em_andamento.php">
                             <img src="/bootstrap-icons/calendar2-plus-fill.svg" alt="" height="30px" width="30px">
                             <span>Registrar Entrada/Saída</span>
                         </a>

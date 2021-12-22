@@ -16,29 +16,29 @@
 
 
 
--- CREATE TABLE `tb_visitante` (
--- 	`id_visitante` SMALLINT(6) NOT NULL AUTO_INCREMENT UNIQUE,
--- 	`nm_visitante` VARCHAR(255) NULL DEFAULT NULL,
--- 	`documento_visitante` VARCHAR(20) NULL DEFAULT NULL,
--- 	`telefone_um_visitante` VARCHAR(20) NULL DEFAULT NULL,
--- 	`telefone_dois_visitante` VARCHAR(20) NULL DEFAULT NULL,
--- 	`fk_tipo_visitante` SMALLINT(6) NULL DEFAULT NULL,
--- 	PRIMARY KEY (`id_visitante`)
--- ) CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;
+CREATE TABLE `tb_visitante` (
+	`id_visitante` SMALLINT(6) NOT NULL AUTO_INCREMENT UNIQUE,
+	`nm_visitante` VARCHAR(255) NULL DEFAULT NULL,
+	`documento_visitante` VARCHAR(20) NULL DEFAULT NULL,
+	`telefone_um_visitante` VARCHAR(20) NULL DEFAULT NULL,
+	`telefone_dois_visitante` VARCHAR(20) NULL DEFAULT NULL,
+	`fk_tipo_visitante` SMALLINT(6) NULL DEFAULT NULL,
+	PRIMARY KEY (`id_visitante`)
+) CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;
 
 
--- CREATE TABLE `tb_visita`(
+CREATE TABLE `tb_visita`(
 	
--- 	`id_visita` SMALLINT(6) NOT NULL AUTO_INCREMENT UNIQUE,
--- 	`fk_visitante` SMALLINT(6) NOT NULL,
--- 	`ds_placa_veiculo` VARCHAR(20) NULL DEFAULT NULL,
--- 	`ds_cor_veiculo` VARCHAR(20) NULL DEFAULT NULL,
--- 	`fk_tipo_visitante` SMALLINT(6) NULL DEFAULT NULL,
--- 	`dt_entrada_visita` TIMESTAMP NULL DEFAULT NULL,
--- 	`dt_saida_visita` TIMESTAMP NULL DEFAULT NULL,
--- 	`observacao_visita` VARCHAR(500) NULL DEFAULT NULL,
--- 	PRIMARY KEY (`id_visita`)
--- ) CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;
+	`id_visita` SMALLINT(6) NOT NULL AUTO_INCREMENT UNIQUE,
+	`fk_visitante` SMALLINT(6) NOT NULL,
+	`ds_placa_veiculo` VARCHAR(20) NULL DEFAULT NULL,
+	`ds_cor_veiculo` VARCHAR(20) NULL DEFAULT NULL,
+	`fk_tipo_visitante` SMALLINT(6) NULL DEFAULT NULL,
+	`dt_entrada_visita` TIMESTAMP NULL DEFAULT NULL,
+	`dt_saida_visita` TIMESTAMP NULL DEFAULT NULL,
+	`observacao_visita` VARCHAR(500) NULL DEFAULT NULL,
+	PRIMARY KEY (`id_visita`)
+) CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;
 
 
 CREATE TABLE `tb_usuario` (

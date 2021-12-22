@@ -105,10 +105,7 @@ if ($id_usuario == "") {
         <input type="hidden" name="hidIdUsuario" id="hidIdUsuario" value="<?php echo $id_usuario ?>">
 
 
-        <div class="container" id="containeralert">
-
-
-        </div>
+        <div class="container" id="containeralert"></div>
 
         <div class="container py-3">
 
@@ -388,16 +385,6 @@ if ($id_usuario == "") {
 
             //Invoca a função via Ajax para verificar se existe usuário semelhante
             validaUsuario(ds_usuario);
-
-
-            // //Se usuário for único, prossegue a atualização
-            // if (usuario_validado) {
-            //     console.log("oi")
-            //     var form = document.getElementById("form_sf_system");
-            //     form.action = "grava_usuario.php";
-            //     form.submit();
-            // }
-
 
         });
 
