@@ -117,9 +117,9 @@ if (isset($_POST['hidIdOperacaoDeletar'])) {
 
     <script>
                 
-        function buscarNome(nm_visitante){
+        function buscarNomeVisitante(nm_visitante){
             $.ajax({
-                url: '/pesquisas_ajax/pesquisar_nome.php',
+                url: '/pesquisas_ajax/pesquisar_nome_visitante.php',
                 type: 'POST',
                 data: {nm_visitante : nm_visitante},
                 beforeSend: function() {
@@ -130,7 +130,7 @@ if (isset($_POST['hidIdOperacaoDeletar'])) {
                     $("#resultadoVisita").html(data)
                 },
                 error: function(data) {
-                    console.log("Ocorreu erro ao VALIDAR usuário via AJAX.");
+                    console.log("Ocorreu erro ao BUSCAR visitante via AJAX.");
                     // $('#cboCidade').html("Houve um erro ao carregar");
                 }
             });
@@ -138,14 +138,14 @@ if (isset($_POST['hidIdOperacaoDeletar'])) {
 
         $(document).ready(function() {
             
-            buscarNome();
+            buscarNomeVisitante();
             
             $("#PesquisaNome").keyup(function(){
                 var nm_visitante = $(this).val();
                 if (nm_visitante != ""){
-                    buscarNome(nm_visitante);
+                    buscarNomeVisitante(nm_visitante);
                 } else {
-                    buscarNome();
+                    buscarNomeVisitante();
                 }
             });
         });

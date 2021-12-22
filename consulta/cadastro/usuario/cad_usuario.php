@@ -13,33 +13,33 @@ if (isset($_SESSION['corMensagem'])) {
     $corMensagem = $_SESSION['corMensagem'];
 }
 
-if (isset($_POST['hidIdUsuario'])){
+if (isset($_POST['hidIdUsuario'])) {
     $id_usuario = $_POST['hidIdUsuario'];
 }
 
 
 if (isset($_POST['hidIdOperacaoDeletar'])) {
-    
+
     $opercaoDeletar = $_POST['hidIdOperacaoDeletar'];
 
-    if ($opercaoDeletar){
-    
+    if ($opercaoDeletar) {
+
         $sql = "DELETE FROM tb_usuario WHERE id_usuario = " . $id_usuario;
-        
+
         $resultsUsuario = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
-        
-    
+
+
         if (!mysqli_query($conn, $sql)) {
             echo "Erro ao deletar o usuario";
             echo "Erro SQL: " . mysqli_error($conn);
-    
+
             $_SESSION['mensagem'] = "Erro ao deletar usuário! Contate o administrador do sistema.";
             $_SESSION['corMensagem'] = "danger";
             mysqli_close($conn);
             header("Location: cad_usuario.php");
             exit();
         } else {
-    
+
             $_SESSION['mensagem'] = "Usuário deletado com sucesso!";
             $_SESSION['corMensagem'] = "success";
             mysqli_close($conn);
@@ -66,6 +66,20 @@ if (isset($_POST['hidIdOperacaoDeletar'])) {
 <body>
 
     <?php require_once $_SESSION['caminhopadrao'] . "nav.php"; ?>
+
+    <br>
+
+    <div class="container topo">
+        <h2>Pesquisar</h2>
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-text">
+                    <img src="../../../bootstrap-icons/search.svg" alt="" height="30px" width="30px">&nbsp;
+                </span>
+                <input type="text" name="PesquisaNome" id="PesquisaNome" placeholder="Digite o nome" class="form-control">
+            </div>
+        </div>
+    </div>
 
 
 
@@ -96,45 +110,47 @@ if (isset($_POST['hidIdOperacaoDeletar'])) {
 
         <br>
 
-        <div class="container">
-            <table class="table table-success table-striped" id="tableMorador">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Nome de usuário</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if ($results->num_rows) {
-                        while ($dados = $results->fetch_array()) { ?>
-                            <tr>
-                                <td><?php echo $dados['ds_nome_usuario']; ?></td>
-                                <td><?php echo $dados['ds_usuario']; ?></td>
-                                <td>
-                                    <button type="button" class="btn btn-warning btn-sm" name="btnEditar" id="btnEditar" onClick="editarUsuario(<?php echo $dados['id_usuario']; ?>)">
-                                        <img src="../../../bootstrap-icons/pencil.svg" alt=""> Editar&nbsp;
-                                    </button>
-
-                                    <button type="button" class="btn btn-danger btn-sm" name="btnExcluir" id="btnExcluir" onClick="exlcuirUsuario(<?php echo $dados['id_usuario']; ?>)">
-                                        <img src="../../../bootstrap-icons/trash.svg" alt=""> Excluir&nbsp;
-                                    </button>
-                                </td>
-
-                            </tr>
-                    <?php }
-                    } else
-                        echo "Nenhum usuário encontrado";
-                    mysqli_close($conn);
-                    ?>
-                </tbody>
-            </table>
+        <div>
+            <div id="resultadoUsuario"></div>
         </div>
+
+
     </form>
 
     <script>
-        $(document).ready(function() {
+        function buscarNomeUsuario(ds_nome_usuario) {
+            $.ajax({
+                url: '/pesquisas_ajax/pesquisar_nome_usuario.php',
+                type: 'POST',
+                data: {
+                    ds_nome_usuario: ds_nome_usuario
+                },
+                beforeSend: function() {
+                    // loading_show();
+                },
+                success: function(data) {
+                    // loading_hide();
+                    $("#resultadoUsuario").html(data)
+                },
+                error: function(data) {
+                    console.log("Ocorreu erro ao BUSCAR usuário via AJAX.");
+                    // $('#cboCidade').html("Houve um erro ao carregar");
+                }
+            });
+        }
 
+        $(document).ready(function() {
+            
+            buscarNomeUsuario();
+
+            $("#PesquisaNome").keyup(function() {
+                var ds_nome_usuario = $(this).val();
+                if (ds_nome_usuario != "") {
+                    buscarNomeUsuario(ds_nome_usuario);
+                } else {
+                    buscarNomeUsuario();
+                }
+            });
 
         });
 
