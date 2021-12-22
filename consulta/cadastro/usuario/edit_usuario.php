@@ -140,9 +140,9 @@ if ($id_usuario == "") {
             <div class="row">
                 <div class="form-group col-md-4">
                     <label for="txtDocumento">Documento</label>
-                    <input type="number" class="form-control" name="txtDocumento" id="txtDocumento" value="<?php if (isset($documento_usuario)) {
+                    <input type="text" class="form-control" name="txtDocumento" id="txtDocumento" value="<?php if (isset($documento_usuario)) {
                                                                                                                 echo $documento_usuario;
-                                                                                                            } ?>" maxlength="15" placeholder="(RG ou CPF) Somente Números">
+                                                                                                            } ?>" maxlength="11" placeholder="(RG ou CPF) Somente Números">
                 </div>
 
                 <div class="form-group col-md-4">
@@ -291,6 +291,11 @@ if ($id_usuario == "") {
         $(document).ready(function() {
 
             $("#txtCep").mask("99.999-999");
+
+            //Força usuário a digitar somente números
+            $("#txtDocumento").keyup(function() {
+                $("#txtDocumento").val(this.value.match(/[0-9]*/));                
+            });
 
         });
 

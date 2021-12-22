@@ -85,7 +85,7 @@ if ($id_visitante == "") {
 
         <input type="hidden" name="hidIdVisitante" id="hidIdVisitante" value="<?php echo $id_visitante ?>">
 
-        
+
         <div class="container" id="containeralert"></div>
 
         <div class="container py-3">
@@ -99,32 +99,32 @@ if ($id_visitante == "") {
 
             <div class="row">
                 <div class="form-group col-md-4">
-                    <label for="txtNomeVisitante">Nome Visitante</label>
+                    <label for="txtNomeVisitante">Nome Completo Visitante</label>
                     <input type="text" class="form-control" name="txtNomeVisitante" id="txtNomeVisitante" value="<?php if (isset($nm_visitante)) {
                                                                                                                         echo $nm_visitante;
                                                                                                                     } ?>" placeholder="Digite o nome">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="txtDocumento">Documento</label>
-                    <input type="number" class="form-control" name="txtDocumento" id="txtDocumento" value="<?php if (isset($documento_visitante)) {
+                    <input type="text" class="form-control" name="txtDocumento" id="txtDocumento" value="<?php if (isset($documento_visitante)) {
                                                                                                                 echo $documento_visitante;
-                                                                                                            } ?>" placeholder="(RG ou CPF) Somente Números">
+                                                                                                            } ?>" maxlength="11" placeholder="(RG ou CPF) Somente Números">
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group col-md-4">
                     <label for="txtTelefoneUm">Telefone 1</label>
-                    <input type="number" class="form-control" name="txtTelefoneUm" id="txtTelefoneUm" value="<?php if (isset($telefone_um_visitante)) {
+                    <input type="text" class="form-control" name="txtTelefoneUm" id="txtTelefoneUm" value="<?php if (isset($telefone_um_visitante)) {
                                                                                                                     echo $telefone_um_visitante;
-                                                                                                                } ?>" maxlength="15" pattern="([0-9]{3})" placeholder="Digite o Telefone (Somente Números)">
+                                                                                                                } ?>" maxlength="11" pattern="([0-9]{3})" placeholder="Digite o Telefone (Somente Números)">
                 </div>
 
                 <div class="form-group col-md-4">
                     <label for="txtTelefoneDois">Telefone 2</label>
-                    <input type="number" class="form-control" name="txtTelefoneDois" id="txtTelefoneDois" value="<?php if (isset($telefone_dois_visitante)) {
+                    <input type="text" class="form-control" name="txtTelefoneDois" id="txtTelefoneDois" value="<?php if (isset($telefone_dois_visitante)) {
                                                                                                                         echo $telefone_dois_visitante;
-                                                                                                                    } ?>" maxlength="15" placeholder="Digite o telefone (Somente Números)">
+                                                                                                                    } ?>" maxlength="11" placeholder="Digite o telefone (Somente Números)">
                 </div>
 
             </div>
@@ -151,10 +151,23 @@ if ($id_visitante == "") {
 
 
     <script>
+
         $(document).ready(function() {
+            
+            //Força usuário a digitar somente números
+            $("#txtTelefoneUm").keyup(function() {
+                $("#txtTelefoneUm").val(this.value.match(/[0-9]*/));                
+            });
 
+            $("#txtTelefoneDois").keyup(function() {
+                $("#txtTelefoneDois").val(this.value.match(/[0-9]*/));                
+            });
 
+            $("#txtDocumento").keyup(function() {
+                $("#txtDocumento").val(this.value.match(/[0-9]*/));                
+            });
 
+            
         });
 
 
