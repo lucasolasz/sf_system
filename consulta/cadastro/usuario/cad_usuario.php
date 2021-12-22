@@ -94,6 +94,8 @@ if (isset($_POST['hidIdOperacaoDeletar'])) {
             </button>
         </div>
 
+        <br>
+
         <div class="container">
             <table class="table table-success table-striped" id="tableMorador">
                 <thead>
