@@ -30,43 +30,66 @@ if (!isset($_SESSION['usuarioUsuario'])) {
 
     <div class="container" id="containeralert"> </div>
 
+    <br>
+
     <div class="container">
         <h2>Visitas em andamento</h2>
+        <button type="button" class="btn btn-success btn-sm" name="btnAdicionarVisita" id="btnAdicionarVisita" onClick="">
+            <img src="../../../bootstrap-icons/plus-circle-fill.svg" alt="" height="30px" width="30px"> Registrar Nova Visita&nbsp;
+        </button>
     </div>
 
-    <div class="container">
-        <table class="table table-success table-striped" id="tableVisitaEmAndamento">
-            <thead>
-                <tr>
-                    <th>Nome Visitante</th>
-                    <th>Tipo Visita</th>
-                    <th>Horário de Entrada</th>
-                    <th>Tempo de Visita</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
+    <br>
 
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <button type="button" class="btn btn-warning btn-sm" name="btnInformacoes" id="btnInformacoes" onClick="editarUsuario(<?php echo $dados['id_usuario']; ?>)">
-                            <img src="../../../bootstrap-icons/exclamation-diamond.svg" alt=""> Informações&nbsp;
-                        </button>
+    <form name="form_sf_system" id="form_sf_system" method="POST">
 
-                        <button type="button" class="btn btn-danger btn-sm" name="btnSaida" id="btnSaida" onClick="exlcuirUsuario(<?php echo $dados['id_usuario']; ?>)">
-                            <img src="../../../bootstrap-icons/arrow-up-square.svg" alt=""> Registra Saida&nbsp;
-                        </button>
-                    </td>
+        <input type="hidden" name="hidIdVisita" id="hidIdVisita" value="">
 
-                </tr>
+        <div class="container">
+            <table class="table table-success table-striped" id="tableVisitaEmAndamento">
+                <thead>
+                    <tr>
+                        <th>Nome Visitante</th>
+                        <th>Tipo Visita</th>
+                        <th>Horário de Entrada</th>
+                        <th>Tempo de Visita</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-            </tbody>
-        </table>
-    </div>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <button type="button" class="btn btn-warning btn-sm" name="btnInformacoes" id="btnInformacoes" onClick="editarUsuario(<?php echo $dados['id_usuario']; ?>)">
+                                <img src="../../../bootstrap-icons/exclamation-diamond.svg" alt=""> Informações&nbsp;
+                            </button>
+
+                            <button type="button" class="btn btn-danger btn-sm" name="btnSaida" id="btnSaida" onClick="exlcuirUsuario(<?php echo $dados['id_usuario']; ?>)">
+                                <img src="../../../bootstrap-icons/arrow-up-square.svg" alt=""> Registra Saida&nbsp;
+                            </button>
+                        </td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </form>
+
+    <script>
+        $("#btnAdicionarVisita").click(function() {
+
+            var form = document.getElementById("form_sf_system");
+            form.action = "edit_visita_em_andamento.php";
+            form.submit();
+
+        });
+    </script>
+
 
 </body>
 

@@ -46,11 +46,11 @@ if ($rowcountUsuario > 0) {
                 <td>' . $ds_nome_usuario_fmt . '</td>
                 <td>' . $ds_usuario . '</td>
                 <td>
-                    <button type="button" class="btn btn-warning btn-sm" name="btnEditar" id="btnEditar" onClick="editarVisitante(' . $id_usuario . ')">
+                    <button type="button" class="btn btn-warning btn-sm" name="btnEditar" id="btnEditar" onClick="editarUsuario(' . $id_usuario . ')">
                         <img src="../../../bootstrap-icons/pencil.svg" alt=""> Editar&nbsp;
                     </button>
 
-                    <button type="button" class="btn btn-danger btn-sm" name="btnExcluir" id="btnExcluir" onClick="exlcuirVisitante(' . $id_usuario . ')">
+                    <button type="button" class="btn btn-danger btn-sm" name="btnExcluir" id="btnExcluir" onClick="exlcuirUsuario(' . $id_usuario . ')">
                         <img src="../../../bootstrap-icons/trash.svg" alt=""> Excluir&nbsp;
                     </button>
                 </td>
