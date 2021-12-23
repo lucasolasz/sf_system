@@ -48,8 +48,8 @@ if ($rowcountVisitante > 0) {
                         <img src="../../../bootstrap-icons/pencil.svg" alt=""> Editar&nbsp;
                     </button>
 
-                    <button type="button" class="btn btn-danger btn-sm" name="btnExcluir" id="btnExcluir" onClick="exlcuirVisitante(' . $id_visitante . ')">
-                        <img src="../../../bootstrap-icons/trash.svg" alt=""> Excluir&nbsp;
+                    <button type="button" class="btn btn-success btn-sm" name="btnEntradaVisita" id="btnEntradaVisita" onClick="entradaVisita(' . $id_visitante . ')">
+                        <img src="../../../bootstrap-icons/arrow-up-circle.svg" alt=""> Entrada Visita&nbsp;
                     </button>
                 </td>
                 

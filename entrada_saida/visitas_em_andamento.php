@@ -57,24 +57,51 @@ if (!isset($_SESSION['usuarioUsuario'])) {
                     </tr>
                 </thead>
                 <tbody>
+                <?php
+                    $sql = "SELECT * FROM tb_visita tvsta";
+                    $sql .= " JOIN tb_visitante tvst ON tvst.id_visitante = tvsta.fk_visitante";
+                    $sql .= " ORDER BY dt_entrada_visita";
 
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <button type="button" class="btn btn-warning btn-sm" name="btnInformacoes" id="btnInformacoes" onClick="editarUsuario(<?php echo $dados['id_usuario']; ?>)">
-                                <img src="../../../bootstrap-icons/exclamation-diamond.svg" alt=""> Informações&nbsp;
-                            </button>
+//                     echo $sql;
+//                     exit();
+                    $resultsVisita = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
+                    
+                    $rowcountVisita = mysqli_num_rows($resultsVisita);
+                    
+//                     echo $rowcountVisita;
+//                     exit();
+                    if ($rowcountVisita > 0) {
+                    while ($dados = mysqli_fetch_array($resultsVisita)) {
 
-                            <button type="button" class="btn btn-danger btn-sm" name="btnSaida" id="btnSaida" onClick="exlcuirUsuario(<?php echo $dados['id_usuario']; ?>)">
-                                <img src="../../../bootstrap-icons/arrow-up-square.svg" alt=""> Registra Saida&nbsp;
-                            </button>
-                        </td>
+                        $id_visita                    =  $dados['id_visita'];
+                        $nm_visitante                 =  $dados['nm_visitante'];
+                        $dt_entrada_visitant          =  $dados['dt_entrada_visitant'];
+                ?>        
+                        <tr>
+                            <td><?php echo $nm_visitante ?></td>
+                            <td></td>
+                            <td><?php echo $dt_entrada_visitant ?></td>
+                            <td></td>
+                            <td>
+                                <button type="button" class="btn btn-warning btn-sm" name="btnInformacoes" id="btnInformacoes" onClick="editarUsuario(<?php echo $id_visita ?>)">
+                                    <img src="../../../bootstrap-icons/exclamation-diamond.svg" alt=""> Informações&nbsp;
+                                </button>
 
-                    </tr>
-
+                                <button type="button" class="btn btn-danger btn-sm" name="btnSaida" id="btnSaida" onClick="registraSaida(<?php echo $id_visita ?>)">
+                                    <img src="../../../bootstrap-icons/arrow-up-square.svg" alt=""> Registra Saida&nbsp;
+                                </button>
+                            </td>
+                            
+                        
+                        </tr>
+                <?php }
+                    } else {?>
+                      <tr>
+                          <td colspan="5" style="text-align: center">Nenhuma visita em andamento</td>
+                      </tr>
+                        
+                <?php } ?>        
+                        
                 </tbody>
             </table>
         </div>
@@ -84,7 +111,7 @@ if (!isset($_SESSION['usuarioUsuario'])) {
         $("#btnAdicionarVisita").click(function() {
 
             var form = document.getElementById("form_sf_system");
-            form.action = "edit_visita_em_andamento.php";
+            form.action = "/consulta/cadastro/visitante/cad_visitante.php";
             form.submit();
 
         });

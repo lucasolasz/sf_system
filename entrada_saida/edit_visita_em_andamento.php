@@ -3,57 +3,34 @@ session_start();
 
 require_once $_SESSION['caminhopadrao'] . "conexao.php";
 
-$id_visita = $_POST["hidIdVisita"];
+$id_visitante = $_POST["hidIdVisitante"];
 
-// echo $opc_adicionar;
-// __halt_compiler();
+// echo $id_visitante;
+//exit();
 
 
 //Se vazio esta cadastrando novo usuario
-if ($id_visita == "") {
-
-    $fk_visitante           = "";
-    $ds_placa_veiculo       = "";
-    $ds_cor_veiculo         = "";
-    $fk_tipo_visitante      = "";
-    $dt_entrada_visita      = "";
-    $qt_pessoas_carro       = "";
-    $observacao_visita      = "";
-
-
-    $titulo_tela = "Nova Visita";
-} else {
-
-    $titulo_tela = "Editar Visita";
-
-    $sql = "SELECT * FROM tb_usuario tus";
-    $sql .= " JOIN tb_cidades tcid ON tcid.id_cidade = tus.fk_cidade";
-    $sql .= " WHERE id_usuario = " . $id_usuario;
+//if ($id_visitante == "") {
+    
+    $sql = "SELECT * FROM tb_visitante";
+    $sql .= " WHERE id_visitante = " . $id_visitante;
 
     // echo $sql;
     // exit();
-    $resultsUsuario = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
+    $resultsVisitante = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
 
-    while ($dados = mysqli_fetch_array($resultsUsuario)) {
+    while ($dados = mysqli_fetch_array($resultsVisitante)) {
 
-        $nome_usuario = $dados['ds_nome_usuario'];
-        $endereco_usuario = $dados['ds_endereco_usuario'];
-        $complemento_usuario = $dados['ds_complemento_usuario'];
-        $documento_usuario = $dados['ds_documento_usuario'];
-        $cep_usuario =  $dados['ds_cep_usuario'];
-        $fk_estado = $dados['fk_estado'];
-        $id_cidade = $dados['id_cidade'];
-        $ds_cidade = $dados['ds_cidade'];
-        $fk_cargo = $dados['fk_cargo'];
-        $fk_tipo_usuario = $dados['fk_tipo_usuario'];
-        $usuario = $dados['ds_usuario'];
-        $senha = "";
-        $cep_usuario = $dados['ds_cep_usuario'];
+        
+        $nm_visitante                 =  $dados['nm_visitante'];
+        $documento_visitante          =  $dados['documento_visitante'];
+        $telefone_um_visitante        =  $dados['telefone_um_visitante'];
+        $telefone_dois_visitante      =  $dados['telefone_dois_visitante'];
+        
+
+        $titulo_tela = "Nova Visita";
     }
-}
-
-// echo $fk_estado;
-// exit();
+//}
 
 ?>
 
@@ -97,21 +74,19 @@ if ($id_visita == "") {
             <div class="row">
                 <div class="form-group col-md-4">
                     <label for="txtNomeVisita">Nome Visita</label>
-                    <input type="text" class="form-control" name="txtNomeVisita" id="txtNomeVisita" value="<?php if (isset($nome_usuario)) {
-                                                                                                                echo $nome_usuario;
+                    <input type="text" class="form-control" name="txtNomeVisita" id="txtNomeVisita" value="<?php if (isset($nm_visitante)) {
+                                                                                                                echo $nm_visitante;
                                                                                                             } ?>" placeholder="Digite o nome">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="txtDocumento">Documento</label>
-                    <input type="text" class="form-control" name="txtDocumento" id="txtDocumento" value="<?php if (isset($endereco_usuario)) {
-                                                                                                                echo $endereco_usuario;
+                    <input type="text" class="form-control" name="txtDocumento" id="txtDocumento" value="<?php if (isset($documento_visitante)) {
+                                                                                                                echo $documento_visitante;
                                                                                                             } ?>" maxlength="11" placeholder="Digite o Documento">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="txtPlacaVeiculo">Placa do Veículo</label>
-                    <input type="text" class="form-control" name="txtPlacaVeiculo" id="txtPlacaVeiculo" value="<?php if (isset($documento_usuario)) {
-                                                                                                                    echo $documento_usuario;
-                                                                                                                } ?>" maxlength="11" placeholder="Digite a placa">
+                    <input type="text" class="form-control" name="txtPlacaVeiculo" id="txtPlacaVeiculo" value="" maxlength="11" placeholder="Digite a placa (Somente Número e Letra)">
                 </div>
             </div>
 
@@ -133,10 +108,8 @@ if ($id_visita == "") {
                 </div>
 
                 <div class="form-group col-md-4">
-                    <label for="txtQtdPessoas">Quantidade Pessoas no carro</label>
-                    <input type="text" class="form-control" name="txtQtdPessoas" id="txtQtdPessoas" value="<?php if (isset($documento_usuario)) {
-                                                                                                                    echo $documento_usuario;
-                                                                                                                } ?>" placeholder="Digite a quantidade">
+                    <label for="txtQtdPessoas">Quantidade pessoas no carro</label>
+                    <input type="text" class="form-control" name="txtQtdPessoas" id="txtQtdPessoas" value="" placeholder="Digite a quantidade">
                 </div>
 
             </div>
@@ -171,6 +144,13 @@ if ($id_visita == "") {
             $("#txtDocumento").keyup(function() {
                 $("#txtDocumento").val(this.value.match(/[0-9]*/));
             });
+            
+              //Força usuário a digitar somente números
+            $("#txtPlacaVeiculo").keyup(function() {
+                $("#txtPlacaVeiculo").val(this.value.match(/[A-Za-z0-9]*/));
+            });
+            
+            
 
         });
 

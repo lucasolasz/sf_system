@@ -28,7 +28,7 @@ if (isset($_POST['hidIdOperacaoDeletar'])) {
         
         $resultsVisitante = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
         
-    
+              
         if (!mysqli_query($conn, $sql)) {
             // echo "Erro ao deletar o visitante";
             // echo "Erro SQL: " . mysqli_error($conn);
@@ -150,17 +150,15 @@ if (isset($_POST['hidIdOperacaoDeletar'])) {
             });
         });
 
-
-
-        function exlcuirVisitante(id_visitante) {
-
+        
+        function entradaVisita(id_visitante) {
             $("#hidIdVisitante").val(id_visitante);
-            $("#hidIdOperacaoDeletar").val(true);
             var form = document.getElementById("form_sf_system");
-            form.action = "cad_visitante.php";
+            form.action = "/entrada_saida/edit_visita_em_andamento.php";
             form.submit();
-
-        };
+            
+        }
+        
 
         function editarVisitante(id_visitante) {
 
