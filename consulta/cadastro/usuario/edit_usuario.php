@@ -268,11 +268,11 @@ if ($id_usuario == "") {
             <br>
 
             <?php if ($id_usuario == "") { ?>
-                <button type="button" class="btn btn-success btn-sm" name="btnSalvarNovoUsuario" id="btnSalvarNovoUsuario" onClick="">
+                <button type="button" class="btn btn-success btn-sm" name="btnSalvarNovoUsuario" id="btnSalvarNovoUsuario" onClick="validaCamposNovoUsuario()">
                     <img src="../../../bootstrap-icons/check-square-fill.svg" alt="" height="30px" width="30px"> Salvar&nbsp;
                 </button>
             <?php } else { ?>
-                <button type="button" class="btn btn-success btn-sm" name="btnEditarUsuario" id="btnEditarUsuario" onClick="">
+                <button type="button" class="btn btn-success btn-sm" name="btnEditarUsuario" id="btnEditarUsuario" onClick="validaCamposEditUsuario()">
                     <img src="../../../bootstrap-icons/check-square-fill.svg" alt="" height="30px" width="30px"> Salvar&nbsp;
                 </button>
             <?php } ?>
@@ -344,20 +344,23 @@ if ($id_usuario == "") {
             return mensagem
         }
 
-        $("#btnEditarUsuario").click(function() {
-            var form = document.getElementById("form_sf_system");
-            form.action = "grava_usuario.php";
-            form.submit();
-        });
+//        $("#btnEditarUsuario").click(function() {
+//            var form = document.getElementById("form_sf_system");
+//            form.action = "grava_usuario.php";
+//            form.submit();
+//        });
 
         usuario_validado = false;
-
-        $("#btnSalvarNovoUsuario").click(function() {
+        
+        
+        
+        function validaCamposNovoUsuario() {
 
             var ds_usuario = $("#txtUsuario").val();
             var cboEstado = $("#cboEstado").val();
             var cboCargo = $("#cboCargo").val();
             var cboTipoUsuario = $("#cboTipoUsuario").val();
+            var txtSenha = $("#txtSenha").val();
 
             //Verifica se campos estão vazios para salvar
             $("#containeralert").html("");
@@ -388,10 +391,53 @@ if ($id_usuario == "") {
                 return false;
             }
 
+            $("#containeralert").html("");
+            if (txtSenha == "") {
+                msg = "<b>Digite uma SENHA</b>";
+                $("#containeralert").html(exibeMensagem(msg));
+                return false;
+            }
+
             //Invoca a função via Ajax para verificar se existe usuário semelhante
             validaUsuario(ds_usuario);
 
-        });
+        };
+        
+        function validaCamposEditUsuario() {
+
+            var cboEstado = $("#cboEstado").val();
+            var cboCargo = $("#cboCargo").val();
+            var cboTipoUsuario = $("#cboTipoUsuario").val();
+
+
+            //Verifica se campos estão vazios para salvar
+            $("#containeralert").html("");
+            if (cboCargo == "") {
+                msg = "<b>Selecione um CARGO</b>";
+                $("#containeralert").html(exibeMensagem(msg));
+                return false;
+            }
+
+            $("#containeralert").html("");
+            if (cboTipoUsuario == "") {
+                msg = "<b>Selecione um TIPO USUÁRIO</b>";
+                $("#containeralert").html(exibeMensagem(msg));
+                return false;
+            }
+
+            $("#containeralert").html("");
+            if (cboEstado == "") {
+                msg = "<b>Selecione um ESTADO e uma CIDADE</b>";
+                $("#containeralert").html(exibeMensagem(msg));
+                return false;
+            }
+            
+            var form = document.getElementById("form_sf_system");
+            form.action = "grava_usuario.php";
+            form.submit();
+
+
+        };
 
 
         function validaUsuario(ds_usuario) {
