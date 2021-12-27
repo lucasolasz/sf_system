@@ -15,7 +15,7 @@ if ($id_visitante == "") {
     $documento_visitante = "";
     $telefone_um_visitante = "";
     $telefone_dois_visitante = "";
-    $fk_tipo_visitante = "";
+    
 
     $titulo_tela = "Novo Visitante";
 } else {
@@ -35,7 +35,7 @@ if ($id_visitante == "") {
         $documento_visitante = $dados['documento_visitante'];
         $telefone_um_visitante = $dados['telefone_um_visitante'];
         $telefone_dois_visitante = $dados['telefone_dois_visitante'];
-        // $fk_tipo_visitante =  $dados['fk_tipo_visitante'];
+        
     }
 }
 

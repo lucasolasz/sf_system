@@ -75,7 +75,7 @@ if (!isset($_SESSION['usuarioUsuario'])) {
 
                         $id_visita                    =  $dados['id_visita'];
                         $nm_visitante                 =  $dados['nm_visitante'];
-                        $dt_entrada_visitant          =  $dados['dt_entrada_visitant'];
+                        $dt_entrada_visita          =  $dados['dt_entrada_visita'];
                 ?>        
                         <tr>
                             <td><?php echo $nm_visitante ?></td>
@@ -108,6 +108,7 @@ if (!isset($_SESSION['usuarioUsuario'])) {
     </form>
 
     <script>
+        
         $("#btnAdicionarVisita").click(function() {
 
             var form = document.getElementById("form_sf_system");

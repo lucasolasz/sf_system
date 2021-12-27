@@ -22,67 +22,52 @@ if ($id_usuario == "") {
 
     $mensagem = "";
 
-    // // Verifica se tem usuario semelhante no banco
-    // $sql = "SELECT ds_usuario FROM tb_usuario WHERE ds_usuario = '$ds_usuario'";
-    // if ($result = mysqli_query($conn, $sql)) {
-    //     //retorna quantidade de linhas da query
-    //     $rowcountUsuario = mysqli_num_rows($result);
-    // }
-
-    // if ($rowcountUsuario > 0) {
-    //     $mensagem = "Falha ao criar usuário: <b>USUÁRIO DE LOGIN</b> já esta em uso. Utilize outro";
-    //     $_SESSION['mensagem'] = $mensagem;
-    //     $_SESSION['corMensagem'] = "danger";
-    //     header("Location: cad_usuario.php");
-    // } else {
-
-        $sql = "INSERT INTO tb_usuario ("
-            . "ds_nome_usuario,"
-            . "ds_endereco_usuario,"
-            . "ds_complemento_usuario,"
-            . "ds_documento_usuario,"
-            . "fk_cidade,"
-            . "fk_estado,"
-            . "fk_cargo,"
-            . "fk_tipo_usuario,"
-            . "ds_cep_usuario,"
-            . "ds_usuario,"
-            . "ds_senha"
-            . ") VALUES ("
-            . "'$ds_nome_usuario',"
-            . "'$ds_endereco',"
-            . "'$ds_complemento',"
-            . "'$ds_documento',"
-            . "'$fk_cidade',"
-            . "'$fk_estado',"
-            . "'$fk_cargo',"
-            . "'$fk_tipo_usuario',"
-            . "'$ds_cep',"
-            . "'$ds_usuario',"
-            . "md5('" . $ds_senha . "'))";
+    $sql = "INSERT INTO tb_usuario ("
+      . "ds_nome_usuario,"
+      . "ds_endereco_usuario,"
+      . "ds_complemento_usuario,"
+      . "ds_documento_usuario,"
+      . "fk_cidade,"
+      . "fk_estado,"
+      . "fk_cargo,"
+      . "fk_tipo_usuario,"
+      . "ds_cep_usuario,"
+      . "ds_usuario,"
+      . "ds_senha"
+      . ") VALUES ("
+      . "'$ds_nome_usuario',"
+      . "'$ds_endereco',"
+      . "'$ds_complemento',"
+      . "'$ds_documento',"
+      . "'$fk_cidade',"
+      . "'$fk_estado',"
+      . "'$fk_cargo',"
+      . "'$fk_tipo_usuario',"
+      . "'$ds_cep',"
+      . "'$ds_usuario',"
+      . "md5('" . $ds_senha . "'))";
 
 //         echo $sql;
 //         exit();
 
+    if (!mysqli_query($conn, $sql)) {
 
-        if (!mysqli_query($conn, $sql)) {
+      //Mensagem Administrativa
+      // $mensagem = "Erro SQL: " . mysqli_error($conn);
+      $mensagem = "Erro ao INSERIR USUARIO. Contate o Administrador do Sistema";
 
-            //Mensagem Administrativa
-            // $mensagem = "Erro SQL: " . mysqli_error($conn);
-            $mensagem = "Erro ao INSERIR USUARIO. Contate o Administrador do Sistema";
+      $_SESSION['mensagem'] = $mensagem;
+      $_SESSION['corMensagem'] = "danger";
+      header("Location: cad_usuario.php");
+    } else {
 
-            $_SESSION['mensagem'] = $mensagem;
-            $_SESSION['corMensagem'] = "danger";
-            header("Location: cad_usuario.php");
-        } else {
+      $mensagem = "Usuário cadastrado com sucesso!";
 
-            $mensagem = "Usuário cadastrado com sucesso!";
-
-            $_SESSION['mensagem'] = $mensagem;
-            $_SESSION['corMensagem'] = "success";
-            header("Location: cad_usuario.php");
-        };
-    // }
+      $_SESSION['mensagem'] = $mensagem;
+      $_SESSION['corMensagem'] = "success";
+      header("Location: cad_usuario.php");
+    };
+  
 } else {
 
 

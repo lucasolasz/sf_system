@@ -9773,3 +9773,8 @@ INSERT INTO `tb_estados` VALUES (24, 'SC', 'Santa Catarina');
 INSERT INTO `tb_estados` VALUES (25, 'SE', 'Sergipe');
 INSERT INTO `tb_estados` VALUES (26, 'SP', 'São Paulo');
 INSERT INTO `tb_estados` VALUES (27, 'TO', 'Tocantins');
+
+
+UPDATE tb_parametro SET vl_parametro = 'v0002' 
+WHERE grupo_parametro = 'banco_dados' 
+AND chave_parametro = 'versao';

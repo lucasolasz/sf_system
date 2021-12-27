@@ -8,9 +8,6 @@ $id_visitante = $_POST["hidIdVisitante"];
 // echo $id_visitante;
 //exit();
 
-
-//Se vazio esta cadastrando novo usuario
-//if ($id_visitante == "") {
     
     $sql = "SELECT * FROM tb_visitante";
     $sql .= " WHERE id_visitante = " . $id_visitante;
@@ -30,7 +27,6 @@ $id_visitante = $_POST["hidIdVisitante"];
 
         $titulo_tela = "Nova Visita";
     }
-//}
 
 ?>
 
@@ -96,6 +92,22 @@ $id_visitante = $_POST["hidIdVisitante"];
                     <label for="cboCorVeiculo">Cor Veículo</label>
                     <select class="form-select" name="cboCorVeiculo" id="cboCorVeiculo">
                         <option value=""></option>
+                        <?php
+                        $sql = "SELECT * FROM tb_cor_veiculo ORDER BY ds_cor_veiculo";
+                        $results = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
+
+                        if ($results->num_rows) {
+                            while ($dados = $results->fetch_array()) {
+
+                                $id_cor_veiculo = $dados['id_cor_veiculo'];
+                                $ds_cor_veiculo = $dados['ds_cor_veiculo'];
+
+
+                                echo "<option value=$id_cor_veiculo>$ds_cor_veiculo</option>";
+                            }
+                        } else
+                            echo "Nenhuma cor encontrada";
+                        ?>
                     </select>
                 </div>
 
@@ -104,6 +116,22 @@ $id_visitante = $_POST["hidIdVisitante"];
                     <label for="cboTipoVisita">Tipo Visita</label>
                     <select class="form-select" name="cboTipoVisita" id="cboTipoVisita">
                         <option value=""></option>
+                        <?php
+                        $sql = "SELECT * FROM tb_tipo_visita ORDER BY ds_tipo_visita";
+                        $results = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
+
+                        if ($results->num_rows) {
+                            while ($dados = $results->fetch_array()) {
+
+                                $id_tipo_visita = $dados['id_tipo_visita'];
+                                $ds_tipo_visita = $dados['ds_tipo_visita'];
+
+
+                                echo "<option value=$id_tipo_visita>$ds_tipo_visita</option>";
+                            }
+                        } else
+                            echo "Nenhum Tipo de Visita encontrada";
+                        ?>
                     </select>
                 </div>
 
