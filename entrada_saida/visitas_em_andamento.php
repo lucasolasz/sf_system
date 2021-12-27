@@ -75,12 +75,12 @@ if (!isset($_SESSION['usuarioUsuario'])) {
 
                         $id_visita                    =  $dados['id_visita'];
                         $nm_visitante                 =  $dados['nm_visitante'];
-                        $dt_entrada_visita          =  $dados['dt_entrada_visita'];
+                        $dt_entrada_visita             =  $dados['dt_entrada_visita'];
                 ?>        
                         <tr>
                             <td><?php echo $nm_visitante ?></td>
                             <td></td>
-                            <td><?php echo $dt_entrada_visitant ?></td>
+                            <td><?php echo $dt_entrada_visita ?></td>
                             <td></td>
                             <td>
                                 <button type="button" class="btn btn-warning btn-sm" name="btnInformacoes" id="btnInformacoes" onClick="editarUsuario(<?php echo $id_visita ?>)">

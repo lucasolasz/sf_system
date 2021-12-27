@@ -30,11 +30,14 @@ CREATE TABLE `tb_visita`(
 	`id_visita` SMALLINT(6) NOT NULL AUTO_INCREMENT UNIQUE,
 	`fk_visitante` SMALLINT(6) NOT NULL,
 	`ds_placa_veiculo` VARCHAR(20) NULL DEFAULT NULL,
-	`ds_cor_veiculo` VARCHAR(20) NULL DEFAULT NULL,
+	`fk_cor_veiculo` SMALLINT(6) NULL DEFAULT NULL,
 	`fk_tipo_visita` SMALLINT(6) NULL DEFAULT NULL,
 	`dt_entrada_visita` TIMESTAMP NULL DEFAULT NULL,
+	`dt_hora_entrada_visita` TIME NULL DEFAULT NULL,
 	`dt_saida_visita` TIMESTAMP NULL DEFAULT NULL,
+	`dt_hora_saida_visita` TIME NULL DEFAULT NULL,
 	`qt_pessoas_carro` SMALLINT(6) NULL DEFAULT NULL,
+	`numero_casa_visita` SMALLINT(6) NULL DEFAULT NULL,
 	`observacao_visita` VARCHAR(500) NULL DEFAULT NULL,
 	PRIMARY KEY (`id_visita`)
 ) CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;
