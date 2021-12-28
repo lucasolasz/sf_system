@@ -87,6 +87,8 @@ if (isset($_POST['hidIdOperacaoDeletar'])) {
 
         <input type="hidden" name="hidIdUsuario" id="hidIdUsuario" value="">
         <input type="hidden" name="hidIdOperacaoDeletar" id="hidIdOperacaoDeletar" value="">
+        
+        <br>
 
         <div class="container">
             <div class="alert alert-<?php echo $corMensagem; ?> text-center" role="alert">

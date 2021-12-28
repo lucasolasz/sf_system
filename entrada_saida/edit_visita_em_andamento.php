@@ -57,9 +57,8 @@ while ($dados = mysqli_fetch_array($resultsVisitante)) {
 
             <input type="hidden" name="hidIdVisita" id="hidIdVisita" value="<?php echo $id_visitante ?>">
 
-
             <div class="container" id="containeralert"></div>
-
+            
             <div class="container py-3">
 
                 <!-- Div para mostrar o loading do ajax -->
@@ -97,7 +96,7 @@ while ($dados = mysqli_fetch_array($resultsVisitante)) {
                     <div class="form-group col-md-4">
                         <label for="cboCorVeiculo">Cor Veículo</label>
                         <select class="form-select" name="cboCorVeiculo" id="cboCorVeiculo">
-                            <option value=""></option>
+                            <option value="0"></option>
                             <?php
                             $sql = "SELECT * FROM tb_cor_veiculo ORDER BY ds_cor_veiculo";
                             $results = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
@@ -120,7 +119,7 @@ while ($dados = mysqli_fetch_array($resultsVisitante)) {
                     <div class="form-group col-md-4">
                         <label for="cboTipoVisita">Tipo Visita</label>
                         <select class="form-select" name="cboTipoVisita" id="cboTipoVisita">
-                            <option value=""></option>
+                            <option value="0"></option>
                             <?php
                             $sql = "SELECT * FROM tb_tipo_visita ORDER BY ds_tipo_visita";
                             $results = mysqli_query($conn, $sql) or die("Erro ao retornar dados");

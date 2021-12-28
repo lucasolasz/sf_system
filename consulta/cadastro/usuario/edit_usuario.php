@@ -104,7 +104,7 @@ if ($id_usuario == "") {
 
         <input type="hidden" name="hidIdUsuario" id="hidIdUsuario" value="<?php echo $id_usuario ?>">
 
-
+       
         <div class="container" id="containeralert"></div>
 
         <div class="container py-3">
