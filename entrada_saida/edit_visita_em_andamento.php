@@ -218,7 +218,7 @@ while ($dados = mysqli_fetch_array($resultsVisitante)) {
                 }
 
                 $("#containeralert").html("");
-                if (cboTipoVisita == "") {
+                if (cboTipoVisita == 0) {
                     msg = "<b>Selecione um TIPO DE VISITA</b>";
                     $("#containeralert").html(exibeMensagem(msg));
                     return false;

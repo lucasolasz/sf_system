@@ -66,7 +66,10 @@ if ($rowcountUsuario > 0) {
         <th>Nome</th>
         <th>Nome Usuário</th>
         <th>Ações</th>
-    </tr>    
+    </tr>
+    <tr>
+        <td colspan="3" style="text-align: center">Nenhum usuário encontrado</td>
+    </tr>
     ';
 }
 

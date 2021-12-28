@@ -63,7 +63,10 @@ if ($rowcountVisitante > 0) {
     <tr>
         <th>Nome Visitante</th>
         <th>Ações</th>
-    </tr>    
+    </tr> 
+    <tr>
+        <td colspan="2" style="text-align: center">Nenhum visitante encontrado</td>
+    </tr>
     ';
 }
 

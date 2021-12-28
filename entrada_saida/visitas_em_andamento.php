@@ -122,10 +122,10 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                     <tbody>
                         <?php
                         $sql = "SELECT * FROM tb_visita tvsta";
-                        $sql .= " JOIN tb_visitante tvst ON tvst.id_visitante = tvsta.fk_visitante";
-                        $sql .= " JOIN tb_tipo_visita tip ON tip.id_tipo_visita = tvsta.fk_tipo_visita";
+                        $sql .= " LEFT JOIN tb_visitante tvst ON tvst.id_visitante = tvsta.fk_visitante";
+                        $sql .= " LEFT JOIN tb_tipo_visita tip ON tip.id_tipo_visita = tvsta.fk_tipo_visita";
                         $sql .= " WHERE dt_saida_visita IS NULL";
-                        $sql .= " ORDER BY dt_entrada_visita";
+                        $sql .= " ORDER BY dt_entrada_visita, dt_hora_entrada_visita";
 
 //                     echo $sql;
 //                     exit();
@@ -146,10 +146,14 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                                 $data = $dados['dt_entrada_visita'];
                                 $dt_entrada_visita = date('d/m/Y', strtotime($data));
                                 $obs_visita = $dados['observacao_visita'];
-
+                                    
+                                
+                                //Captura dos valores para o calculo do tempo decorrido
                                 $dataEntrada = $data;
                                 $dataAgora = date("y.m.d H:i:s");
-
+                                
+                                
+                                //Calculo do tempo decorrido da visita 
                                 $entrada = new DateTime($dataEntrada);
                                 $saida = new DateTime('now');
                                 $intervalo = $saida->diff($entrada);
