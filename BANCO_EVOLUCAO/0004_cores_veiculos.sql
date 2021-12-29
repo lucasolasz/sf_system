@@ -19,7 +19,7 @@ INSERT INTO tb_cor_veiculo (id_cor_veiculo, ds_cor_veiculo) VALUES(12,'ROSA');
 INSERT INTO tb_cor_veiculo (id_cor_veiculo, ds_cor_veiculo) VALUES(13,'ROXA');
 INSERT INTO tb_cor_veiculo (id_cor_veiculo, ds_cor_veiculo) VALUES(14,'VERDE');
 INSERT INTO tb_cor_veiculo (id_cor_veiculo, ds_cor_veiculo) VALUES(15,'VERMELHA');
-INSERT INTO tb_cor_veiculo (id_cor_veiculo, ds_cor_veiculo) VALUES(16,'FANTASIA')
+INSERT INTO tb_cor_veiculo (id_cor_veiculo, ds_cor_veiculo) VALUES(16,'FANTASIA');
 
 
 UPDATE tb_parametro SET vl_parametro = 'v0004' 

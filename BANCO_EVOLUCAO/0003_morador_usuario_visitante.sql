@@ -46,12 +46,12 @@ CREATE TABLE `tb_visita`(
 CREATE TABLE IF NOT EXISTS `tb_tipo_visita` (
   `id_tipo_visita` smallint(6) NOT NULL AUTO_INCREMENT UNIQUE,
   `ds_tipo_visita` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id_tipo_visitante`) USING BTREE
+  PRIMARY KEY (`id_tipo_visita`) USING BTREE
 )  CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;
 
-INSERT INTO tb_tipo_visita (id_tipo_visitante, ds_tipo_visitante) VALUES(1, 'Manutenção');
-INSERT INTO tb_tipo_visita (id_tipo_visitante, ds_tipo_visitante) VALUES(2, 'Visita Comum');
-INSERT INTO tb_tipo_visita (id_tipo_visitante, ds_tipo_visitante) VALUES(3, 'Delivery');
+INSERT INTO tb_tipo_visita (id_tipo_visita, ds_tipo_visita) VALUES(1, 'Manutenção');
+INSERT INTO tb_tipo_visita (id_tipo_visita, ds_tipo_visita) VALUES(2, 'Visita Comum');
+INSERT INTO tb_tipo_visita (id_tipo_visita, ds_tipo_visita) VALUES(3, 'Delivery');
 
 
 CREATE TABLE `tb_usuario` (
