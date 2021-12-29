@@ -7,10 +7,11 @@ date_default_timezone_set('America/Sao_Paulo');
 
 require_once $_SESSION['caminhopadrao'] . "conexao.php";
 
+$id_usuarioLogado =  $_SESSION['usuarioID'];
+
 if (isset($_POST["hidIdVisita"])){
     $id_visita = $_POST["hidIdVisita"];
 }
-
 
 //Verifica se o usuario está logado
 if (!isset($_SESSION['usuarioUsuario'])) {
@@ -21,7 +22,7 @@ if (isset($_SESSION['corMensagem'])) {
     $corMensagem = $_SESSION['corMensagem'];
 }
 
-//Atualiza a página a cada 45seg
+//Atualiza a página a cada 45seg com o intuito de atualizar o tempo de visita (automaticamente)
 header("Refresh:45");
 
 //header("Refresh:900; /sair.php");
@@ -42,6 +43,7 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
         $sql = "UPDATE tb_visita SET"
                 . " dt_saida_visita = '" . $anoMesDia . "'"
                 . " , dt_hora_saida_visita = '" . $horaMinutoSegundo . "'"
+                . " , fk_usuario_saida = '" . $id_usuarioLogado . "'"
                 . " WHERE id_visita = " . $id_visita;
 
         $resultsVisitante = mysqli_query($conn, $sql) or die("Erro ao DELETAR dados");
@@ -49,7 +51,6 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
         if (!mysqli_query($conn, $sql)) {
             // echo "Erro ao deletar o visitante";
             // echo "Erro SQL: " . mysqli_error($conn);
-
             $_SESSION['mensagem'] = "Erro ao registrar SAIDA da visita! Contate o administrador do sistema.";
             $_SESSION['corMensagem'] = "danger";
             mysqli_close($conn);

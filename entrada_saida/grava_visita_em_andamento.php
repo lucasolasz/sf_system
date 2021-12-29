@@ -4,6 +4,10 @@ session_start();
 
 require_once $_SESSION['caminhopadrao'] . "conexao.php";
 
+//Pega o id do usuario logado na sessao
+$id_usuarioLogado =  $_SESSION['usuarioID'];
+
+
 $id_visita = $_POST["hidIdVisita"];
 $txtNomeVisita = trim($_POST["txtNomeVisita"]);
 $txtDocumento = trim($_POST["txtDocumento"]);
@@ -35,6 +39,7 @@ $mensagem = "";
       . "ds_placa_veiculo,"
       . "fk_cor_veiculo,"
       . "fk_tipo_visita,"
+      . "fk_usuario_entrada,"
       . "dt_entrada_visita,"
       . "dt_hora_entrada_visita,"
       . "qt_pessoas_carro,"
@@ -45,6 +50,7 @@ $mensagem = "";
       . "'$txtPlacaVeiculo',"
       . "'$cboCorVeiculo',"
       . "'$cboTipoVisita',"
+      . "'$id_usuarioLogado',"
       . "'$anoMesDia',"
       . "'$horaMinutoSegundo',"
       . "'$txtQtdPessoas',"
