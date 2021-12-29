@@ -30,7 +30,7 @@ if ($id_visitante == "") {
     $resultsVisitante = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
 
     while ($dados = mysqli_fetch_array($resultsVisitante)) {
-
+        
         $nm_visitante = $dados['nm_visitante'];
         $documento_visitante = $dados['documento_visitante'];
         $telefone_um_visitante = $dados['telefone_um_visitante'];
@@ -82,6 +82,7 @@ if ($id_visitante == "") {
 
             <input type="hidden" name="hidIdVisitante" id="hidIdVisitante" value="<?php echo $id_visitante ?>">
             <input type="hidden" name="hidIdOperacaoDeletar" id="hidIdOperacaoDeletar" value="">
+            <input type="hidden" name="hidContadorVaiculos" id="hidContadorVaiculos" value="">
 
 
             <div class="container" id="containeralert"></div>
@@ -112,10 +113,13 @@ if ($id_visitante == "") {
                         }
                         ?>" maxlength="11" placeholder="(RG ou CPF) Somente Números">
                     </div>
+                    
+                   
                 </div>
 
                 <div class="row">
-                    <div class="form-group col-md-4">
+                    
+                     <div class="form-group col-md-4">
                         <label for="txtTelefoneUm">Telefone 1</label>
                         <input type="text" class="form-control" name="txtTelefoneUm" id="txtTelefoneUm" value="<?php
                         if (isset($telefone_um_visitante)) {
@@ -123,6 +127,7 @@ if ($id_visitante == "") {
                         }
                         ?>" maxlength="11" pattern="([0-9]{3})" placeholder="Digite o Telefone (Somente Números)">
                     </div>
+                    
 
                     <div class="form-group col-md-4">
                         <label for="txtTelefoneDois">Telefone 2</label>
@@ -132,8 +137,97 @@ if ($id_visitante == "") {
                         }
                         ?>" maxlength="11" placeholder="Digite o telefone (Somente Números)">
                     </div>
+                    
+                    
 
                 </div>
+                
+                <br>
+                
+                <div class="row">
+                    
+                    <div class="form-group col-md-4">
+                        <a class="btn btn-primary" href="javascript:void(0)" id="addInput">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            + Adicionar Veiculo
+                        </a>
+                    </div> 
+                    
+                </div>
+                
+                
+                <?php 
+                    
+                    if ($id_visitante != "") {
+
+                        $sql = "SELECT * FROM tb_visitante tvi";
+                        $sql .= " JOIN tb_veiculo tvei ON tvei.fk_visitante = tvi.id_visitante";
+                        $sql .= " WHERE tvi.id_visitante = " . $id_visitante;
+
+                       
+                        $result = mysqli_query($conn, $sql) or die("Erro ao retornar dados do veiculo");
+
+                        $i = 0;
+
+                        //Atribui valor retornado para a variavel
+                        while ($dados = mysqli_fetch_array($result)){
+
+                           $i++;
+
+                           $ds_placa_veiculo = $dados['ds_placa_veiculo'];
+                           $ds_tipo_veiculo = $dados['ds_tipo_veiculo'];
+                           
+                           //Inicia vazio para não haver repetição
+                           $vazioSelected = "";
+                           $motoSelected = "";
+                           $carroSelected = "";
+                           $caminhaoSelected = "";
+                           $bicicletaSelected = "";
+
+                           if ($ds_tipo_veiculo == "") {
+                               $vazioSelected = "selected";                               
+                           }  else if ($ds_tipo_veiculo == "Moto"){
+                               $motoSelected = "selected";
+                           } else if ($ds_tipo_veiculo == "Carro"){
+                                $carroSelected = "selected";
+                           } else if ($ds_tipo_veiculo == "Caminhão"){
+                               $caminhaoSelected = "selected";
+                           } else if ($ds_tipo_veiculo == "Bicicleta"){
+                               $bicicletaSelected = "selected";
+                           }
+                           
+                           
+                            echo '<div class="row">'.   
+                                      '<div class="form-group col-md-4">'.    
+                                          '<label for="cboTipoVeiculo' . $i . '">Tipo Veículo</label>'.
+                                          '<select class="form-select" id="cboTipoVeiculo' . $i . '" name="cboTipoVeiculo' . $i . '">'.
+                                              '<option ' . $vazioSelected .    ' value=""></option>'.
+                                              '<option ' . $motoSelected .     ' value="Moto">Moto</option>'.
+                                              '<option ' . $carroSelected .    ' value="Carro">Carro</option>'.
+                                              '<option ' . $caminhaoSelected . ' value="Caminhão">Caminhão</option>'.
+                                              '<option ' . $bicicletaSelected. ' value="Bicicleta">Bicicleta</option>'.
+                                          '</select>'.
+                                      '</div>';
+
+                            echo      '<div class="form-group col-md-4">' .
+                                      '<label for="txtPlacaVeiculoVisitante'. $i .'">Placa do Veículo</label>'.
+                                      '<input type="text" class="form-control" name="txtPlacaVeiculoVisitante'. $i .'" id="txtPlacaVeiculoVisitante'. $i .'" value="'.$ds_placa_veiculo.'" maxlength="11">'.
+                                      '</div>'.
+                                 '</div>';
+                        }
+                    }
+    
+                ?>
+              
+                
+                <div class="container" id="dynamicDiv">
+                    
+
+                </div>
+                
+                <br>
+                
+               
 
                 <br>
                 <br>
@@ -163,7 +257,12 @@ if ($id_visitante == "") {
 
 
         <script>
-
+            
+            
+            var i = <?php echo $i ?>;
+            
+            console.log(i);
+            
             $(document).ready(function () {
 
                 //Força usuário a digitar somente números
@@ -181,7 +280,33 @@ if ($id_visitante == "") {
 
 
             });
+            
+            
+            //inclui dinamicamente os campos para adicionar carros
+            $(function () {
+                var scntDiv = $('#dynamicDiv');
 
+                $(document).on('click', '#addInput', function () {
+                    i ++;
+                    $('<div class="row">'+   
+                        '<div class="form-group col-md-4">'+    
+                            '<label for="cboTipoVeiculo' + i + '">Tipo Veículo</label>'+
+                            '<select class="form-select" id="cboTipoVeiculo' + i + '" name="cboTipoVeiculo' + i + '">'+
+                                '<option value=""></option>'+
+                                '<option value="Moto">Moto</option>'+
+                                '<option value="Carro">Carro</option>'+
+                                '<option value="Caminhão">Caminhão</option>'+
+                                '<option value="Bicicleta">Bicicleta</option>'+
+                            '</select>'+
+                        '</div>'+
+                        '<div class="form-group col-md-4">'+
+                                '<label for="txtPlacaVeiculoVisitante' + i + '">Placa do Veículo</label>'+
+                                '<input type="text" class="form-control" name="txtPlacaVeiculoVisitante' + i + '" id="txtPlacaVeiculoVisitante' + i + '" value="" maxlength="11" placeholder="Digite a placa (Somente Número e Letra)">'+
+                        '</div>'+
+                    '</div>').appendTo(scntDiv);
+                    return false;
+                });
+            });
 
             $("#btnEditarVisitante").click(function () {
                 var form = document.getElementById("form_sf_system");
@@ -199,6 +324,7 @@ if ($id_visitante == "") {
 
                 var txtNomeVisitante = $("#txtNomeVisitante").val();
                 var txtDocumento = $("#txtDocumento").val();
+                var contadorCarros = i;
 
                 //Verifica se campos estão vazios para salvar
                 $("#txtNomeVisitante").html("");
@@ -214,6 +340,11 @@ if ($id_visitante == "") {
                     $("#containeralert").html(exibeMensagem(msg));
                     return false;
                 }
+                
+                
+               $("#hidContadorVaiculos").val(i);
+                
+               
 
                 //Invoca a função via Ajax para verificar se existe visitante semelhante
                 validaVisitante(txtNomeVisitante);

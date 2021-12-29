@@ -13,19 +13,6 @@ CREATE TABLE `tb_parametro`(
 INSERT INTO tb_parametro (grupo_parametro, chave_parametro, vl_parametro, ds_parametro) VALUES('banco_dados', 'versao','v0001','Indica versão do banco de dados');
 
 
-
-
-
--- CREATE TABLE IF NOT EXISTS `tb_veiculo` (
---   `id_veiculo` smallint(6) NOT NULL AUTO_INCREMENT UNIQUE,
---   `ds_veiculo` varchar(255) DEFAULT NULL,
---   `placa_veiculo` varchar(20) DEFAULT NULL,
---   `observacao_veiculo` varchar(255) DEFAULT NULL,
---   PRIMARY KEY (`id_veiculo`) USING BTREE
--- )  CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;
-
-
-
 -- CREATE TABLE IF NOT EXISTS `tb_ponto_eletronico` (
 --   `id_ponto_eletronico` smallint(6) NOT NULL AUTO_INCREMENT UNIQUE,
 --   `dt_entrada` TIMESTAMP NULL DEFAULT NULL,

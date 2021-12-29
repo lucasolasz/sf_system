@@ -10,12 +10,33 @@ $documento_visitante = trim($_POST["txtDocumento"]);
 $telefone_um_visitante = trim($_POST["txtTelefoneUm"]);
 $telefone_dois_visitante = trim($_POST["txtTelefoneDois"]);
 
+//Carrega quantidade de veiculos cadastrados
+$contadorVeiculos = $_POST["hidContadorVaiculos"];
+
+
+
+//Inicia array dinamico para captura das placas e dos tipos de veiculos cadastrados
+$arrayPlacaVeiculo = [];
+$arrayTipoVeiculo = [];
+
+//Alimenta dinamicamente a quantidade de placas
+for ($i = 1; $i<=$contadorVeiculos; $i++){
+    
+   $arrayTipoVeiculo[$i] = $_POST['cboTipoVeiculo'.$i.''];
+    
+   $arrayPlacaVeiculo[$i] = $_POST['txtPlacaVeiculoVisitante'.$i.''];
+  
+}
+
+
+$observa = "que isso fera";
+
+
 //Se vazio está adicionando 
 if ($id_visitante == "") {
 
     $mensagem = "";
-
-
+        
     $sql = "INSERT INTO tb_visitante ("
         . "nm_visitante,"
         . "documento_visitante,"
@@ -40,14 +61,36 @@ if ($id_visitante == "") {
         $_SESSION['corMensagem'] = "danger";
         header("Location: cad_visitante.php");
     } else {
+        
+        /* Retorna id do visitante cadastrado. Necessário, pois preciso informar 
+        o id do visitante cadastrado sem precisar fazer uma outra consulta ao banco */
+        $proximoIdVisitante = mysqli_insert_id($conn);
+        
+        if($contadorVeiculos > 0) {
+        //Adiciona os veiculos informados
+        for ($i = 1; $i<=$contadorVeiculos; $i++){
+
+            $sql = "INSERT INTO tb_veiculo ("
+                . "ds_placa_veiculo,"
+                . "ds_tipo_veiculo,"
+                . "fk_visitante,"
+                . "observacao_veiculo"
+                . ") VALUES ("
+                . "'$arrayPlacaVeiculo[$i]',"
+                . "'$arrayTipoVeiculo[$i]',"
+                . "'$proximoIdVisitante',"
+                . "'$observa')";
+
+            mysqli_query($conn, $sql) or die("Erro ao inserir veiculos");
+        };
+    }   
 
         $mensagem = "Visitante CADASTRADO com sucesso!";
 
         $_SESSION['mensagem'] = $mensagem;
         $_SESSION['corMensagem'] = "success";
         header("Location: cad_visitante.php");
-    };
-    // }
+    };   
 } else {
 
 
