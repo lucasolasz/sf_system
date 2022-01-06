@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS `tb_tipo_visita` (
 INSERT INTO tb_tipo_visita (id_tipo_visita, ds_tipo_visita) VALUES(1, 'Manutenção');
 INSERT INTO tb_tipo_visita (id_tipo_visita, ds_tipo_visita) VALUES(2, 'Visita Comum');
 INSERT INTO tb_tipo_visita (id_tipo_visita, ds_tipo_visita) VALUES(3, 'Delivery');
+INSERT INTO tb_tipo_visita (id_tipo_visita, ds_tipo_visita) VALUES(4, 'Uber');
 
 
 CREATE TABLE `tb_usuario` (
