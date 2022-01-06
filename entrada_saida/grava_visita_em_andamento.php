@@ -11,8 +11,7 @@ $id_usuarioLogado =  $_SESSION['usuarioID'];
 $id_visita = $_POST["hidIdVisita"];
 $txtNomeVisita = trim($_POST["txtNomeVisita"]);
 $txtDocumento = trim($_POST["txtDocumento"]);
-$txtPlacaVeiculo = trim($_POST["txtPlacaVeiculo"]);
-$cboCorVeiculo = $_POST["cboCorVeiculo"];
+$cboPlacaVisitante = trim($_POST["cboPlacaVisitante"]);
 $cboTipoVisita = $_POST["cboTipoVisita"];
 $txtQtdPessoas = $_POST["txtQtdPessoas"];
 $txtNumeroCasa = $_POST["txtNumeroCasa"];
@@ -36,15 +35,17 @@ $mensagem = "";
 
     $sql = "INSERT INTO tb_visita ("
       . "fk_visitante,"
-      . "fk_tipo_visita,"
-      . "fk_usuario_entrada,"
-      . "dt_entrada_visita,"
-      . "dt_hora_entrada_visita,"
-      . "qt_pessoas_carro,"
-      . "numero_casa_visita,"
-      . "observacao_visita"
+      . " ds_placa_veiculo_visitante,"
+      . " fk_tipo_visita,"
+      . " fk_usuario_entrada,"
+      . " dt_entrada_visita,"
+      . " dt_hora_entrada_visita,"
+      . " qt_pessoas_carro,"
+      . " numero_casa_visita,"
+      . " observacao_visita "
       . ") VALUES ("
       . "'$id_visita',"
+      . "'$cboPlacaVisitante',"
       . "'$cboTipoVisita',"
       . "'$id_usuarioLogado',"
       . "'$anoMesDia',"
@@ -56,8 +57,8 @@ $mensagem = "";
      if (!mysqli_query($conn, $sql)) {
 
       //Mensagem Administrativa
-      $mensagem = "Erro SQL: " . mysqli_error($conn);
-      // $mensagem = "Erro ao INSERIR VISITA. Contate o Administrador do Sistema";
+      // $mensagem = "Erro SQL: " . mysqli_error($conn);
+      $mensagem = "Erro ao INSERIR VISITA. Contate o Administrador do Sistema";
 
       $_SESSION['mensagem'] = $mensagem;
       $_SESSION['corMensagem'] = "danger";

@@ -6,8 +6,7 @@ require_once $_SESSION['caminhopadrao'] . "conexao.php";
 $id_visitante = $_POST["hidIdVisitante"];
 
 // echo $id_visitante;
-//exit();
-
+// exit();
 
 $sql = "SELECT * FROM tb_visitante";
 $sql .= " WHERE id_visitante = " . $id_visitante;
@@ -86,35 +85,31 @@ while ($dados = mysqli_fetch_array($resultsVisitante)) {
                         ?>" maxlength="11" placeholder="Digite o Documento">
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="txtPlacaVeiculo">Placa do Veículo</label>
-                        <input type="text" class="form-control" name="txtPlacaVeiculo" id="txtPlacaVeiculo" value="" maxlength="11" placeholder="Digite a placa (Somente Número e Letra)">
-                    </div>
-                </div>
-
-                <div class="row">
-
-                    <div class="form-group col-md-4">
-                        <label for="cboCorVeiculo">Cor Veículo</label>
-                        <select class="form-select" name="cboCorVeiculo" id="cboCorVeiculo">
-                            <option value="0"></option>
+                        <label for="cboPlacaVisitante">Placa Visitante</label>
+                        <select class="form-select" name="cboPlacaVisitante" id="cboPlacaVisitante">
+                            <option value=""></option>
                             <?php
-                            $sql = "SELECT * FROM tb_cor_veiculo ORDER BY ds_cor_veiculo";
-                            $results = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
+                            $sql = "SELECT ds_placa_veiculo FROM tb_visitante tvi" . 
+                                   " JOIN tb_veiculo tve ON tve.fk_visitante = tvi.id_visitante" . 
+                                   " WHERE tvi.id_visitante = " . $id_visitante;
+
+                            $results = mysqli_query($conn, $sql) or die("Erro ao retornar PLACAS");
 
                             if ($results->num_rows) {
                                 while ($dados = $results->fetch_array()) {
 
-                                    $id_cor_veiculo = $dados['id_cor_veiculo'];
-                                    $ds_cor_veiculo = $dados['ds_cor_veiculo'];
+                                    $ds_placa_veiculo = $dados['ds_placa_veiculo'];                                    
 
-                                    echo "<option value=$id_cor_veiculo>$ds_cor_veiculo</option>";
+                                    echo "<option value=$ds_placa_veiculo>$ds_placa_veiculo</option>";
                                 }
                             } else
-                                echo "Nenhuma cor encontrada";
+                                echo "Nenhuma placa encontrada";
                             ?>
                         </select>
                     </div>
+                </div>
 
+                <div class="row">
 
                     <div class="form-group col-md-4">
                         <label for="cboTipoVisita">Tipo Visita</label>
@@ -143,13 +138,11 @@ while ($dados = mysqli_fetch_array($resultsVisitante)) {
                         <input type="text" class="form-control" name="txtQtdPessoas" id="txtQtdPessoas" value="" placeholder="Digite a quantidade">
                     </div>
 
-                </div>
-
-                <div class="row">
                     <div class="form-group col-md-4">
                         <label for="txtNumeroCasa">N° Casa a ser visitada</label>
                         <input type="text" class="form-control" name="txtNumeroCasa" id="txtNumeroCasa" value="" maxlength="3" placeholder="Informe o número da casa">
                     </div>
+
                 </div>
 
                 <div class="row">

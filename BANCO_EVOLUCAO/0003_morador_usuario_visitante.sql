@@ -30,7 +30,6 @@ CREATE TABLE `tb_visita`(
 	`id_visita` SMALLINT(6) NOT NULL AUTO_INCREMENT UNIQUE,
 	`fk_visitante` SMALLINT(6) NOT NULL,
 	`ds_placa_veiculo_visitante` VARCHAR(20) NULL DEFAULT NULL,
-	`fk_cor_veiculo_visitante` SMALLINT(6) NULL DEFAULT NULL,
 	`fk_tipo_visita` SMALLINT(6) NULL DEFAULT NULL,
 	`fk_usuario_entrada` SMALLINT(6) NULL DEFAULT NULL,
 	`fk_usuario_saida` SMALLINT(6) NULL DEFAULT NULL,	
