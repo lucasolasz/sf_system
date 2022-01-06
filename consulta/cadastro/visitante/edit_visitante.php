@@ -5,6 +5,8 @@ require_once $_SESSION['caminhopadrao'] . "conexao.php";
 
 $id_visitante = $_POST["hidIdVisitante"];
 
+$i = 0;
+
 // echo $opc_adicionar;
 // __halt_compiler();
 // 
@@ -27,7 +29,7 @@ if ($id_visitante == "") {
 
     // echo $sql;
     // exit();
-    $resultsVisitante = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
+    $resultsVisitante = mysqli_query($conn, $sql) or die("Erro ao retornar dados do VISITANTE");
 
     while ($dados = mysqli_fetch_array($resultsVisitante)) {
         
@@ -155,9 +157,11 @@ if ($id_visitante == "") {
                     
                 </div>
                 
+                <br>
                 
                 <?php 
                     
+                    //Carrega os veiculos cadastrados ao editar visitante
                     if ($id_visitante != "") {
 
                         $sql = "SELECT * FROM tb_visitante tvi";
@@ -165,9 +169,7 @@ if ($id_visitante == "") {
                         $sql .= " WHERE tvi.id_visitante = " . $id_visitante;
 
                        
-                        $result = mysqli_query($conn, $sql) or die("Erro ao retornar dados do veiculo");
-
-                        $i = 0;
+                        $result = mysqli_query($conn, $sql) or die("Erro ao retornar dados do VEICULO");
 
                         //Atribui valor retornado para a variavel
                         while ($dados = mysqli_fetch_array($result)){
@@ -175,60 +177,84 @@ if ($id_visitante == "") {
                            $i++;
 
                            $ds_placa_veiculo = $dados['ds_placa_veiculo'];
-                           $ds_tipo_veiculo = $dados['ds_tipo_veiculo'];
-                           
-                           //Inicia vazio para não haver repetição
-                           $vazioSelected = "";
-                           $motoSelected = "";
-                           $carroSelected = "";
-                           $caminhaoSelected = "";
-                           $bicicletaSelected = "";
+                           $fk_cor_veiculo = $dados['fk_cor_veiculo'];
+                           $fk_tipo_veiculo = $dados['fk_tipo_veiculo'];?>
+                               
+                            <div class="row"> 
+                                <div class="form-group col-md-4">    
+                                    <label for="cboTipoVeiculo<?php echo $i ?>">Tipo Veículo</label>
+                                    <select class="form-select" id="cboTipoVeiculo<?php echo $i ?>" name="cboTipoVeiculo<?php echo $i ?>">
+                                        <option value="0"></option>
+                                        <?php     
+                                        $sql = "SELECT * FROM tb_tipo_veiculo ORDER BY ds_tipo_veiculo";
+                                            $results = mysqli_query($conn, $sql) or die("Erro ao retornar TIPOS DE VEICULO");
 
-                           if ($ds_tipo_veiculo == "") {
-                               $vazioSelected = "selected";                               
-                           }  else if ($ds_tipo_veiculo == "Moto"){
-                               $motoSelected = "selected";
-                           } else if ($ds_tipo_veiculo == "Carro"){
-                                $carroSelected = "selected";
-                           } else if ($ds_tipo_veiculo == "Caminhão"){
-                               $caminhaoSelected = "selected";
-                           } else if ($ds_tipo_veiculo == "Bicicleta"){
-                               $bicicletaSelected = "selected";
-                           }
-                           
-                           
-                            echo '<div class="row">'.   
-                                      '<div class="form-group col-md-4">'.    
-                                          '<label for="cboTipoVeiculo' . $i . '">Tipo Veículo</label>'.
-                                          '<select class="form-select" id="cboTipoVeiculo' . $i . '" name="cboTipoVeiculo' . $i . '">'.
-                                              '<option ' . $vazioSelected .    ' value=""></option>'.
-                                              '<option ' . $motoSelected .     ' value="Moto">Moto</option>'.
-                                              '<option ' . $carroSelected .    ' value="Carro">Carro</option>'.
-                                              '<option ' . $caminhaoSelected . ' value="Caminhão">Caminhão</option>'.
-                                              '<option ' . $bicicletaSelected. ' value="Bicicleta">Bicicleta</option>'.
-                                          '</select>'.
-                                      '</div>';
+                                            if ($results->num_rows) {
+                                                while ($dados = $results->fetch_array()) {
 
-                            echo      '<div class="form-group col-md-4">' .
-                                      '<label for="txtPlacaVeiculoVisitante'. $i .'">Placa do Veículo</label>'.
-                                      '<input type="text" class="form-control" name="txtPlacaVeiculoVisitante'. $i .'" id="txtPlacaVeiculoVisitante'. $i .'" value="'.$ds_placa_veiculo.'" maxlength="11">'.
-                                      '</div>'.
-                                 '</div>';
-                        }
-                    }
-    
-                ?>
-              
+                                                    $id_tipo_veiculo = $dados['id_tipo_veiculo'];
+                                                    $ds_tipo_veiculo = $dados['ds_tipo_veiculo'];
+
+                                                    $tipoSelected = "";
+
+                                                    if ($fk_tipo_veiculo == $id_tipo_veiculo) {
+                                                        $tipoSelected = "selected"; 
+                                                    }
+
+                                                    echo "'<option $tipoSelected value=$id_tipo_veiculo>$ds_tipo_veiculo</option>'";
+                                                }
+                                            } else {
+                                                echo "'Nenhum Tipo encontrado'";
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="txtPlacaVeiculoVisitante<?php echo $i ?>">Placa do Veículo</label>
+                                    <input type="text" class="form-control" name="txtPlacaVeiculoVisitante<?php echo $i ?>" 
+                                        id="txtPlacaVeiculoVisitante<?php echo $i ?>" value="<?php echo $ds_placa_veiculo ?>" maxlength="11">
+                                </div>
+                                 
+
+                                <div class="form-group col-md-4">
+                                    <label for="cboCorVeiculo<?php echo $i ?>">Cor Veículo</label>
+                                    <select class="form-select" name="cboCorVeiculo<?php echo $i ?>" id="cboCorVeiculo<?php echo $i ?>">
+                                        <option value="0"></option>
+                                        <?php 
+
+                                            $sql = "SELECT * FROM tb_cor_veiculo ORDER BY ds_cor_veiculo";
+                                            $results = mysqli_query($conn, $sql) or die("Erro ao retornar CORES DE VEICULO");
+
+                                            if ($results->num_rows) {
+                                                while ($dados = $results->fetch_array()) {
+
+                                                    $id_cor_veiculo = $dados['id_cor_veiculo'];
+                                                    $ds_cor_veiculo = $dados['ds_cor_veiculo'];
+
+                                                    $corSelected = "";
+
+                                                    if ($fk_cor_veiculo == $id_cor_veiculo) {
+                                                        $corSelected = "selected"; 
+                                                    }
+
+                                                    echo "'<option $corSelected value=$id_cor_veiculo>$ds_cor_veiculo</option>'";
+                                                }
+                                            } else {
+                                                echo "'Nenhuma Cor encontrada'";
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                           </div>  
+                <?php   } 
+                    }?>
                 
-                <div class="container" id="dynamicDiv">
-                    
-
+                <div class="container p-0" id="dynamicDiv">
+            
                 </div>
-                
+        
                 <br>
-                
-               
-
                 <br>
                 <br>
 
@@ -261,8 +287,6 @@ if ($id_visitante == "") {
             
             var i = <?php echo $i ?>;
             
-            console.log(i);
-            
             $(document).ready(function () {
 
                 //Força usuário a digitar somente números
@@ -292,16 +316,51 @@ if ($id_visitante == "") {
                         '<div class="form-group col-md-4">'+    
                             '<label for="cboTipoVeiculo' + i + '">Tipo Veículo</label>'+
                             '<select class="form-select" id="cboTipoVeiculo' + i + '" name="cboTipoVeiculo' + i + '">'+
-                                '<option value=""></option>'+
-                                '<option value="Moto">Moto</option>'+
-                                '<option value="Carro">Carro</option>'+
-                                '<option value="Caminhão">Caminhão</option>'+
-                                '<option value="Bicicleta">Bicicleta</option>'+
+                                '<option value="0"></option>'+
+                                <?php
+                                    $sql = "SELECT * FROM tb_tipo_veiculo ORDER BY ds_tipo_veiculo";
+                                    $results = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
+
+                                    if ($results->num_rows) {
+                                        while ($dados = $results->fetch_array()) {
+
+                                            $id_tipo_veiculo = $dados['id_tipo_veiculo'];
+                                            $ds_tipo_veiculo = $dados['ds_tipo_veiculo'];
+
+                                            echo "'<option value=$id_tipo_veiculo>$ds_tipo_veiculo</option>'+";
+                                        }
+                                    } else {
+                                        echo "'Nenhuma cor encontrada'";
+                                    }
+                                ?>
                             '</select>'+
                         '</div>'+
                         '<div class="form-group col-md-4">'+
                                 '<label for="txtPlacaVeiculoVisitante' + i + '">Placa do Veículo</label>'+
                                 '<input type="text" class="form-control" name="txtPlacaVeiculoVisitante' + i + '" id="txtPlacaVeiculoVisitante' + i + '" value="" maxlength="11" placeholder="Digite a placa (Somente Número e Letra)">'+
+                        '</div>'+
+                    // '</div>'+
+                        '<div class="form-group col-md-4">'+
+                            '<label for="cboCorVeiculo' + i + '">Cor Veículo</label>'+
+                            '<select class="form-select" name="cboCorVeiculo' + i + '" id="cboCorVeiculo' + i + '">'+
+                                '<option value="0"></option>'+
+                                <?php
+                                    $sql = "SELECT * FROM tb_cor_veiculo ORDER BY ds_cor_veiculo";
+                                    $results = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
+
+                                    if ($results->num_rows) {
+                                        while ($dados = $results->fetch_array()) {
+
+                                            $id_cor_veiculo = $dados['id_cor_veiculo'];
+                                            $ds_cor_veiculo = $dados['ds_cor_veiculo'];
+
+                                            echo "'<option value=$id_cor_veiculo>$ds_cor_veiculo</option>'+";
+                                        }
+                                    } else {
+                                        echo "'Nenhuma cor encontrada'";
+                                    }
+                                ?>
+                            '</select>'+
                         '</div>'+
                     '</div>').appendTo(scntDiv);
                     return false;
@@ -309,6 +368,11 @@ if ($id_visitante == "") {
             });
 
             $("#btnEditarVisitante").click(function () {
+
+                var contadorCarros = i;
+
+                $("#hidContadorVaiculos").val(i);
+
                 var form = document.getElementById("form_sf_system");
                 form.action = "grava_visitante.php";
                 form.submit();
@@ -340,7 +404,6 @@ if ($id_visitante == "") {
                     $("#containeralert").html(exibeMensagem(msg));
                     return false;
                 }
-                
                 
                $("#hidContadorVaiculos").val(i);
                 

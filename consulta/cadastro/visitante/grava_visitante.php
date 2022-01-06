@@ -10,10 +10,9 @@ $documento_visitante = trim($_POST["txtDocumento"]);
 $telefone_um_visitante = trim($_POST["txtTelefoneUm"]);
 $telefone_dois_visitante = trim($_POST["txtTelefoneDois"]);
 
+
 //Carrega quantidade de veiculos cadastrados
 $contadorVeiculos = $_POST["hidContadorVaiculos"];
-
-
 
 //Inicia array dinamico para captura das placas e dos tipos de veiculos cadastrados
 $arrayPlacaVeiculo = [];
@@ -25,6 +24,8 @@ for ($i = 1; $i<=$contadorVeiculos; $i++){
    $arrayTipoVeiculo[$i] = $_POST['cboTipoVeiculo'.$i.''];
     
    $arrayPlacaVeiculo[$i] = $_POST['txtPlacaVeiculoVisitante'.$i.''];
+
+   $arrayCorVeiculo[$i]  = $_POST['cboCorVeiculo'.$i.''];
   
 }
 
@@ -54,8 +55,8 @@ if ($id_visitante == "") {
     if (!mysqli_query($conn, $sql)) {
 
         //Mensagem Administrativa
-        $mensagem = "Erro SQL: " . mysqli_error($conn);
-        // $mensagem = "Erro ao INSERIR VISITANTE. Contate o Administrador do Sistema";
+        // $mensagem = "Erro SQL: " . mysqli_error($conn);
+        $mensagem = "Erro ao INSERIR VISITANTE. Contate o Administrador do Sistema";
 
         $_SESSION['mensagem'] = $mensagem;
         $_SESSION['corMensagem'] = "danger";
@@ -72,16 +73,18 @@ if ($id_visitante == "") {
 
             $sql = "INSERT INTO tb_veiculo ("
                 . "ds_placa_veiculo,"
-                . "ds_tipo_veiculo,"
                 . "fk_visitante,"
+                . "fk_cor_veiculo,"
+                . "fk_tipo_veiculo,"
                 . "observacao_veiculo"
                 . ") VALUES ("
                 . "'$arrayPlacaVeiculo[$i]',"
-                . "'$arrayTipoVeiculo[$i]',"
                 . "'$proximoIdVisitante',"
+                . "'$arrayCorVeiculo[$i]',"
+                . "'$arrayTipoVeiculo[$i]',"
                 . "'$observa')";
 
-            mysqli_query($conn, $sql) or die("Erro ao inserir veiculos");
+            mysqli_query($conn, $sql) or die("Erro ao INSERIR veiculo do visitante");
         };
     }   
 
@@ -92,8 +95,6 @@ if ($id_visitante == "") {
         header("Location: cad_visitante.php");
     };   
 } else {
-
-
     //Update dos dados do visitante
     $sql = "UPDATE tb_visitante SET"
         . " nm_visitante = '" . $nm_visitante . "'"
@@ -101,7 +102,6 @@ if ($id_visitante == "") {
         . " , telefone_um_visitante = '" . $telefone_um_visitante . "'"
         . " , telefone_dois_visitante = '" . $telefone_dois_visitante . "'"
         . " WHERE id_visitante = " . $id_visitante;
-
 
     if (!mysqli_query($conn, $sql)) {
         // echo "Erro ao atualizar o banco";
@@ -116,9 +116,25 @@ if ($id_visitante == "") {
         mysqli_close($conn);
     } else {
 
+        
+        if($contadorVeiculos > 0) {
+            //Update dos veiculos informados
+            for ($i = 1; $i<=$contadorVeiculos; $i++){
+    
+                $sql = "UPDATE tb_veiculo SET"
+                . " ds_placa_veiculo = '" . $arrayPlacaVeiculo[$i] . "'"
+                . " , fk_cor_veiculo = '" . $arrayCorVeiculo[$i] . "'"
+                . " , fk_tipo_veiculo = '" . $arrayTipoVeiculo[$i] . "'"
+                . " WHERE fk_visitante = " . $id_visitante;
+       
+                mysqli_query($conn, $sql) or die("Erro ao ATUALIZAR veiculo do visitante");
+            };
+    
+        } 
+
         $_SESSION['mensagem'] = "Visitante ATUALIZADO com sucesso!";
         $_SESSION['corMensagem'] = "warning";
         mysqli_close($conn);
         header("Location: cad_visitante.php");
-    };
+    }
 }

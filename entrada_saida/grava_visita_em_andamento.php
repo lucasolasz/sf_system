@@ -36,8 +36,6 @@ $mensagem = "";
 
     $sql = "INSERT INTO tb_visita ("
       . "fk_visitante,"
-      . "ds_placa_veiculo,"
-      . "fk_cor_veiculo,"
       . "fk_tipo_visita,"
       . "fk_usuario_entrada,"
       . "dt_entrada_visita,"
@@ -47,8 +45,6 @@ $mensagem = "";
       . "observacao_visita"
       . ") VALUES ("
       . "'$id_visita',"
-      . "'$txtPlacaVeiculo',"
-      . "'$cboCorVeiculo',"
       . "'$cboTipoVisita',"
       . "'$id_usuarioLogado',"
       . "'$anoMesDia',"
@@ -60,8 +56,8 @@ $mensagem = "";
      if (!mysqli_query($conn, $sql)) {
 
       //Mensagem Administrativa
-      // $mensagem = "Erro SQL: " . mysqli_error($conn);
-      $mensagem = "Erro ao INSERIR VISITA. Contate o Administrador do Sistema";
+      $mensagem = "Erro SQL: " . mysqli_error($conn);
+      // $mensagem = "Erro ao INSERIR VISITA. Contate o Administrador do Sistema";
 
       $_SESSION['mensagem'] = $mensagem;
       $_SESSION['corMensagem'] = "danger";

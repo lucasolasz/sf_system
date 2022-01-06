@@ -20,8 +20,6 @@ CREATE TABLE `tb_visitante` (
 	`id_visitante` SMALLINT(6) NOT NULL AUTO_INCREMENT UNIQUE,
 	`nm_visitante` VARCHAR(255) NULL DEFAULT NULL,
 	`documento_visitante` VARCHAR(20) NULL DEFAULT NULL,
-	`ds_placa_veiculo_visitante` VARCHAR(20) NULL DEFAULT NULL,
-	`fk_cor_veiculo_visitante` SMALLINT(6) NULL DEFAULT NULL,
 	`telefone_um_visitante` VARCHAR(20) NULL DEFAULT NULL,
 	`telefone_dois_visitante` VARCHAR(20) NULL DEFAULT NULL,
 	PRIMARY KEY (`id_visitante`)
@@ -74,7 +72,7 @@ CREATE TABLE `tb_usuario` (
 	PRIMARY KEY (`id_usuario`)
 ) CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;
 
-INSERT INTO tb_usuario (ds_usuario, ds_senha) VALUES ('admin', MD5('sfsystem@admin'));
+INSERT INTO tb_usuario (ds_nome_usuario,ds_usuario, ds_senha) VALUES ('Administrador','admin', MD5('sfsystem@admin'));
 
 
 CREATE TABLE IF NOT EXISTS `tb_tipo_usuario` (

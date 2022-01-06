@@ -26,7 +26,11 @@ if (isset($_POST['hidIdOperacaoDeletar'])) {
     
         $sql = "DELETE FROM tb_visitante WHERE id_visitante = " . $id_visitante;
         
-        $resultsVisitante = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
+        $resultsVisitante = mysqli_query($conn, $sql) or die("Erro ao DELETAR visitante");
+
+        $sql = "DELETE FROM tb_veiculo WHERE fk_visitante = " . $id_visitante;
+
+        $resultsVisitante = mysqli_query($conn, $sql) or die("Erro ao DELETAR veiculo");
         
               
         if (!mysqli_query($conn, $sql)) {
