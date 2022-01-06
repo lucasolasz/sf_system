@@ -147,6 +147,7 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                                 $data = $dados['dt_entrada_visita'];
                                 $dt_entrada_visita = date('d/m/Y', strtotime($data));
                                 $obs_visita = $dados['observacao_visita'];
+                                $ds_placa_veiculo_visitante = $dados['ds_placa_veiculo_visitante'];
                                     
                                 
                                 //Captura dos valores para o calculo do tempo decorrido
@@ -187,7 +188,18 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                                             <p><?php echo $obs_visita ?></p>
 
                                             <h6>Tempo de visita:</h6>
-                                            <?php echo $intervalo->h . " Horas " . $intervalo->i . " Minutos" ?>
+                                            <p>
+                                                <?php
+                                                if ($intervalo->m > 0){
+                                                    echo $intervalo->m . " Meses " . $intervalo->d . " Dias " . $intervalo->h . " Horas " . $intervalo->i . " Minutos";
+                                                } else {
+                                                    echo $intervalo->d . " Dias " . $intervalo->h . " Horas " . $intervalo->i . " Minutos";
+                                                }
+                                                ?>
+                                            </p>
+
+                                            <h6>Placa veículo:</h6>
+                                            <p><?php echo $ds_placa_veiculo_visitante ?></p>
 
                                         </div>
                                         <div class = "modal-footer">
