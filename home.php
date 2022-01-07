@@ -21,8 +21,12 @@ if(!isset($_SESSION['usuarioUsuario'])){
     <?php require_once "nav.php"; ?>
 
     <div class="container">
-        <img src="/img/Logo.png" class="img-fluid" alt="" height="300px" width="900px" style="display: block; margin-left: auto; margin-right: auto;">
+        <img src="/img/Logo.png" class="img-fluid" alt="" height="100px" width="800px" 
+             style="display: block; margin: auto;">
     </div>
+    
+    
+    <?php require_once "footer.php"; ?>
 
 </body>
 
