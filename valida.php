@@ -20,7 +20,7 @@ if ((isset($_POST['txtUsuario'])) && (isset($_POST['txtSenha']))) {
 
     if(empty($resultado)){
        
-        $_SESSION['loginErro'] = "Usuário ou senha em inválido";
+        $_SESSION['loginErro'] = "Usuário ou senha inválido";
         header("Location: index.php");
     
     }elseif (isset($resultado)){
@@ -35,14 +35,14 @@ if ((isset($_POST['txtUsuario'])) && (isset($_POST['txtSenha']))) {
         header("Location: home.php");
     }else{
        
-        $_SESSION['loginErro'] = "Usuário ou senha em inválido";
+        $_SESSION['loginErro'] = "Usuário ou senha inválido";
         header("Location: index.php");
     } 
     
 
  
 } else {
-    $_SESSION['loginErro'] = "Usuário ou senha em inválido";
+    $_SESSION['loginErro'] = "Usuário ou senha inválido";
     header("Location: index.php");
 }
 

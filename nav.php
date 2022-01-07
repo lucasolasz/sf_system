@@ -1,5 +1,10 @@
 <?php
 
+//Verifica se o usuario está logado
+if(!isset($_SESSION['usuarioUsuario'])){
+    header("Location: index.php");
+    
+}
 
 ?>
 <div class="container">

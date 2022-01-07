@@ -92,8 +92,8 @@ if ($id_usuario == "") {
         // echo "Erro SQL: " . mysqli_error($conn);
 
         //Mensagem Administrativa
-         $_SESSION['mensagem'] = "Erro Atualizar SQL: " . mysqli_error($conn);
-//        $_SESSION['mensagem'] = "Erro ao ATUALIZAR USUÁRIO. Contate o Administrador do Sistema";
+//         $_SESSION['mensagem'] = "Erro Atualizar SQL: " . mysqli_error($conn);
+        $_SESSION['mensagem'] = "Erro ao ATUALIZAR USUÁRIO. Contate o Administrador do Sistema";
         $_SESSION['corMensagem'] = "danger";
         mysqli_close($conn);
         header("Location: cad_usuario.php");
