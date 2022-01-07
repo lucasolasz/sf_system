@@ -29,6 +29,7 @@ if ((isset($_POST['txtUsuario'])) && (isset($_POST['txtSenha']))) {
         $_SESSION['usuarioNome'] = $resultado['ds_nome'];
         $_SESSION['usuarioUsuario'] = $resultado['ds_usuario'];
         $_SESSION['usuarioSenha'] = $resultado['ds_senha'];
+        $_SESSION['fk_tipo_usuario'] = $resultado['fk_tipo_usuario'];
         $_SESSION['caminhopadrao'] = $_SERVER['DOCUMENT_ROOT'] . "/";
 
         header("Location: home.php");

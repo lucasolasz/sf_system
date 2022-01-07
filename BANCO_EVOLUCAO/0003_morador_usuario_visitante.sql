@@ -72,7 +72,7 @@ CREATE TABLE `tb_usuario` (
 	PRIMARY KEY (`id_usuario`)
 ) CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;
 
-INSERT INTO tb_usuario (ds_nome_usuario,ds_usuario, ds_senha) VALUES ('Administrador','admin', MD5('sfsystem@admin'));
+INSERT INTO tb_usuario (ds_nome_usuario,ds_usuario, ds_senha, fk_tipo_usuario) VALUES ('Administrador','admin', MD5('sfsystem@admin'), 1);
 
 
 CREATE TABLE IF NOT EXISTS `tb_tipo_usuario` (
@@ -83,8 +83,6 @@ CREATE TABLE IF NOT EXISTS `tb_tipo_usuario` (
 
 INSERT INTO tb_tipo_usuario (id_tipo_usuario, ds_tipo_usuario) VALUES(1, 'Administrador');
 INSERT INTO tb_tipo_usuario (id_tipo_usuario, ds_tipo_usuario) VALUES(2, 'Empregado');
-INSERT INTO tb_tipo_usuario (id_tipo_usuario, ds_tipo_usuario) VALUES(3, 'Super User');
-
 
 
 CREATE TABLE IF NOT EXISTS `tb_cargo` (

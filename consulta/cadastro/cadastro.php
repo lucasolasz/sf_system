@@ -38,8 +38,16 @@ $cadastrarMorador = 0;
                 </button>
                 <button type="button" class="btn btn-success" id="btnNovoVisitante" name="btnNovoVisitante">
                     <img src="/bootstrap-icons/file-person-fill.svg" alt=""> VISITANTE</button>
-                <button type="button" class="btn btn-success" id="btnNovoUsuario" name="btnNovoUsuario">
-                    <img src="/bootstrap-icons/person-bounding-box.svg" alt=""> USUÁRIO</button>
+                
+                <?php 
+                    //Privileio para administrador
+                    if($_SESSION['fk_tipo_usuario'] == 1){ ?>
+                
+                    <button type="button" class="btn btn-success" id="btnNovoUsuario" name="btnNovoUsuario">
+                        <img src="/bootstrap-icons/person-bounding-box.svg" alt=""> USUÁRIO</button>
+
+                <?php  } ?>
+            
             </div>
         </div>
 
