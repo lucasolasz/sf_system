@@ -11,26 +11,36 @@ $telefone_um_visitante = trim($_POST["txtTelefoneUm"]);
 $telefone_dois_visitante = trim($_POST["txtTelefoneDois"]);
 
 
-//Carrega quantidade de veiculos cadastrados
-$contadorVeiculos = $_POST["hidContadorVaiculos"];
+//Inicia array dinamico para captura de veiculos de visitantes cadastrados
+$stringIdsVeiculos = $_POST["hidArrayIdCamposVeiculos"];
 
-//Inicia array dinamico para captura das placas e dos tipos de veiculos cadastrados
+// echo $stringIdsVeiculos;
+// exit();
+
+/*Função para ignorar um caracter de uma string.
+Primeiro parametro indica o que voce quer ignorar e
+o segundo a string*/
+$arrayIdsVeiculos = explode(',', $stringIdsVeiculos);
+
+
+/* Realiza a contagem do meu vetor para utilizar nos incrementos abaixo*/
+$contadorVeiculos = count($arrayIdsVeiculos);
+
+// echo var_dump($arrayIdsVeiculos);
+// exit();
+
 $arrayPlacaVeiculo = [];
 $arrayTipoVeiculo = [];
 
 //Alimenta dinamicamente a quantidade de placas
-for ($i = 1; $i<=$contadorVeiculos; $i++){
+for ($i = 0; $i<$contadorVeiculos; $i++){
     
-   $arrayTipoVeiculo[$i] = $_POST['cboTipoVeiculo'.$i.''];
+   $arrayTipoVeiculo[$i] = $_POST['cboTipoVeiculo'. $arrayIdsVeiculos[$i] .''];
     
-   $arrayPlacaVeiculo[$i] = $_POST['txtPlacaVeiculoVisitante'.$i.''];
+   $arrayPlacaVeiculo[$i] = $_POST['txtPlacaVeiculoVisitante'. $arrayIdsVeiculos[$i] .''];
 
-   $arrayCorVeiculo[$i]  = $_POST['cboCorVeiculo'.$i.''];
-  
+   $arrayCorVeiculo[$i]  = $_POST['cboCorVeiculo'. $arrayIdsVeiculos[$i] .'']; 
 }
-
-
-$observa = "que isso fera";
 
 
 //Se vazio está adicionando 
@@ -69,20 +79,18 @@ if ($id_visitante == "") {
         
         if($contadorVeiculos > 0) {
         //Adiciona os veiculos informados
-        for ($i = 1; $i<=$contadorVeiculos; $i++){
+        for ($i = 0; $i<$contadorVeiculos; $i++){
 
             $sql = "INSERT INTO tb_veiculo ("
                 . "ds_placa_veiculo,"
                 . "fk_visitante,"
                 . "fk_cor_veiculo,"
-                . "fk_tipo_veiculo,"
-                . "observacao_veiculo"
+                . "fk_tipo_veiculo"
                 . ") VALUES ("
                 . "'$arrayPlacaVeiculo[$i]',"
                 . "'$proximoIdVisitante',"
                 . "'$arrayCorVeiculo[$i]',"
-                . "'$arrayTipoVeiculo[$i]',"
-                . "'$observa')";
+                . "'$arrayTipoVeiculo[$i]')";
 
             mysqli_query($conn, $sql) or die("Erro ao INSERIR veiculo do visitante");
         };
@@ -119,7 +127,7 @@ if ($id_visitante == "") {
         
         if($contadorVeiculos > 0) {
             //Update dos veiculos informados
-            for ($i = 1; $i<=$contadorVeiculos; $i++){
+            for ($i = 0; $i<$contadorVeiculos; $i++){
     
                 $sql = "UPDATE tb_veiculo SET"
                 . " ds_placa_veiculo = '" . $arrayPlacaVeiculo[$i] . "'"
