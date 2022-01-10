@@ -38,14 +38,12 @@ require_once "../../../conexao.php";
                     <input type="text" class="form-control" id="txtDocumento" name="txtDocumento" placeholder="Insira o documento cadastrado">                   
                 </div>
 
+                <button type="submit" class="btn btn-success" id="btnCancelar" name="btnCancelar">Cancelar
+                </button>
+
                 <button type="submit" class="btn btn-success" id="btnContinuar" name="btnContinuar">Continuar&nbsp;
-                    <img src="../../../bootstrap-icons/arrow-right-square-fill.svg" alt="" height="30px" width="30px">
+                    <img src="../../../bootstrap-icons/arrow-right-square-fill.svg" alt="" height="20px" width="20px">
                 </button>
-                
-                <button type="submit" class="btn btn-success" id="btnCancelar" name="btnCancelar">
-                    <img src="../../../bootstrap-icons/arrow-left-square-fill.svg" alt="" height="30px" width="30px"> Cancelar&nbsp;
-                </button>
-                
 
             </form>
         </main>
