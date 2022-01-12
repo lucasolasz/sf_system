@@ -5,7 +5,8 @@
 
 <footer id="sticky-footer" class="py-4 text-black-50">
     <div class="container text-center">
-      <small>© Desenvolvido por: Lucas Andrade Olasz</small>
+      <small>© Desenvolvido por: Lucas Andrade Olasz</small><br>
+      <small>Contato: olaszlucas072@gmail.com</small>
     </div>;
 </footer>
 <!--
