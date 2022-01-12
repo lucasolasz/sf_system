@@ -139,8 +139,26 @@ while ($dados = mysqli_fetch_array($resultsVisitante)) {
                     </div>
 
                     <div class="form-group col-md-4">
-                        <label for="txtNumeroCasa">N° Casa a ser visitada</label>
-                        <input type="text" class="form-control" name="txtNumeroCasa" id="txtNumeroCasa" value="" maxlength="3" placeholder="Informe o número da casa">
+
+                    <label for="cboNumeroDaCasa">N° Casa a ser visitada</label>
+                        <select class="form-select" name="cboNumeroDaCasa" id="cboNumeroDaCasa">
+                            <option value=""></option>
+                            <?php
+                                $sql = "SELECT * FROM tb_casa";
+
+                                $results = mysqli_query($conn, $sql) or die("Erro ao retornar CASA");
+
+                                if ($results->num_rows) {
+                                    while ($dados = $results->fetch_array()) {
+
+                                        $ds_numero_casa = $dados['ds_numero_casa'];                                    
+
+                                        echo "<option value=$ds_numero_casa>$ds_numero_casa</option>";
+                                    }
+                                } else
+                                    echo "Nenhuma casa encontrada";
+                            ?>
+                        </select>
                     </div>
 
                 </div>
@@ -183,11 +201,6 @@ while ($dados = mysqli_fetch_array($resultsVisitante)) {
                     $("#txtPlacaVeiculo").val(this.value.match(/[A-Za-z0-9]*/));
                 });
 
-                //Força usuário a digitar somente números
-                $("#txtNumeroCasa").keyup(function () {
-                    $("#txtNumeroCasa").val(this.value.match(/[0-9]*/));
-                });
-
             });
 
             function exibeMensagem(msg) {
@@ -200,7 +213,7 @@ while ($dados = mysqli_fetch_array($resultsVisitante)) {
 
                 var txtDocumento = $("#txtDocumento").val();
                 var cboTipoVisita = $("#cboTipoVisita").val();
-                var txtNumeroCasa = $("#txtNumeroCasa").val();
+                var cboNumeroDaCasa = $("#cboNumeroDaCasa").val();
 
                 //Verifica se campos estão vazios para salvar
                 $("#containeralert").html("");
@@ -218,8 +231,8 @@ while ($dados = mysqli_fetch_array($resultsVisitante)) {
                 }
 
                 $("#containeralert").html("");
-                if (txtNumeroCasa == "") {
-                    msg = "<b>Digite um NÚMERO DE CASA a ser visitada</b>";
+                if (cboNumeroDaCasa == "") {
+                    msg = "<b>Escolha um NÚMERO DE CASA a ser visitada</b>";
                     $("#containeralert").html(exibeMensagem(msg));
                     return false;
                 }

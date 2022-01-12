@@ -38,7 +38,7 @@ CREATE TABLE `tb_visita`(
 	`dt_saida_visita` TIMESTAMP NULL DEFAULT NULL,
 	`dt_hora_saida_visita` TIME NULL DEFAULT NULL,
 	`qt_pessoas_carro` VARCHAR(20) NULL DEFAULT NULL,
-	`numero_casa_visita` SMALLINT(6) NULL DEFAULT NULL,
+	`ds_casa_visita` VARCHAR(10) NULL DEFAULT NULL,
 	`observacao_visita` VARCHAR(500) NULL DEFAULT NULL,
 	PRIMARY KEY (`id_visita`)
 ) CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;

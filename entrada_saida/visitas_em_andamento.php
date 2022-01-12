@@ -143,6 +143,7 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                                 $nm_visitante = $dados['nm_visitante'];
                                 $ds_tipo_visita = $dados['ds_tipo_visita'];
                                 $dt_hora_entrada_visita = $dados['dt_hora_entrada_visita'];
+                                $ds_casa_visita = $dados['ds_casa_visita'];
                                 //Precisa-se formatar a data do padrao americano para o br
                                 $data = $dados['dt_entrada_visita'];
                                 $dt_entrada_visita = date('d/m/Y', strtotime($data));
@@ -200,6 +201,9 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
 
                                             <h6>Placa veículo:</h6>
                                             <p><?php echo $ds_placa_veiculo_visitante ?></p>
+                                            
+                                            <h6>Casa destino:</h6>
+                                            <p><?php echo $ds_casa_visita ?></p>
 
                                         </div>
                                         <div class = "modal-footer">

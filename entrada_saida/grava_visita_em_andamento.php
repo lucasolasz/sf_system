@@ -14,7 +14,7 @@ $txtDocumento = trim($_POST["txtDocumento"]);
 $cboPlacaVisitante = trim($_POST["cboPlacaVisitante"]);
 $cboTipoVisita = $_POST["cboTipoVisita"];
 $txtQtdPessoas = $_POST["txtQtdPessoas"];
-$txtNumeroCasa = $_POST["txtNumeroCasa"];
+$cboNumeroDaCasa = $_POST["cboNumeroDaCasa"];
 $txtObervacao = $_POST["txtObervacao"];
 
 //Define o timezone para são paulo
@@ -41,7 +41,7 @@ $mensagem = "";
       . " dt_entrada_visita,"
       . " dt_hora_entrada_visita,"
       . " qt_pessoas_carro,"
-      . " numero_casa_visita,"
+      . " ds_casa_visita,"
       . " observacao_visita "
       . ") VALUES ("
       . "'$id_visita',"
@@ -51,7 +51,7 @@ $mensagem = "";
       . "'$anoMesDia',"
       . "'$horaMinutoSegundo',"
       . "'$txtQtdPessoas',"
-      . "'$txtNumeroCasa',"
+      . "'$cboNumeroDaCasa',"
       . "'$txtObervacao')";
     
      if (!mysqli_query($conn, $sql)) {
