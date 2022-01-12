@@ -171,47 +171,69 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                                             <img src="../../../bootstrap-icons/exclamation-diamond.svg" alt=""> Informações&nbsp;
                                         </button>
 
-                                        <button type="button" class="btn btn-danger btn-sm" name="btnSaida" id="btnSaida" onClick="registraSaida(<?php echo $id_visita ?>)">
+                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalSaida<?php echo $id_visita ?>">
                                             <img src="../../../bootstrap-icons/arrow-up-square.svg" alt=""> Registra Saida&nbsp;
                                         </button>
                                     </td>
                                 </tr>
-                                <!-- Modal -->
-                            <div class="modal fade" id="modalInformacoes<?php echo $id_visita ?>" tabindex="-1" aria-labelledby="modalInformacoesLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="modalInformacoesLabel">Informações da Visita: <?php echo $nm_visitante ?></h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <h6>Observações:</h6>
-                                            <p><?php echo $obs_visita ?></p>
+                                <!-- Modal de informações-->
+                                <div class="modal fade" id="modalInformacoes<?php echo $id_visita ?>" tabindex="-1" aria-labelledby="modalInformacoesLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalInformacoesLabel">Informações da Visita: <?php echo $nm_visitante ?></h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h6>Observações:</h6>
+                                                <p><?php echo $obs_visita ?></p>
 
-                                            <h6>Tempo de visita:</h6>
-                                            <p>
-                                                <?php
-                                                if ($intervalo->m > 0){
-                                                    echo $intervalo->m . " Meses " . $intervalo->d . " Dias " . $intervalo->h . " Horas " . $intervalo->i . " Minutos";
-                                                } else {
-                                                    echo $intervalo->d . " Dias " . $intervalo->h . " Horas " . $intervalo->i . " Minutos";
-                                                }
-                                                ?>
-                                            </p>
+                                                <h6>Tempo de visita:</h6>
+                                                <p>
+                                                    <?php
+                                                    if ($intervalo->m > 0){
+                                                        echo $intervalo->m . " Meses " . $intervalo->d . " Dias " . $intervalo->h . " Horas " . $intervalo->i . " Minutos";
+                                                    } else {
+                                                        echo $intervalo->d . " Dias " . $intervalo->h . " Horas " . $intervalo->i . " Minutos";
+                                                    }
+                                                    ?>
+                                                </p>
 
-                                            <h6>Placa veículo:</h6>
-                                            <p><?php echo $ds_placa_veiculo_visitante ?></p>
-                                            
-                                            <h6>Casa destino:</h6>
-                                            <p><?php echo $ds_casa_visita ?></p>
+                                                <h6>Placa veículo:</h6>
+                                                <p><?php echo $ds_placa_veiculo_visitante ?></p>
+                                                
+                                                <h6>Casa destino:</h6>
+                                                <p><?php echo $ds_casa_visita ?></p>
 
-                                        </div>
-                                        <div class = "modal-footer">
-                                            <button type = "button" class = "btn btn-secondary" data-bs-dismiss = "modal">Fechar</button>
+                                            </div>
+                                            <div class = "modal-footer">
+                                                <button type = "button" class = "btn btn-secondary" data-bs-dismiss = "modal">Fechar</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+
+                                <!-- Modal de informações-->
+                                <div class="modal fade" id="modalSaida<?php echo $id_visita ?>" tabindex="-1" aria-labelledby="modalSaidaLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalSaidaLabel">Confirmação saída visita</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                
+                                               <h6>Confirma saída da visita: <b><?php echo $nm_visitante ?></b></h6> 
+                                            </div>
+                                            <div class = "modal-footer">
+                                                <button type = "button" class = "btn btn-secondary" data-bs-dismiss = "modal">Fechar</button>
+                                                <button type="button" class="btn btn-primary" onClick="registraSaida(<?php echo $id_visita ?>)">Confirma</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
                             <?php
                         }
                     } else {
@@ -239,7 +261,7 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                 form.submit();
 
             }
-            ;
+            
 
 
             $("#btnAdicionarVisita").click(function () {
