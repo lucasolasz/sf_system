@@ -35,11 +35,19 @@ if(!isset($_SESSION['usuarioUsuario'])){
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/entrada_saida/visitas_em_andamento.php">
-                            <img src="/bootstrap-icons/calendar2-plus-fill.svg" alt="" height="30px" width="30px">
+                            <img src="/bootstrap-icons/file-arrow-up-fill.svg" alt="" height="30px" width="30px">
                             <span>Registrar Entrada/Saída</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/relatórios/relatorio_entrada_saida.php">
+                            <img src="/bootstrap-icons/calendar-check-fill.svg" alt="" height="30px" width="30px">
+                            <span>Relatórios</span>
+                        </a>
+                    </li>
                 </ul>
+
+                
                 <span class="navbar-text">
                     <a class="nav-link me-2" href="/sair.php">
                         <img src="/bootstrap-icons/arrow-right-square-fill.svg" alt="" height="30px" width="30px">

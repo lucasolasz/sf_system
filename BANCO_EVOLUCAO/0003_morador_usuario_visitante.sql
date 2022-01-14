@@ -33,9 +33,9 @@ CREATE TABLE `tb_visita`(
 	`fk_tipo_visita` SMALLINT(6) NULL DEFAULT NULL,
 	`fk_usuario_entrada` SMALLINT(6) NULL DEFAULT NULL,
 	`fk_usuario_saida` SMALLINT(6) NULL DEFAULT NULL,	
-	`dt_entrada_visita` TIMESTAMP NULL DEFAULT NULL,
+	`dt_entrada_visita` DATE NULL DEFAULT NULL,
 	`dt_hora_entrada_visita` TIME NULL DEFAULT NULL,
-	`dt_saida_visita` TIMESTAMP NULL DEFAULT NULL,
+	`dt_saida_visita` DATE NULL DEFAULT NULL,
 	`dt_hora_saida_visita` TIME NULL DEFAULT NULL,
 	`qt_pessoas_carro` VARCHAR(20) NULL DEFAULT NULL,
 	`ds_casa_visita` VARCHAR(10) NULL DEFAULT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE `tb_usuario` (
 	PRIMARY KEY (`id_usuario`)
 ) CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;
 
-INSERT INTO tb_usuario (ds_nome_usuario,ds_usuario, ds_senha, fk_tipo_usuario) VALUES ('Administrador','admin', MD5('sfsystem@admin'), 1);
+INSERT INTO tb_usuario (ds_nome_usuario,ds_usuario, ds_senha, fk_tipo_usuario, fk_cargo) VALUES ('Administrador','admin', MD5('sfsystem@admin'), 1,1);
 
 
 CREATE TABLE IF NOT EXISTS `tb_tipo_usuario` (
