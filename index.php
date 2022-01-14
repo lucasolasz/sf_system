@@ -5,7 +5,7 @@ session_start();
 <!doctype html>
 <html lang="pt-br">
 
-<?php require_once "header.php"; ?>;
+<?php require_once "header.php"; ?>
 
     <body class="text-center py-3">
 
