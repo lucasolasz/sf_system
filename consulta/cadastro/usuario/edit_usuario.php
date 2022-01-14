@@ -267,19 +267,19 @@ if ($id_usuario == "") {
             <br>
             <br>
 
+            <button type="button" class="btn btn-success btn-lg" name="btnCancelarNovoUsuario" id="btnCancelarNovoUsuario" onClick="">Cancelar</button>
+
             <?php if ($id_usuario == "") { ?>
-                <button type="button" class="btn btn-success btn-sm" name="btnSalvarNovoUsuario" id="btnSalvarNovoUsuario" onClick="validaCamposNovoUsuario()">
-                    <img src="../../../bootstrap-icons/check-square-fill.svg" alt="" height="30px" width="30px"> Salvar&nbsp;
+                <button type="button" class="btn btn-success btn-lg" name="btnSalvarNovoUsuario" id="btnSalvarNovoUsuario" onClick="validaCamposNovoUsuario()">
+                    <img src="../../../bootstrap-icons/check-square-fill.svg" alt=""> Salvar&nbsp;
                 </button>
             <?php } else { ?>
-                <button type="button" class="btn btn-success btn-sm" name="btnEditarUsuario" id="btnEditarUsuario" onClick="validaCamposEditUsuario()">
-                    <img src="../../../bootstrap-icons/check-square-fill.svg" alt="" height="30px" width="30px"> Salvar&nbsp;
+                <button type="button" class="btn btn-success btn-lg" name="btnEditarUsuario" id="btnEditarUsuario" onClick="validaCamposEditUsuario()">
+                    <img src="../../../bootstrap-icons/check-square-fill.svg" alt=""> Salvar&nbsp;
                 </button>
             <?php } ?>
 
-            <button type="button" class="btn btn-success btn-sm" name="btnCancelarNovoUsuario" id="btnCancelarNovoUsuario" onClick="">
-                <img src="../../../bootstrap-icons/arrow-left-square-fill.svg" alt="" height="30px" width="30px"> Cancelar&nbsp;
-            </button>
+            
 
 
         </div>

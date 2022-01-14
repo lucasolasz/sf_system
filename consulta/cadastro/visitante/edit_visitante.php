@@ -269,23 +269,23 @@ if ($id_visitante == "") {
             <br>
             <br>
 
+            <button type="button" class="btn btn-success btn-lg" name="btnCancelarNovoVisitante" id="btnCancelarNovoVisitante" onClick="">Cancelar</button>
+
             <?php if ($id_visitante == "") { ?>
-                <button type="button" class="btn btn-success btn-sm" name="btnSalvarNovoVisitante" id="btnSalvarNovoVisitante" onClick="">
-                    <img src="../../../bootstrap-icons/check-square-fill.svg" alt="" height="30px" width="30px"> Salvar&nbsp;
+                <button type="button" class="btn btn-success btn-lg" name="btnSalvarNovoVisitante" id="btnSalvarNovoVisitante" onClick="">
+                    <img src="../../../bootstrap-icons/check-square-fill.svg" alt="" > Salvar&nbsp;
                 </button>
             <?php } else { ?>
-                <button type="button" class="btn btn-success btn-sm" name="btnEditarVisitante" id="btnEditarVisitante" onClick="">
-                    <img src="../../../bootstrap-icons/check-square-fill.svg" alt="" height="30px" width="30px"> Salvar&nbsp;
+                <button type="button" class="btn btn-success btn-lg" name="btnEditarVisitante" id="btnEditarVisitante" onClick="">
+                    <img src="../../../bootstrap-icons/check-square-fill.svg" alt=""> Salvar&nbsp;
                 </button>
             <?php } ?>
 
-            <button type="button" class="btn btn-success btn-sm" name="btnCancelarNovoVisitante" id="btnCancelarNovoVisitante" onClick="">
-                <img src="../../../bootstrap-icons/arrow-left-square-fill.svg" alt="" height="30px" width="30px"> Cancelar&nbsp;
-            </button>
+
 
             <?php if ($id_visitante != "") { ?>
-                <button type="button" class="btn btn-danger btn-sm" name="btnExcluir" id="btnExcluir" onClick="exlcuirVisitante(<?php echo $id_visitante ?>)">
-                    <img src="../../../bootstrap-icons/trash.svg" alt="" height="30px" width="30px"> Excluir&nbsp;
+                <button type="button" class="btn btn-danger btn-lg" name="btnExcluir" id="btnExcluir" onClick="exlcuirVisitante(<?php echo $id_visitante ?>)">
+                    <img src="../../../bootstrap-icons/trash.svg" alt=""> Excluir&nbsp;
                 </button>
             <?php } ?>
 
