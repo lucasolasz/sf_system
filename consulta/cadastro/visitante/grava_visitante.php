@@ -11,43 +11,55 @@ $telefone_um_visitante = trim($_POST["txtTelefoneUm"]);
 $telefone_dois_visitante = trim($_POST["txtTelefoneDois"]);
 
 
+
+
 //Inicia array dinamico para captura de veiculos de visitantes cadastrados
 $stringIdsVeiculos = $_POST["hidArrayIdCamposVeiculos"];
 
-// echo $stringIdsVeiculos;
+// echo var_dump($stringIdsVeiculos);
 // exit();
 
-/*Função para ignorar um caracter de uma string.
-Primeiro parametro indica o que voce quer ignorar e
-o segundo a string*/
-$arrayIdsVeiculos = explode(',', $stringIdsVeiculos);
+if ($stringIdsVeiculos != "-1"){
 
-
-/* Realiza a contagem do meu vetor para utilizar nos incrementos abaixo*/
-$contadorVeiculos = count($arrayIdsVeiculos);
-
-// echo var_dump($arrayIdsVeiculos);
-// exit();
-
-$arrayPlacaVeiculo = [];
-$arrayTipoVeiculo = [];
-
-//Alimenta dinamicamente a quantidade de placas
-for ($i = 0; $i<$contadorVeiculos; $i++){
+    /*Função para ignorar um caracter de uma string.
+    Primeiro parametro indica o que voce quer ignorar e
+    o segundo a string*/
+    $arrayIdsVeiculos = explode(',', $stringIdsVeiculos);
     
-   $arrayTipoVeiculo[$i] = $_POST['cboTipoVeiculo'. $arrayIdsVeiculos[$i] .''];
-    
-   $arrayPlacaVeiculo[$i] = $_POST['txtPlacaVeiculoVisitante'. $arrayIdsVeiculos[$i] .''];
+    /* Realiza a contagem do meu vetor para utilizar nos incrementos abaixo*/
+    $contadorVeiculos = count($arrayIdsVeiculos);
 
-   $arrayCorVeiculo[$i]  = $_POST['cboCorVeiculo'. $arrayIdsVeiculos[$i] .'']; 
+    // echo var_dump($arrayIdsVeiculos);
+    // exit();
+
+    $arrayPlacaVeiculo = [];
+    $arrayTipoVeiculo = [];
+
+    //Alimenta dinamicamente a quantidade de placas
+    for ($i = 0; $i<$contadorVeiculos; $i++){
+
+        $arrayTipoVeiculo[$i] = $_POST['cboTipoVeiculo'. $arrayIdsVeiculos[$i] .''];
+
+        $arrayPlacaVeiculo[$i] = $_POST['txtPlacaVeiculoVisitante'. $arrayIdsVeiculos[$i] .''];
+
+        $arrayCorVeiculo[$i]  = $_POST['cboCorVeiculo'. $arrayIdsVeiculos[$i] .'']; 
+
+
+        // echo $arrayTipoVeiculo[$i] . "<br>";
+        // echo $arrayPlacaVeiculo[$i] . "<br>";
+        // echo $arrayCorVeiculo[$i] . "<br>";
+        // exit();
+    }
+
 }
+
 
 
 //Se vazio está adicionando 
 if ($id_visitante == "") {
 
     $mensagem = "";
-        
+
     $sql = "INSERT INTO tb_visitante ("
         . "nm_visitante,"
         . "documento_visitante,"
@@ -76,25 +88,29 @@ if ($id_visitante == "") {
         /* Retorna id do visitante cadastrado. Necessário, pois preciso informar 
         o id do visitante cadastrado sem precisar fazer uma outra consulta ao banco */
         $proximoIdVisitante = mysqli_insert_id($conn);
-        
-        if($contadorVeiculos > 0) {
-        //Adiciona os veiculos informados
-        for ($i = 0; $i<$contadorVeiculos; $i++){
 
-            $sql = "INSERT INTO tb_veiculo ("
-                . "ds_placa_veiculo,"
-                . "fk_visitante,"
-                . "fk_cor_veiculo,"
-                . "fk_tipo_veiculo"
-                . ") VALUES ("
-                . "'$arrayPlacaVeiculo[$i]',"
-                . "'$proximoIdVisitante',"
-                . "'$arrayCorVeiculo[$i]',"
-                . "'$arrayTipoVeiculo[$i]')";
 
-            mysqli_query($conn, $sql) or die("Erro ao INSERIR veiculo do visitante");
-        };
-    }   
+        //So cadastra o carro caso haja algum adicionado na hora do cadastro
+        if($stringIdsVeiculos != "-1") {
+
+            
+            //Adiciona os veiculos informados
+            for ($i = 0; $i<$contadorVeiculos; $i++){
+
+                $sql = "INSERT INTO tb_veiculo ("
+                    . "ds_placa_veiculo,"
+                    . "fk_visitante,"
+                    . "fk_cor_veiculo,"
+                    . "fk_tipo_veiculo"
+                    . ") VALUES ("
+                    . "'$arrayPlacaVeiculo[$i]',"
+                    . "'$proximoIdVisitante',"
+                    . "'$arrayCorVeiculo[$i]',"
+                    . "'$arrayTipoVeiculo[$i]')";
+
+                mysqli_query($conn, $sql) or die("Erro ao INSERIR veiculo do visitante");
+            };
+        }   
 
         $mensagem = "Visitante CADASTRADO com sucesso!";
 
@@ -103,6 +119,7 @@ if ($id_visitante == "") {
         header("Location: cad_visitante.php");
     };   
 } else {
+
     //Update dos dados do visitante
     $sql = "UPDATE tb_visitante SET"
         . " nm_visitante = '" . $nm_visitante . "'"
@@ -122,27 +139,74 @@ if ($id_visitante == "") {
         mysqli_close($conn);
         header("Location: cad_visitante.php");
         mysqli_close($conn);
+
     } else {
+   
+        if($stringIdsVeiculos != "-1") {
 
-        
-        if($contadorVeiculos > 0) {
-            //Update dos veiculos informados
             for ($i = 0; $i<$contadorVeiculos; $i++){
-    
-                $sql = "UPDATE tb_veiculo SET"
-                . " ds_placa_veiculo = '" . $arrayPlacaVeiculo[$i] . "'"
-                . " , fk_cor_veiculo = '" . $arrayCorVeiculo[$i] . "'"
-                . " , fk_tipo_veiculo = '" . $arrayTipoVeiculo[$i] . "'"
-                . " WHERE fk_visitante = " . $id_visitante;
-       
-                mysqli_query($conn, $sql) or die("Erro ao ATUALIZAR veiculo do visitante");
-            };
-    
-        } 
 
-        $_SESSION['mensagem'] = "Visitante ATUALIZADO com sucesso!";
-        $_SESSION['corMensagem'] = "warning";
-        mysqli_close($conn);
-        header("Location: cad_visitante.php");
-    }
+                //Reseta a variavel auxiliar
+                $temUpdate = 0;   
+                
+                /*Preciso realizar comparacao das placas para quando adiciono um novo carro
+                em um visitante que ja possuia outro carro cadastrado */
+                $sql = "SELECT * FROM tb_veiculo WHERE fk_visitante = " . $id_visitante;
+            
+                $results = mysqli_query($conn, $sql) or die("Erro ao retornar PLACAS na EDICAO");
+                
+
+                while ($dados = $results->fetch_array()) {
+
+                    $ds_placa_veiculo = $dados['ds_placa_veiculo'];  
+
+                    /*Ao encontrar algum update, significa que a placa ja esta cadastrada e não precisa ser inserida
+                    para evitar erro no banco*/
+                    if($arrayPlacaVeiculo[$i] == $ds_placa_veiculo){
+
+                        //Variavel contadora auxiliar 
+                        $temUpdate += 1;
+                        break;   
+
+                    }
+
+                }
+                
+                //Se existe algum update após o loop, ele executa o update.
+                if ($temUpdate > 0 ) {
+
+                    $sql = "UPDATE tb_veiculo SET"
+                    . " ds_placa_veiculo = '" . $arrayPlacaVeiculo[$i] . "'"
+                    . " , fk_cor_veiculo = '" . $arrayCorVeiculo[$i] . "'"
+                    . " , fk_tipo_veiculo = '" . $arrayTipoVeiculo[$i] . "'"
+                    . " WHERE ds_placa_veiculo = '" . $arrayPlacaVeiculo[$i] . "'";
+            
+                    mysqli_query($conn, $sql) or die("Erro ao ATUALIZAR veiculo do visitante");
+                    
+                } else {
+
+                    $sql = "INSERT INTO tb_veiculo ("
+                    . "ds_placa_veiculo,"
+                    . "fk_visitante,"
+                    . "fk_cor_veiculo,"
+                    . "fk_tipo_veiculo"
+                    . ") VALUES ("
+                    . "'$arrayPlacaVeiculo[$i]',"
+                    . "'$id_visitante',"
+                    . "'$arrayCorVeiculo[$i]',"
+                    . "'$arrayTipoVeiculo[$i]')";
+
+                    mysqli_query($conn, $sql) or die("Erro ao INSERIR veiculo do visitante na EDICAO");
+
+                }
+
+            }
+                    
+        }
+            
+    } 
+    $_SESSION['mensagem'] = "Visitante ATUALIZADO com sucesso!";
+    $_SESSION['corMensagem'] = "warning";
+    mysqli_close($conn);
+    header("Location: cad_visitante.php");
 }

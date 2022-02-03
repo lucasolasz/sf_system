@@ -7,6 +7,30 @@ $id_visitante = $_POST["hidIdVisitante"];
 
 $i = 0;
 
+
+if (isset($_POST['hidIdDeletarVeiculo'])){
+    
+    $id_veiculo = intval($_POST['hidIdDeletarVeiculo']);
+
+    // echo var_dump($deleta_veiculo);
+
+    // exit();
+
+    if($id_veiculo != 0){
+
+        $sql = "DELETE FROM tb_veiculo WHERE id_veiculo = " . $id_veiculo;
+        
+        $resultsDeleteVeiculo = mysqli_query($conn, $sql) or die("Erro ao DELETAR veiculo");
+
+    }
+
+
+}
+
+
+
+
+
 // echo $opc_adicionar;
 // __halt_compiler();
 // 
@@ -75,6 +99,12 @@ if ($id_visitante == "") {
     }
 </style>
 
+<script>
+
+var arrayIDs = [];
+
+</script>
+
 <body>
 
     <?php require_once $_SESSION['caminhopadrao'] . "nav.php"; ?>
@@ -83,8 +113,10 @@ if ($id_visitante == "") {
 
         <input type="hidden" name="hidIdVisitante" id="hidIdVisitante" value="<?php echo $id_visitante ?>">
         <input type="hidden" name="hidIdOperacaoDeletar" id="hidIdOperacaoDeletar" value="">
+        <input type="hidden" name="hidIdDeletarVeiculo" id="hidIdDeletarVeiculo" value="">
         <input type="hidden" name="hidContadorVeiculos" id="hidContadorVeiculos" value="">
         <input type="hidden" name="hidArrayIdCamposVeiculos" id="hidArrayIdCamposVeiculos" value="">
+        <input type="hidden" name="hidIncluiVeiculoEdicao" id="hidIncluiVeiculoEdicao" value="">
 
 
         <div class="container" id="containeralert"></div>
@@ -174,12 +206,12 @@ if ($id_visitante == "") {
                 //Atribui valor retornado para a variavel
                 while ($dados = mysqli_fetch_array($result)) {
 
-                    
+                    $id_veiculo = $dados['id_veiculo'];
                     $ds_placa_veiculo = $dados['ds_placa_veiculo'];
                     $fk_cor_veiculo = $dados['fk_cor_veiculo'];
                     $fk_tipo_veiculo = $dados['fk_tipo_veiculo']; ?>
 
-                    <div class="row">
+                    <div class="row" id="linhacarro<?php echo $i ?>">
                         <div class="form-group col-md-4">
                             <label for="cboTipoVeiculo<?php echo $i ?>">Tipo Veículo</label>
                             <select class="form-select" id="cboTipoVeiculo<?php echo $i ?>" name="cboTipoVeiculo<?php echo $i ?>">
@@ -246,12 +278,16 @@ if ($id_visitante == "") {
                         </div>
                         <div class="form-group col-md-1">
                             <label for="remInput<?php echo $i ?>">Remover</label>
-                            <a class="btn btn-danger" href="javascript:void(0)" id="remInput<?php echo $i ?>">
-                                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
-                                X
+                            <a class="btn btn-danger" href="javascript:void(0)" id="remInput<?php echo $i ?>" onclick="removeLinhaVeiculoEdit(<?php echo $id_veiculo ?>, <?php echo $id_visitante ?>)">
+                            <img src="../../../bootstrap-icons/trash.svg" alt="">                                
                             </a>
                         </div>
                     </div>
+
+                    <script>
+                        arrayIDs.push(<?php echo $i ?>)
+                        console.log(arrayIDs);
+                    </script>
             <?php 
                 /*Incrementa o valor de i depois de exibir os campos. 
                 Tive que fazer desta forma, pois o contador das linhas estava
@@ -295,7 +331,7 @@ if ($id_visitante == "") {
 
     <script>
         var i = <?php echo $i ?>;
-        var arrayIDs = [];
+        
 
         $(document).ready(function() {
 
@@ -381,6 +417,8 @@ if ($id_visitante == "") {
                     /*Função que Adiciona valor ao final do array.
                     Evitou a necessidade de criar variavel de controle da posicao do array*/
                     arrayIDs.push(i);
+
+                    console.log("fora do edit:" + arrayIDs);
                     
                     /*Incrementa o valor de i depois de exibir os campos. 
                     Tive que fazer desta forma, pois o contador das linhas estava
@@ -394,12 +432,31 @@ if ($id_visitante == "") {
         });
 
 
+        function removeLinhaVeiculoEdit(id_veiculo, id_visitante){
+
+            console.log("valor do id passado remocao edit: " + id_veiculo)
+            console.log("valor do visitante: " + id_visitante);
+
+
+            $("#hidIdVisitante").val(id_visitante);
+            $("#hidIdDeletarVeiculo").val(id_veiculo);
+
+
+            var form = document.getElementById("form_sf_system");
+            form.action = "edit_visitante.php";
+            form.submit();
+        }
+
         function removeLinhaVeiculo(id){
+
+            // console.log("valor do id passado: " + id)
             
             /*Remove valor do array pelo indice.
             Informe a posicao que sera removido e em seguida a quantidade de itens 
             a partir da posicao indicada*/
             arrayIDs.splice(id, 1);
+
+            // console.log("Array : " + arrayIDs)
 
             //Remove a linha do HTML via Jquery
             $("#remInput"+ id).parents('#linhacarro'+ id).remove();   
@@ -412,8 +469,16 @@ if ($id_visitante == "") {
 
             var contadorCarros = i;
 
+            /*Necessário, pois quando o usuario excluia algum carro da lista dinamica
+            dava erro no insert*/
+            if (arrayIDs.length > 0){
+                $("#hidArrayIdCamposVeiculos").val(arrayIDs);
+            } else {
+                $("#hidArrayIdCamposVeiculos").val(-1);
+            }
+
             //Atribui valor ao campo hiden para ser resgatado no grava via post
-            $("#hidContadorVeiculos").val(i);
+            // $("#hidArrayIdCamposVeiculos").val(i);
 
             var form = document.getElementById("form_sf_system");
             form.action = "grava_visitante.php";
@@ -446,14 +511,22 @@ if ($id_visitante == "") {
                 $("#containeralert").html(exibeMensagem(msg));
                 return false;
             }
-
-
-            //Atribui valor ao campo hiden para ser resgatado no grava via post
-            // $("#hidContadorVeiculos").val(i);
-            $("#hidArrayIdCamposVeiculos").val(arrayIDs);
             
 
-            //Invoca a função via Ajax para verificar se existe visitante semelhante
+            /*Necessário, pois quando o usuario excluia algum carro da lista dinamica
+            dava erro no insert*/
+            if (arrayIDs.length > 0){
+                $("#hidArrayIdCamposVeiculos").val(arrayIDs);
+            } else {
+                $("#hidArrayIdCamposVeiculos").val(-1);
+            }
+
+            //Atribui valor ao campo hiden para ser resgatado no grava via post
+            $("#hidContadorVeiculos").val(i);
+            
+            
+
+            // Invoca a função via Ajax para verificar se existe visitante semelhante
             validaVisitante(txtNomeVisitante);
 
         });
