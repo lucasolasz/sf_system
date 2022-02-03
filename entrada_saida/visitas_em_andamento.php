@@ -125,6 +125,7 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                         $sql = "SELECT * FROM tb_visita tvsta";
                         $sql .= " LEFT JOIN tb_visitante tvst ON tvst.id_visitante = tvsta.fk_visitante";
                         $sql .= " LEFT JOIN tb_tipo_visita tip ON tip.id_tipo_visita = tvsta.fk_tipo_visita";
+                        $sql .= " LEFT JOIN tb_usuario tus ON tus.id_usuario = tvsta.fk_usuario_entrada";
                         $sql .= " WHERE dt_saida_visita IS NULL";
                         $sql .= " ORDER BY dt_entrada_visita, dt_hora_entrada_visita";
 
@@ -149,17 +150,19 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                                 $dt_entrada_visita = date('d/m/Y', strtotime($data));
                                 $obs_visita = $dados['observacao_visita'];
                                 $ds_placa_veiculo_visitante = $dados['ds_placa_veiculo_visitante'];
+                                $ds_nome_usuario = $dados['ds_nome_usuario'];
                                     
                                 
                                 //Captura dos valores para o calculo do tempo decorrido
                                 $dataEntrada = $data;
                                 $dataAgora = date("y.m.d H:i:s");
-                                
+
                                 
                                 //Calculo do tempo decorrido da visita 
                                 $entrada = new DateTime($dataEntrada);
                                 $saida = new DateTime('now');
                                 $intervalo = $saida->diff($entrada);
+
                                 ?>        
                                 <tr>
                                     <td><?php echo $nm_visitante ?></td>
@@ -186,7 +189,12 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                                             </div>
                                             <div class="modal-body">
                                                 <h6>Observações:</h6>
-                                                <p><?php echo $obs_visita ?></p>
+                                                
+                                                <?php if($obs_visita != "") { ?>
+                                                    <p><?php echo $obs_visita ?></p>
+                                                <?php }else { ?>
+                                                    <p><i>Nenhuma observação</i></p>
+                                               <?php } ?>
 
                                                 <h6>Tempo de visita:</h6>
                                                 <p>
@@ -200,10 +208,13 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                                                 </p>
 
                                                 <h6>Placa veículo:</h6>
-                                                <p><?php echo $ds_placa_veiculo_visitante ?></p>
+                                                <p><?php echo strtoupper($ds_placa_veiculo_visitante) ?></p>
                                                 
                                                 <h6>Casa destino:</h6>
                                                 <p><?php echo $ds_casa_visita ?></p>
+
+                                                <h6>Entrada dada pelo porteiro(a):</h6>
+                                                <p><?php echo $ds_nome_usuario ?></p>
 
                                             </div>
                                             <div class = "modal-footer">
