@@ -214,7 +214,7 @@ var arrayIDs = [];
                     <div class="row" id="linhacarro<?php echo $i ?>">
                         <div class="form-group col-md-4">
                             <label for="cboTipoVeiculo<?php echo $i ?>">Tipo Veículo</label>
-                            <select class="form-select" id="cboTipoVeiculo<?php echo $i ?>" name="cboTipoVeiculo<?php echo $i ?>">
+                            <select class="form-select" id="cboTipoVeiculo<?php echo $i ?>" name="cboTipoVeiculo<?php echo $i ?>"  onchange="placaBicicleta(<?php echo $i ?>)" >
                                 <option value="0"></option>
                                 <?php
                                 $sql = "SELECT * FROM tb_tipo_veiculo ORDER BY ds_tipo_veiculo";
@@ -347,8 +347,8 @@ var arrayIDs = [];
             $("#txtDocumento").keyup(function() {
                 $("#txtDocumento").val(this.value.match(/[0-9]*/));
             });
-
-
+            
+            
         });
 
 
@@ -361,7 +361,7 @@ var arrayIDs = [];
                 $('<div class="row" id="linhacarro' + i + '">' +
                     '<div class="form-group col-md-4">' +
                     '<label for="cboTipoVeiculo' + i + '">Tipo Veículo</label>' +
-                    '<select class="form-select" id="cboTipoVeiculo' + i + '" name="cboTipoVeiculo' + i + '">' +
+                    '<select class="form-select" id="cboTipoVeiculo' + i + '" name="cboTipoVeiculo' + i + '" onchange="placaBicicleta(' + i + ')">' +
                     '<option value="0"></option>' +
                     <?php
                     $sql = "SELECT * FROM tb_tipo_veiculo ORDER BY ds_tipo_veiculo";
@@ -418,7 +418,7 @@ var arrayIDs = [];
                     Evitou a necessidade de criar variavel de controle da posicao do array*/
                     arrayIDs.push(i);
 
-                    console.log("fora do edit:" + arrayIDs);
+//                    console.log("fora do edit:" + arrayIDs);
                     
                     /*Incrementa o valor de i depois de exibir os campos. 
                     Tive que fazer desta forma, pois o contador das linhas estava
@@ -430,6 +430,22 @@ var arrayIDs = [];
 
             
         });
+        
+        
+        
+        function placaBicicleta(linha_da_placa) {
+        
+            id_tipo_veiculo = $("#cboTipoVeiculo" + linha_da_placa).val();
+            
+            if (id_tipo_veiculo == 4){
+                $("#txtPlacaVeiculoVisitante" + linha_da_placa).val("Bicicleta - S/Placa");
+                $("#txtPlacaVeiculoVisitante" + linha_da_placa).prop('readonly', true);
+            } else{
+                $("#txtPlacaVeiculoVisitante" + linha_da_placa).val("");
+                $("#txtPlacaVeiculoVisitante" + linha_da_placa).prop('readonly', false);
+            }
+            
+        }
 
 
         function removeLinhaVeiculoEdit(id_veiculo, id_visitante){
