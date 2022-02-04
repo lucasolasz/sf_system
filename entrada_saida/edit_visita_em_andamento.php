@@ -98,7 +98,7 @@ while ($dados = mysqli_fetch_array($resultsVisitante)) {
                             if ($results->num_rows) {
                                 while ($dados = $results->fetch_array()) {
 
-                                    $ds_placa_veiculo = $dados['ds_placa_veiculo'];                                    
+                                    $ds_placa_veiculo = strtoupper($dados['ds_placa_veiculo']);                                    
 
                                     echo "<option value=$ds_placa_veiculo>$ds_placa_veiculo</option>";
                                 }

@@ -11,7 +11,7 @@
 <!-- <link rel="stylesheet" href="/resources/demos/style.css"> -->
 <!-- <link rel="stylesheet" href="/bootstrap-datepicker/bootstrap-datepicker.css"> -->
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css" />
-<link rel="shortcut icon" href="/img/favicon.ico" sizes="200x200">
+<link rel="shortcut icon" href="/img/favicon.ico">
 
 <script src="/bootstrap/js/jquery-3.6.0.min.js"></script>
 <script src="/bootstrap/js/jquery.maskedinput-1.1.4.pack.js"></script>

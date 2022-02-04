@@ -26,7 +26,7 @@ if ((isset($_POST['txtUsuario'])) && (isset($_POST['txtSenha']))) {
     }elseif (isset($resultado)){
         
         $_SESSION['usuarioID'] = $resultado['id_usuario'];
-        $_SESSION['usuarioNome'] = $resultado['ds_nome'];
+        $_SESSION['usuarioNome'] = $resultado['ds_nome_usuario'];
         $_SESSION['usuarioUsuario'] = $resultado['ds_usuario'];
         $_SESSION['usuarioSenha'] = $resultado['ds_senha'];
         $_SESSION['fk_tipo_usuario'] = $resultado['fk_tipo_usuario'];
