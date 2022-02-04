@@ -156,10 +156,10 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                                 //Captura dos valores para o calculo do tempo decorrido
                                 $dataEntrada = $data;
                                 $dataAgora = date("y.m.d H:i:s");
-
                                 
+                                                               
                                 //Calculo do tempo decorrido da visita 
-                                $entrada = new DateTime($dataEntrada);
+                                $entrada = new DateTime($dataEntrada . $dt_hora_entrada_visita);
                                 $saida = new DateTime('now');
                                 $intervalo = $saida->diff($entrada);
 
