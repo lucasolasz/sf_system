@@ -172,14 +172,16 @@ while ($dados = mysqli_fetch_array($resultsVisitante)) {
 
                 <br>
                 <br>
-
-                <button type="button" class="btn btn-success btn-lg" name="btnRegistraEntrada" id="btnRegistraEntrada">
-                    <img src="../../../bootstrap-icons/check-square-fill.svg" alt="" height="30px"> Registrar Entrada&nbsp;
+                
+                <button type="button" class="btn btn-success btn-lg" name="btnCancelaNovaVisita" 
+                        id="btnCancelaNovaVisita" onClick="" >Cancelar                
                 </button>
 
-                <button type="button" class="btn btn-success btn-lg" name="btnCancelaNovaVisita" id="btnCancelaNovaVisita" onClick="">
-                    <img src="../../../bootstrap-icons/arrow-left-square-fill.svg" alt="" height="30px"> Cancelar&nbsp;
-                </button>            
+                <button type="button" class="btn btn-success btn-lg" name="btnRegistraEntrada" id="btnRegistraEntrada">
+                    <img src="../../../bootstrap-icons/check-square-fill.svg" alt=""> Registrar Entrada&nbsp;
+                </button>
+
+                            
 
             </div>
 
