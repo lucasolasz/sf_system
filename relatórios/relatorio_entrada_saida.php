@@ -21,17 +21,8 @@ if (isset($_POST["txtDataInicioPeriodo"])) {
 }
 
 //SQL principal
-$sql = "SELECT * FROM tb_visita tvis" .
-    " JOIN tb_usuario tus ON tus.id_usuario = tvis.fk_usuario_entrada" .
-    " JOIN tb_usuario tusa ON tusa.id_usuario = tvis.fk_usuario_saida" .
-    " JOIN tb_cargo tcar ON tcar.id_cargo = tus.fk_cargo" .
-    " JOIN tb_cargo tcarsa ON tcarsa.id_cargo = tusa.fk_cargo" .
-    " JOIN tb_tipo_visita tvisa ON tvisa.id_tipo_visita = tvis.fk_tipo_visita" .
-    " JOIN tb_veiculo tvei ON tvei.ds_placa_veiculo = tvis.ds_placa_veiculo_visitante" .
-    " JOIN tb_tipo_veiculo ttivei ON ttivei.id_tipo_veiculo = tvei.fk_tipo_veiculo" .
-    " JOIN tb_casa tcas ON tcas.ds_numero_casa = tvis.ds_casa_visita" .
-    " JOIN tb_visitante tvista ON tvista.id_visitante = tvis.fk_visitante" .
-    " WHERE 1 = 1 ";
+$sql = "SELECT * FROM tb_historico_relatorio_visita"  
+    . " WHERE 1 = 1 ";
 
 //Filtra as datas
 if (isset($_POST["txtDataInicioPeriodo"], $_POST["txtDataTerminoPeriodo"])){
@@ -40,34 +31,34 @@ if (isset($_POST["txtDataInicioPeriodo"], $_POST["txtDataTerminoPeriodo"])){
     $txtDataTerminoPeriodo = $_POST["txtDataTerminoPeriodo"];
 
     if ($txtDataInicioPeriodo != "" or $txtDataTerminoPeriodo != "" ){ 
-        $sql .= " AND dt_entrada_visita BETWEEN '$txtDataInicioPeriodo' AND '$txtDataTerminoPeriodo'";
+        $sql .= " AND dt_entrada_visita_hst BETWEEN '$txtDataInicioPeriodo' AND '$txtDataTerminoPeriodo'";
     }
 }
 
-//Filtra os porteiros pelo id
+//Filtra os porteiros pelo nome
 if (isset($_POST["cboNomeUsuario"])){
-    $fk_usuario_entrada = $_POST["cboNomeUsuario"];
+    $ds_nome_usuario = $_POST["cboNomeUsuario"];
 
-    if($fk_usuario_entrada != ""){
-        $sql .= " AND fk_usuario_entrada = '$fk_usuario_entrada'";
+    if($ds_nome_usuario != ""){
+        $sql .= " AND nm_usuario_entrada_hst = '$ds_nome_usuario'";
     }
 }
 
-//Filtra tipo visita pelo id
+//Filtra tipo visita pelo nome
 if (isset($_POST["cboTipoVisita"])){
-    $fk_tipo_visita = $_POST["cboTipoVisita"];
+    $ds_tipo_visita = $_POST["cboTipoVisita"];
 
-    if($fk_tipo_visita != ""){
-        $sql .= " AND fk_tipo_visita = '$fk_tipo_visita'";
+    if($ds_tipo_visita != ""){
+        $sql .= " AND ds_tipo_visita_hst = '$ds_tipo_visita'";
     }
 }
 
-//Filtra tipo veiculo pelo id
+//Filtra tipo veiculo pelo nome
 if (isset($_POST["cboTipoVeiculo"])){
-    $fk_tipo_veiculo = $_POST["cboTipoVeiculo"];
+    $ds_tipo_veiculo = $_POST["cboTipoVeiculo"];
 
-    if($fk_tipo_veiculo != ""){
-        $sql .= " AND fk_tipo_veiculo = '$fk_tipo_veiculo'";
+    if($ds_tipo_veiculo != ""){
+        $sql .= " AND ds_tipo_veiculo_hst = '$ds_tipo_veiculo'";
     }
 }
 
@@ -76,7 +67,7 @@ if (isset($_POST["cboCasa"])){
     $ds_casa_visita = $_POST["cboCasa"];
 
     if($ds_casa_visita != ""){
-        $sql .= " AND ds_casa_visita = '$ds_casa_visita'";
+        $sql .= " AND ds_casa_visita_hst = '$ds_casa_visita'";
     }
 }
 
@@ -165,7 +156,7 @@ $resultsSqlPrincipal = mysqli_query($conn, $sql) or die("Erro ao retornar SQL PR
                                     $porteiroSelected = "selected";
                                 }
 
-                                echo "'<option $porteiroSelected value=$id_usuario>$ds_nome_usuario</option>'";
+                                echo "'<option $porteiroSelected value=$ds_nome_usuario>$ds_nome_usuario</option>'";
                             }
                         } else {
                             echo "'Nenhum porteiro encontrado'";
@@ -203,7 +194,7 @@ $resultsSqlPrincipal = mysqli_query($conn, $sql) or die("Erro ao retornar SQL PR
                                     $tipoVisitaSelected = "selected";
                                 }
 
-                                echo "'<option $tipoVisitaSelected value=$id_tipo_visita>$ds_tipo_visita</option>'";
+                                echo "'<option $tipoVisitaSelected value=$ds_tipo_visita>$ds_tipo_visita</option>'";
                             }
                         } else {
                             echo "'Nenhum tipo visita encontrado'";
@@ -233,7 +224,7 @@ $resultsSqlPrincipal = mysqli_query($conn, $sql) or die("Erro ao retornar SQL PR
                                 }
 
 
-                                echo "'<option $tipoVeiculoSelected value=$id_tipo_veiculo>$ds_tipo_veiculo</option>'";
+                                echo "'<option $tipoVeiculoSelected value=$ds_tipo_veiculo>$ds_tipo_veiculo</option>'";
                             }
                         } else {
                             echo "'Nenhum tipo veiculo encontrado'";
@@ -304,6 +295,7 @@ $resultsSqlPrincipal = mysqli_query($conn, $sql) or die("Erro ao retornar SQL PR
                         <th>Tipo Visita</th>
                         <th>Tipo Veículo</th>
                         <th>Casa</th>
+                        <th>Data Entrada</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -311,26 +303,28 @@ $resultsSqlPrincipal = mysqli_query($conn, $sql) or die("Erro ao retornar SQL PR
                     <?php if ($resultsSqlPrincipal->num_rows) {
                         while ($dados = $resultsSqlPrincipal->fetch_array()) {
                             
-                            $ds_nome_usuario = $dados['ds_nome_usuario'];
-                            $nm_visitante = $dados['nm_visitante'];
-                            $ds_tipo_visita = $dados['ds_tipo_visita'];
-                            $ds_tipo_veiculo = $dados['ds_tipo_veiculo'];
-                            $ds_numero_casa = $dados['ds_numero_casa'];
+                            $nm_usuario_entrada_hst = $dados['nm_usuario_entrada_hst'];
+                            $nm_visitante_hst = $dados['nm_visitante_hst'];
+                            $ds_tipo_visita_hst = $dados['ds_tipo_visita_hst'];
+                            $ds_tipo_veiculo_hst = $dados['ds_tipo_veiculo_hst'];
+                            $ds_casa_visita_hst = $dados['ds_casa_visita_hst'];
+                            $dt_entrada_visita_hst = date('d/m/Y', strtotime($dados['dt_entrada_visita_hst']));
                             
                             
 
                     ?>       
                         <tr>
-                            <td><?php echo $ds_nome_usuario ?></td>
-                            <td><?php echo $nm_visitante ?></td>
-                            <td><?php echo $ds_tipo_visita ?></td>
-                            <td><?php echo $ds_tipo_veiculo ?></td>
-                            <td><?php echo $ds_numero_casa ?></td>
+                            <td><?php echo $nm_usuario_entrada_hst ?></td>
+                            <td><?php echo $nm_visitante_hst ?></td>
+                            <td><?php echo $ds_tipo_visita_hst ?></td>
+                            <td><?php echo $ds_tipo_veiculo_hst ?></td>
+                            <td><?php echo $ds_casa_visita_hst ?></td>
+                            <td><?php echo $dt_entrada_visita_hst ?></td>
                         </tr>
 
                   <?php      }
                     } else {
-                        echo "<tr><td colspan='5' style='text-align: center'>Nenhum resultado encontrado</td></tr>";
+                        echo "<tr><td colspan='6' style='text-align: center'>Nenhum resultado encontrado</td></tr>";
                     }
                     ?>
 
