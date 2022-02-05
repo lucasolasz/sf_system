@@ -126,6 +126,8 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                         $sql .= " LEFT JOIN tb_visitante tvst ON tvst.id_visitante = tvsta.fk_visitante";
                         $sql .= " LEFT JOIN tb_tipo_visita tip ON tip.id_tipo_visita = tvsta.fk_tipo_visita";
                         $sql .= " LEFT JOIN tb_usuario tus ON tus.id_usuario = tvsta.fk_usuario_entrada";
+                        $sql .= " LEFT JOIN tb_veiculo tvei ON tvei.ds_placa_veiculo = tvsta.ds_placa_veiculo_visitante";
+                        $sql .= " LEFT JOIN tb_tipo_veiculo tpvei ON tpvei.id_tipo_veiculo = tvei.fk_tipo_veiculo";
                         $sql .= " WHERE dt_saida_visita IS NULL";
                         $sql .= " ORDER BY dt_entrada_visita, dt_hora_entrada_visita";
 
@@ -151,6 +153,7 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                                 $obs_visita = $dados['observacao_visita'];
                                 $ds_placa_veiculo_visitante = $dados['ds_placa_veiculo_visitante'];
                                 $ds_nome_usuario = $dados['ds_nome_usuario'];
+                                $ds_tipo_veiculo = $dados['ds_tipo_veiculo'];
                                     
                                 
                                 //Captura dos valores para o calculo do tempo decorrido
@@ -208,7 +211,7 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                                                 </p>
 
                                                 <h6>Placa veículo:</h6>
-                                                <p><?php echo strtoupper($ds_placa_veiculo_visitante) ?></p>
+                                                <p><?php echo $ds_tipo_veiculo . " - " . strtoupper($ds_placa_veiculo_visitante) ?></p>
                                                 
                                                 <h6>Casa destino:</h6>
                                                 <p><?php echo $ds_casa_visita ?></p>
