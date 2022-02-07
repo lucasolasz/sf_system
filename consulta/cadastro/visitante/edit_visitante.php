@@ -438,7 +438,7 @@ var arrayIDs = [];
             id_tipo_veiculo = $("#cboTipoVeiculo" + linha_da_placa).val();
             
             if (id_tipo_veiculo == 4){
-                $("#txtPlacaVeiculoVisitante" + linha_da_placa).val("Bicicleta - S/Placa");
+                $("#txtPlacaVeiculoVisitante" + linha_da_placa).val("S/PLACA");
                 $("#txtPlacaVeiculoVisitante" + linha_da_placa).prop('readonly', true);
             } else{
                 $("#txtPlacaVeiculoVisitante" + linha_da_placa).val("");
