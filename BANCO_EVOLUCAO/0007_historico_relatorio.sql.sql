@@ -2,6 +2,7 @@
 
 CREATE TABLE `tb_historico_relatorio_visita`(	
 	`id_relatorio_visita_hst` SMALLINT(6) NOT NULL AUTO_INCREMENT UNIQUE,
+        `id_visita_hst` SMALLINT(6) DEFAULT NULL, 
 	`nm_visitante_hst` VARCHAR(255) DEFAULT NULL,
         `telefone_um_visitante_hst` VARCHAR(20) NULL DEFAULT NULL,
         `telefone_dois_visitante_hst` VARCHAR(20) NULL DEFAULT NULL,

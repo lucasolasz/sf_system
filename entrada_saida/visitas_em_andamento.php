@@ -8,6 +8,7 @@ date_default_timezone_set('America/Sao_Paulo');
 require_once $_SESSION['caminhopadrao'] . "conexao.php";
 
 $id_usuarioLogado =  $_SESSION['usuarioID'];
+$nm_usuarioLogado = $_SESSION['usuarioNome'];
 
 if (isset($_POST["hidIdVisita"])){
     $id_visita = $_POST["hidIdVisita"];
@@ -46,7 +47,7 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                 . " , fk_usuario_saida = '" . $id_usuarioLogado . "'"
                 . " WHERE id_visita = " . $id_visita;
 
-        $resultsVisitante = mysqli_query($conn, $sql) or die("Erro ao DELETAR dados");
+        $resultsVisitante = mysqli_query($conn, $sql) or die("Erro ao realizar UPDATE dos dados na tabela visita");
 
         if (!mysqli_query($conn, $sql)) {
             // echo "Erro ao deletar o visitante";
@@ -57,6 +58,16 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
             header("Location: visitas_em_andamento.php");
             exit();
         } else {
+            
+            
+            //Realiza o update na tabela de historico das visitas para o relatorio
+            $sql = "UPDATE tb_historico_relatorio_visita SET"
+                    . " nm_usuario_saida_hst = '" . $nm_usuarioLogado . "'"
+                    . " , dt_saida_visita_hst = '" . $anoMesDia . "'"
+                    . " , dt_hora_saida_visita_hst = '" . $horaMinutoSegundo . "'"
+                    . " WHERE id_visita_hst = " . $id_visita;
+            
+            mysqli_query($conn, $sql) or die("Erro ao realizar UPDATE dos dados da tabela historico");
 
             $_SESSION['mensagem'] = "SAIDA da visita registrada com sucesso!";
             $_SESSION['corMensagem'] = "success";
