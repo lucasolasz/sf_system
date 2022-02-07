@@ -80,7 +80,7 @@ if (isset($_POST['hidIdOperacaoDeletar'])) {
                 <span class="input-group-text">
                 <img src="../../../bootstrap-icons/search.svg" alt="" height="30px" width="30px">&nbsp;
                 </span>
-                <input type="text" name="PesquisaNome" id="PesquisaNome" placeholder="Digite o nome" class="form-control">
+                <input type="text" name="PesquisaNome" id="PesquisaNome" placeholder="Digite o nome ou placa" class="form-control">
             </div>
         </div>
     </div>

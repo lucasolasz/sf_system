@@ -10,7 +10,10 @@ require_once $_SESSION['caminhopadrao'] . "conexao.php";
 if (isset($_POST["nm_visitante"])) {
     $nm_visitante = $_POST["nm_visitante"];
     //Retorna visitante para pesquisa
-    $sql = "SELECT * FROM tb_visitante WHERE nm_visitante LIKE '%$nm_visitante%' ORDER BY nm_visitante";
+    $sql = "SELECT DISTINCT vis.nm_visitante, vis.id_visitante FROM tb_visitante vis"
+            . " LEFT JOIN tb_veiculo tvei ON tvei.fk_visitante = vis.id_visitante"
+            . " WHERE vis.nm_visitante LIKE '%$nm_visitante%' OR tvei.ds_placa_veiculo LIKE '%$nm_visitante%' "
+            . " ORDER BY vis.nm_visitante";
 } else {
     $sql = "SELECT * from tb_visitante ORDER BY nm_visitante";
 }
@@ -36,13 +39,13 @@ if ($rowcountVisitante > 0) {
 
             $nm_visitante = $dados['nm_visitante'];
             //Função que converte a String em Primeira maiúscula e restante minúsculo
-            $teste = mb_convert_case($nm_visitante , MB_CASE_TITLE , 'UTF-8');
+            $nome = mb_convert_case($nm_visitante , MB_CASE_TITLE , 'UTF-8');
             $id_visitante = $dados['id_visitante'];
 
 
             $data .= '
             <tr>
-                <td>' . $teste . '</td>
+                <td>' . $nome . '</td>
                 <td>
                     <button type="button" class="btn btn-warning btn-sm" name="btnEditar" id="btnEditar" onClick="editarVisitante(' . $id_visitante . ')">
                         <img src="../../../bootstrap-icons/pencil.svg" alt=""> Editar&nbsp;
