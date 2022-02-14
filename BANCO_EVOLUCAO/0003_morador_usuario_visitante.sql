@@ -96,8 +96,7 @@ CREATE TABLE IF NOT EXISTS `tb_cargo` (
 
 
 INSERT INTO tb_cargo (id_cargo, ds_cargo) VALUES(1, 'Síndico');
-INSERT INTO tb_cargo (id_cargo, ds_cargo) VALUES(2, 'Jardineiro');
-INSERT INTO tb_cargo (id_cargo, ds_cargo) VALUES(3, 'Porteiro');
+INSERT INTO tb_cargo (id_cargo, ds_cargo) VALUES(2, 'Porteiro');
 
 
 UPDATE tb_parametro SET vl_parametro = 'v0003' 

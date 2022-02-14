@@ -1,4 +1,8 @@
 <?php
+//
+////Define o timezone
+//date_default_timezone_set('America/Sao_Paulo');
+//header("Refresh:30; /sair.php");
 
 ?>
 
