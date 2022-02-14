@@ -1,19 +1,22 @@
 
--- CREATE TABLE `tb_morador` (
--- 	`id_morador` SMALLINT(6) NOT NULL AUTO_INCREMENT UNIQUE,
--- 	`nm_morador` VARCHAR(255) NULL DEFAULT NULL,
--- 	`nm_alternativo` VARCHAR(255) NULL DEFAULT NULL,
--- 	`documento_morador` VARCHAR(20) NULL DEFAULT NULL,
--- 	`ds_placa_veiculo` VARCHAR(20) NULL DEFAULT NULL,
--- 	`ds_cor_veiculo` VARCHAR(20) NULL DEFAULT NULL,
--- 	`fk_veiculo` SMALLINT(6) NULL DEFAULT NULL,
--- 	`num_casa_morador` SMALLINT(6) NULL DEFAULT NULL,
--- 	`telefone_um_morador` VARCHAR(20) NULL DEFAULT NULL,
--- 	`telefone_dois_morador` VARCHAR(20) NULL DEFAULT NULL,
--- 	`observacao_morador` VARCHAR(500) NULL DEFAULT NULL,
--- 	PRIMARY KEY (`id_morador`)
--- ) CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;
-
+CREATE TABLE `tb_morador` (
+    id_morador SMALLINT(6) NOT NULL AUTO_INCREMENT UNIQUE,
+    nm_morador VARCHAR(255) NULL DEFAULT NULL,
+    num_casa_morador VARCHAR(10) DEFAULT NULL,
+    flag_locatario CHAR(1) DEFAULT NULL,
+    documento_morador VARCHAR(20) NULL DEFAULT NULL,
+    dt_nascimento_morador DATE NULL DEFAULT NULL,
+    tel_um_morador VARCHAR(20) NULL DEFAULT NULL,
+    tel_dois_morador VARCHAR(20) NULL DEFAULT NULL,
+    email_morador VARCHAR(100) NULL DEFAULT NULL,
+    tel_emergencia VARCHAR(20) NULL DEFAULT NULL,
+    nm_locatario VARCHAR(255) NULL DEFAULT NULL,
+    documento_locatario VARCHAR(20) NULL DEFAULT NULL,
+    dt_nascimento_locatario DATE NULL DEFAULT NULL,
+    tel_um_locatario VARCHAR(20) NULL DEFAULT NULL,
+    tel_dois_locatario VARCHAR(20) NULL DEFAULT NULL,
+    PRIMARY KEY (`id_morador`)
+) CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;
 
 
 CREATE TABLE `tb_visitante` (

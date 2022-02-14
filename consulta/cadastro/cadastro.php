@@ -64,9 +64,16 @@ $cadastrarMorador = 0;
             form.submit();
 
         });
+        
+        $("#btnNovoMorador").click(function() {
 
+            // $('#hidOpcaoUsuario').val(1);
 
+            var form = document.getElementById("form_sf_system");
+            form.action = "./morador/cad_morador.php";
+            form.submit();
 
+        });
 
 
         $("#btnNovoUsuario").click(function() {
