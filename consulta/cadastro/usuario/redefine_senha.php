@@ -51,16 +51,14 @@ if (isset($_SESSION['documentoRecuperaSenha'])){
                 </div>
                 
                 <br>
+                
+                <button type="submit" class="btn btn-success" id="btnCancelar" name="btnCancelar">Cancelar
+                </button>
 
                 <button type="submit" class="btn btn-success" id="btnGravar" name="btnGravar">
-                <img src="../../../bootstrap-icons/check-square-fill.svg" alt="" height="30px" width="30px"> Gravar&nbsp;
+                <img src="../../../bootstrap-icons/check-square-fill.svg"> Gravar&nbsp;
                 </button>
                 
-                <button type="submit" class="btn btn-success" id="btnCancelar" name="btnCancelar">
-                    <img src="../../../bootstrap-icons/arrow-left-square-fill.svg" alt="" height="30px" width="30px"> Cancelar&nbsp;
-                </button>
-                
-
             </form>
         </main>
 
