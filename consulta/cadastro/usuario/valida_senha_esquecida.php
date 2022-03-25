@@ -20,8 +20,9 @@ if (isset($_POST['hidOperacaoUpdateSenha'])){
    if ($senha == $confirmaSenha){
        
        
-       $sql = "UPDATE tb_usuario SET ds_senha = md5('" .  $senha . "') WHERE ds_documento_usuario = " . $hidDocumento;
-       
+       $sql = "UPDATE tb_usuario SET ds_senha = md5('" .  $senha . "') WHERE ds_documento_usuario = '" . $hidDocumento . "'";
+       echo $sql;
+       exit();
         if (!mysqli_query($conn, $sql)) {
             
             $_SESSION['loginErro'] = "Erro ao ALTERAR a senha. Contate o Administrador do sistema.";
