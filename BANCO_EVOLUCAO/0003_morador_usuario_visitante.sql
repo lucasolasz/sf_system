@@ -75,8 +75,8 @@ CREATE TABLE `tb_usuario` (
 	PRIMARY KEY (`id_usuario`)
 ) CHARACTER SET utf8 COLLATE UTF8_GENERAL_CI;
 
-INSERT INTO tb_usuario (ds_nome_usuario,ds_usuario, ds_senha, fk_tipo_usuario, fk_cargo) VALUES ('Administrador','admin', MD5('sfsystem@admin'), 1,1);
-
+INSERT INTO `tb_usuario` (`ds_nome_usuario`, `ds_endereco_usuario`, `ds_complemento_usuario`, `ds_documento_usuario`, `fk_cidade`, `fk_estado`, `ds_cep_usuario`, `fk_cargo`, `ds_usuario`, `ds_senha`, `fk_tipo_usuario`) VALUES
+('Administrador', '', '', '', 6861, 19, '', 3, 'admin', MD5('sfsystem@admin'), 1);
 
 CREATE TABLE IF NOT EXISTS `tb_tipo_usuario` (
   `id_tipo_usuario` smallint(6) NOT NULL AUTO_INCREMENT UNIQUE,
