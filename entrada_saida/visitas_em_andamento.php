@@ -137,7 +137,7 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                         $sql .= " LEFT JOIN tb_visitante tvst ON tvst.id_visitante = tvsta.fk_visitante";
                         $sql .= " LEFT JOIN tb_tipo_visita tip ON tip.id_tipo_visita = tvsta.fk_tipo_visita";
                         $sql .= " LEFT JOIN tb_usuario tus ON tus.id_usuario = tvsta.fk_usuario_entrada";
-                        $sql .= " LEFT JOIN tb_veiculo tvei ON tvei.ds_placa_veiculo = tvsta.ds_placa_veiculo_visitante";
+                        $sql .= " LEFT JOIN tb_veiculo tvei ON tvei.fk_visitante = tvsta.fk_visitante";
                         $sql .= " LEFT JOIN tb_tipo_veiculo tpvei ON tpvei.id_tipo_veiculo = tvei.fk_tipo_veiculo";
                         $sql .= " WHERE dt_saida_visita IS NULL";
                         $sql .= " ORDER BY dt_entrada_visita, dt_hora_entrada_visita";
