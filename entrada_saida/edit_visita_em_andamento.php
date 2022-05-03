@@ -8,25 +8,19 @@ $id_visitante = $_POST["hidIdVisitante"];
 // echo $id_visitante;
 // exit();
 
-$sql = "SELECT * FROM tb_visitante";
-$sql .= " WHERE id_visitante = " . $id_visitante;
-
+$sql = "SELECT * FROM tb_visitante WHERE id_visitante =  $id_visitante ";
 // echo $sql;
 // exit();
 $resultsVisitante = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
 
 while ($dados = mysqli_fetch_array($resultsVisitante)) {
 
-
     $nm_visitante = $dados['nm_visitante'];
     $documento_visitante = $dados['documento_visitante'];
     $telefone_um_visitante = $dados['telefone_um_visitante'];
     $telefone_dois_visitante = $dados['telefone_dois_visitante'];
     
-   
-    
     $titulo_tela = "Nova visita";
-    
     
 }
 ?>
@@ -87,20 +81,21 @@ while ($dados = mysqli_fetch_array($resultsVisitante)) {
                     <div class="form-group col-md-4">
                         <label for="cboPlacaVisitante">Placa Visitante</label>
                         <select class="form-select" name="cboPlacaVisitante" id="cboPlacaVisitante">
-                            <option value=""></option>
+                            <option value="NULL"></option>
                             <?php
-                            $sql = "SELECT ds_placa_veiculo FROM tb_visitante tvi" . 
+                            $sql = "SELECT id_veiculo, ds_placa_veiculo FROM tb_visitante tvi" . 
                                    " JOIN tb_veiculo tve ON tve.fk_visitante = tvi.id_visitante" . 
-                                   " WHERE tvi.id_visitante = " . $id_visitante;
+                                   " WHERE tvi.id_visitante =  $id_visitante";
 
                             $results = mysqli_query($conn, $sql) or die("Erro ao retornar PLACAS");
 
                             if ($results->num_rows) {
                                 while ($dados = $results->fetch_array()) {
-
+                                    
+                                    $id_veiculo = $dados['id_veiculo'];
                                     $ds_placa_veiculo = strtoupper($dados['ds_placa_veiculo']);                                    
 
-                                    echo "<option value=$ds_placa_veiculo>$ds_placa_veiculo</option>";
+                                    echo "<option value=$id_veiculo>$ds_placa_veiculo</option>";
                                 }
                             } else
                                 echo "Nenhuma placa encontrada";
@@ -114,7 +109,7 @@ while ($dados = mysqli_fetch_array($resultsVisitante)) {
                     <div class="form-group col-md-4">
                         <label for="cboTipoVisita">Tipo Visita</label>
                         <select class="form-select" name="cboTipoVisita" id="cboTipoVisita">
-                            <option value="0"></option>
+                            <option value="NULL"></option>
                             <?php
                             $sql = "SELECT * FROM tb_tipo_visita ORDER BY ds_tipo_visita";
                             $results = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
@@ -142,7 +137,7 @@ while ($dados = mysqli_fetch_array($resultsVisitante)) {
 
                     <label for="cboNumeroDaCasa">N° Casa a ser visitada</label>
                         <select class="form-select" name="cboNumeroDaCasa" id="cboNumeroDaCasa">
-                            <option value=""></option>
+                            <option value="NULL"></option>
                             <?php
                                 $sql = "SELECT * FROM tb_casa";
 
@@ -151,9 +146,10 @@ while ($dados = mysqli_fetch_array($resultsVisitante)) {
                                 if ($results->num_rows) {
                                     while ($dados = $results->fetch_array()) {
 
+                                        $id_casa = $dados['id_casa'];
                                         $ds_numero_casa = $dados['ds_numero_casa'];                                    
 
-                                        echo "<option value=$ds_numero_casa>$ds_numero_casa</option>";
+                                        echo "<option value=$id_casa>$ds_numero_casa</option>";
                                     }
                                 } else
                                     echo "Nenhuma casa encontrada";
@@ -226,14 +222,14 @@ while ($dados = mysqli_fetch_array($resultsVisitante)) {
                 }
 
                 $("#containeralert").html("");
-                if (cboTipoVisita == 0) {
+                if (cboTipoVisita == "NULL") {
                     msg = "<b>Selecione um TIPO DE VISITA</b>";
                     $("#containeralert").html(exibeMensagem(msg));
                     return false;
                 }
 
                 $("#containeralert").html("");
-                if (cboNumeroDaCasa == "") {
+                if (cboNumeroDaCasa == "NULL") {
                     msg = "<b>Escolha um NÚMERO DE CASA a ser visitada</b>";
                     $("#containeralert").html(exibeMensagem(msg));
                     return false;

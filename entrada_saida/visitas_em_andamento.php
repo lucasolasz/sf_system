@@ -28,55 +28,6 @@ header("Refresh:45");
 
 //header("Refresh:900; /sair.php");
 
-
-if (isset($_POST['hidIdOperacaoSaida'])) {
-
-    $opercaoSaida = $_POST['hidIdOperacaoSaida'];
-
-    if ($opercaoSaida) {
-        
-        //Captura o valor do ano/mes/dia - Hora/minuto/segundo
-        $anoMesDia = date("y.m.d H:i:s");
-
-        //Captura Hora/minuto/segundo
-        $horaMinutoSegundo = date("H:i:s");
-
-        $sql = "UPDATE tb_visita SET"
-                . " dt_saida_visita = '" . $anoMesDia . "'"
-                . " , dt_hora_saida_visita = '" . $horaMinutoSegundo . "'"
-                . " , fk_usuario_saida = '" . $id_usuarioLogado . "'"
-                . " WHERE id_visita = " . $id_visita;
-
-        $resultsVisitante = mysqli_query($conn, $sql) or die("Erro ao realizar UPDATE dos dados na tabela visita");
-
-        if (!mysqli_query($conn, $sql)) {
-            // echo "Erro ao deletar o visitante";
-            // echo "Erro SQL: " . mysqli_error($conn);
-            $_SESSION['mensagem'] = "Erro ao registrar SAIDA da visita! Contate o administrador do sistema.";
-            $_SESSION['corMensagem'] = "danger";
-            mysqli_close($conn);
-            header("Location: visitas_em_andamento.php");
-            exit();
-        } else {
-            
-            
-            //Realiza o update na tabela de historico das visitas para o relatorio
-            $sql = "UPDATE tb_historico_relatorio_visita SET"
-                    . " nm_usuario_saida_hst = '" . $nm_usuarioLogado . "'"
-                    . " , dt_saida_visita_hst = '" . $anoMesDia . "'"
-                    . " , dt_hora_saida_visita_hst = '" . $horaMinutoSegundo . "'"
-                    . " WHERE id_visita_hst = " . $id_visita;
-            
-            mysqli_query($conn, $sql) or die("Erro ao realizar UPDATE dos dados da tabela historico");
-
-            $_SESSION['mensagem'] = "SAIDA da visita registrada com sucesso!";
-            $_SESSION['corMensagem'] = "success";
-            mysqli_close($conn);
-            header("Location: visitas_em_andamento.php");
-            exit();
-        };
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -137,19 +88,16 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                         $sql .= " LEFT JOIN tb_visitante tvst ON tvst.id_visitante = tvsta.fk_visitante";
                         $sql .= " LEFT JOIN tb_tipo_visita tip ON tip.id_tipo_visita = tvsta.fk_tipo_visita";
                         $sql .= " LEFT JOIN tb_usuario tus ON tus.id_usuario = tvsta.fk_usuario_entrada";
-                        $sql .= " LEFT JOIN tb_veiculo tvei ON tvei.fk_visitante = tvsta.fk_visitante";
+                        $sql .= " LEFT JOIN tb_veiculo tvei ON tvei.id_veiculo = tvsta.fk_veiculo";
                         $sql .= " LEFT JOIN tb_tipo_veiculo tpvei ON tpvei.id_tipo_veiculo = tvei.fk_tipo_veiculo";
+                        $sql .= " LEFT JOIN tb_casa tcas ON tcas.id_casa = tvsta.fk_casa";
                         $sql .= " WHERE dt_saida_visita IS NULL";
-                        $sql .= " ORDER BY dt_entrada_visita, dt_hora_entrada_visita";
+                        $sql .= " ORDER BY dt_entrada_visita asc, dt_hora_entrada_visita asc";
 
-//                     echo $sql;
-//                     exit();
                         $resultsVisita = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
 
                         $rowcountVisita = mysqli_num_rows($resultsVisita);
 
-//                     echo $rowcountVisita;
-//                     exit();
                         if ($rowcountVisita > 0) {
                             while ($dados = mysqli_fetch_array($resultsVisita)) {
 
@@ -157,12 +105,12 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                                 $nm_visitante = $dados['nm_visitante'];
                                 $ds_tipo_visita = $dados['ds_tipo_visita'];
                                 $dt_hora_entrada_visita = $dados['dt_hora_entrada_visita'];
-                                $ds_casa_visita = $dados['ds_casa_visita'];
+                                $ds_numero_casa = $dados['ds_numero_casa'];
                                 //Precisa-se formatar a data do padrao americano para o br
                                 $data = $dados['dt_entrada_visita'];
                                 $dt_entrada_visita = date('d/m/Y', strtotime($data));
                                 $obs_visita = $dados['observacao_visita'];
-                                $ds_placa_veiculo_visitante = $dados['ds_placa_veiculo_visitante'];
+                                $ds_placa_veiculo = $dados['ds_placa_veiculo'];
                                 $ds_nome_usuario = $dados['ds_nome_usuario'];
                                 $ds_tipo_veiculo = $dados['ds_tipo_veiculo'];
                                     
@@ -198,7 +146,7 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="modalInformacoesLabel">Informações da Visita: <?php echo $nm_visitante ?></h5>
+                                                <h5 class="modal-title" id="modalInformacoesLabel">Informações da Visita: <b><?php echo $nm_visitante ?></b></h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
@@ -221,11 +169,16 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                                                     ?>
                                                 </p>
 
-                                                <h6>Placa veículo:</h6>
-                                                <p><?php echo $ds_tipo_veiculo . " - " . strtoupper($ds_placa_veiculo_visitante) ?></p>
+                                                <h6>Tipo Veículo - Placa veículo:</h6>
+                                                
+                                                <?php if($ds_tipo_veiculo != "") { ?>
+                                                    <p><?php echo $ds_tipo_veiculo . " - " . strtoupper($ds_placa_veiculo)?></p>
+                                                <?php }else { ?>
+                                                    <p><i>Visitante sem placa escolhida</i></p>
+                                               <?php } ?>
                                                 
                                                 <h6>Casa destino:</h6>
-                                                <p><?php echo $ds_casa_visita ?></p>
+                                                <p><?php echo $ds_numero_casa ?></p>
 
                                                 <h6>Entrada dada pelo porteiro(a):</h6>
                                                 <p><?php echo $ds_nome_usuario ?></p>
@@ -282,7 +235,7 @@ if (isset($_POST['hidIdOperacaoSaida'])) {
                 $("#hidIdVisita").val(id_visita);
                 $("#hidIdOperacaoSaida").val(true);
                 var form = document.getElementById("form_sf_system");
-                form.action = "visitas_em_andamento.php";
+                form.action = "delete_visita_em_andamento.php";
                 form.submit();
 
             }
