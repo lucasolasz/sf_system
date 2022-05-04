@@ -21,8 +21,8 @@ if(!isset($_SESSION['usuarioUsuario'])){
     <?php require_once "nav.php"; ?>
 
     <div class="container">
-        <img src="/img/Logo.png" class="img-fluid" alt="" height="100px" width="800px" 
-             style="display: block; margin: auto;">
+        <img src="/img/Logo.png" class="img-fluid" alt="" height="50px" width="400px" 
+             style="display: block; margin: auto; padding-top: 20px;">
     </div>
     
     
