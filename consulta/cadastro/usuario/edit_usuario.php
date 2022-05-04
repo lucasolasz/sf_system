@@ -5,31 +5,11 @@ require_once $_SESSION['caminhopadrao'] . "conexao.php";
 
 $id_usuario = $_POST["hidIdUsuario"];
 
-
-
-
-// echo $opc_adicionar;
-// __halt_compiler();
-
-
 //Se vazio esta cadastrando novo usuario
 if ($id_usuario == "") {
-
-    $nome_usuario           = "";
-    $endereco_usuario       = "";
-    $complemento_usuario    = "";
-    $documento_usuario      = "";
-    $fk_estado              = "";
-    $fk_cidade              = "";
-    $id_cidade              = "";
-    $ds_cidade              = "";
-    $fk_cargo               = "";
-    $fk_tipo_usuario        = "";
-    $usuario                = "";
-    $senha                  = "";
-    $cep_usuario            = "";
-
+    
     $titulo_tela = "Novo Usuário";
+
 } else {
 
     $titulo_tela = "Editar Usuário";
@@ -59,9 +39,6 @@ if ($id_usuario == "") {
         $cep_usuario = $dados['ds_cep_usuario'];
     }
 }
-
-// echo $fk_estado;
-// exit();
 
 ?>
 
@@ -104,7 +81,7 @@ if ($id_usuario == "") {
 
         <input type="hidden" name="hidIdUsuario" id="hidIdUsuario" value="<?php echo $id_usuario ?>">
 
-       
+
         <div class="container" id="containeralert"></div>
 
         <div class="container py-3">
@@ -148,7 +125,7 @@ if ($id_usuario == "") {
                 <div class="form-group col-md-4">
                     <label for="cboEstado">Estado</label>
                     <select class="form-select" id="cboEstado" name="cboEstado">
-                        <option value=""></option>
+                        <option value="NULL"></option>
                         <?php
                         $sql = "SELECT * FROM tb_estados";
                         $results = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
@@ -188,7 +165,7 @@ if ($id_usuario == "") {
                 <div class="form-group col-md-4">
                     <label for="cboCargo">Cargo</label>
                     <select class="form-select" id="cboCargo" name="cboCargo">
-                        <option value=""></option>
+                        <option value="NULL"></option>
                         <?php
                         $sql = "SELECT * FROM tb_cargo ORDER BY ds_cargo";
                         $results = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
@@ -215,7 +192,7 @@ if ($id_usuario == "") {
                 <div class="form-group col-md-4">
                     <label for="cboTipoUsuario">Tipo Usuário</label>
                     <select class="form-select" id="cboTipoUsuario" name="cboTipoUsuario">
-                        <option value=""></option>
+                        <option value="NULL"></option>
                         <?php
                         $sql = "SELECT * FROM tb_tipo_usuario ORDER BY ds_tipo_usuario";
                         $results = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
@@ -279,7 +256,7 @@ if ($id_usuario == "") {
                 </button>
             <?php } ?>
 
-            
+
 
 
         </div>
@@ -294,7 +271,7 @@ if ($id_usuario == "") {
 
             //Força usuário a digitar somente números
             $("#txtDocumento").keyup(function() {
-                $("#txtDocumento").val(this.value.match(/[0-9]*/));                
+                $("#txtDocumento").val(this.value.match(/[0-9]*/));
             });
 
         });
@@ -343,19 +320,13 @@ if ($id_usuario == "") {
             mensagem = "<div class='alert alert-danger text-center' role='alert'>Falha ao criar usuário: " + msg + "</div>";
             return mensagem
         }
-
-//        $("#btnEditarUsuario").click(function() {
-//            var form = document.getElementById("form_sf_system");
-//            form.action = "grava_usuario.php";
-//            form.submit();
-//        });
-
+        
         usuario_validado = false;
-        
-        
-        
-        function validaCamposNovoUsuario() {
 
+        function validaCamposNovoUsuario() {
+            
+            var txtDocumento = $("#txtDocumento").val();
+            var txtNomeUsuario = $("#txtNomeUsuario").val();
             var ds_usuario = $("#txtUsuario").val();
             var cboEstado = $("#cboEstado").val();
             var cboCargo = $("#cboCargo").val();
@@ -364,21 +335,35 @@ if ($id_usuario == "") {
 
             //Verifica se campos estão vazios para salvar
             $("#containeralert").html("");
-            if (cboCargo == "") {
+            if (txtNomeUsuario == "") {
+                msg = "<b>Digite um NOME</b>";
+                $("#containeralert").html(exibeMensagem(msg));
+                return false;
+            }
+
+            $("#containeralert").html("");
+            if (txtDocumento == "") {
+                msg = "<b>Digite um DOCUMENTO</b>";
+                $("#containeralert").html(exibeMensagem(msg));
+                return false;
+            }
+
+            $("#containeralert").html("");
+            if (cboCargo == "NULL") {
                 msg = "<b>Selecione um CARGO</b>";
                 $("#containeralert").html(exibeMensagem(msg));
                 return false;
             }
 
             $("#containeralert").html("");
-            if (cboTipoUsuario == "") {
+            if (cboTipoUsuario == "NULL") {
                 msg = "<b>Selecione um TIPO USUÁRIO</b>";
                 $("#containeralert").html(exibeMensagem(msg));
                 return false;
             }
 
             $("#containeralert").html("");
-            if (cboEstado == "") {
+            if (cboEstado == "NULL") {
                 msg = "<b>Selecione um ESTADO e uma CIDADE</b>";
                 $("#containeralert").html(exibeMensagem(msg));
                 return false;
@@ -402,7 +387,7 @@ if ($id_usuario == "") {
             validaUsuario(ds_usuario);
 
         };
-        
+
         function validaCamposEditUsuario() {
 
             var cboEstado = $("#cboEstado").val();
@@ -431,7 +416,7 @@ if ($id_usuario == "") {
                 $("#containeralert").html(exibeMensagem(msg));
                 return false;
             }
-            
+
             var form = document.getElementById("form_sf_system");
             form.action = "grava_usuario.php";
             form.submit();

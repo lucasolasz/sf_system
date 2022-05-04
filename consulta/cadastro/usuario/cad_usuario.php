@@ -26,14 +26,14 @@ if (isset($_POST['hidIdOperacaoDeletar'])) {
 
         $sql = "DELETE FROM tb_usuario WHERE id_usuario = " . $id_usuario;
 
-        $resultsUsuario = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
+        // $resultsUsuario = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
 
 
         if (!mysqli_query($conn, $sql)) {
-            echo "Erro ao deletar o usuario";
-            echo "Erro SQL: " . mysqli_error($conn);
+            // echo "Erro ao deletar o usuario";
+            // echo "Erro SQL: " . mysqli_error($conn);
 
-            $_SESSION['mensagem'] = "Erro ao deletar usuário! Contate o administrador do sistema.";
+            $_SESSION['mensagem'] = "Erro ao deletar usuário! É possível que esteja vinculado a visitas. <br> Contate o administrador do sistema.";
             $_SESSION['corMensagem'] = "danger";
             mysqli_close($conn);
             header("Location: cad_usuario.php");
