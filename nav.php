@@ -40,7 +40,7 @@ if(!isset($_SESSION['usuarioUsuario'])){
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/relatórios/relatorio_entrada_saida.php">
+                        <a class="nav-link" href="/relatórios/relatorio_entrada_saida.php?pagina=1">
                             <img src="/bootstrap-icons/calendar-check-fill.svg" alt="" height="30px" width="30px">
                             <span>Relatórios</span>
                         </a>
