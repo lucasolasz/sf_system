@@ -75,7 +75,7 @@ if (isset($_POST['hidIdOperacaoDeletar'])) {
                 <span class="input-group-text">
                 <img src="../../../bootstrap-icons/search.svg" alt="" height="30px" width="30px">&nbsp;
                 </span>
-                <input type="text" name="PesquisaNome" id="PesquisaNome" placeholder="Digite o nome ou placa" class="form-control">
+                <input type="text" name="PesquisaNome" id="PesquisaNome" placeholder="Digite o nome ou casa" class="form-control">
             </div>
         </div>
     </div>
@@ -149,17 +149,7 @@ if (isset($_POST['hidIdOperacaoDeletar'])) {
                     buscarNomeMorador();
                 }
             });
-        });
-
-        
-//        function entradaVisita(id_visitante) {;
-//            $("#hidIdVisitante").val(id_visitante);
-//            var form = document.getElementById("form_sf_system");
-//            form.action = "/entrada_saida/edit_visita_em_andamento.php";
-//            form.submit();
-//            
-//        }
-        
+        });       
 
         function editarMorador(id_morador) {
 

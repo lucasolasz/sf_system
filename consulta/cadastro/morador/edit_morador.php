@@ -16,7 +16,7 @@ if (isset($_POST['hidIdDeletarVeiculo'])){
 
     if($id_veiculo != 0){
 
-        $sql = "DELETE FROM tb_veiculo WHERE id_veiculo = " . $id_veiculo;
+        $sql = "DELETE FROM tb_veiculo WHERE id_veiculo =  $id_veiculo";
         
         $resultsDeleteVeiculo = mysqli_query($conn, $sql) or die("Erro ao DELETAR veiculo");
 
@@ -29,8 +29,7 @@ if (isset($_POST['hidIdDeletarVeiculo'])){
 if ($id_morador == "") {
 
     $titulo_tela = "Novo Morador";
-    
-    $flag_locatario = "";
+    $flag_locatario = "NULL";
     $exibeDisabled = "disabled";
     
 } else {
@@ -38,7 +37,7 @@ if ($id_morador == "") {
     $titulo_tela = "Editar Morador";
 
     $sql = "SELECT * FROM tb_morador mor";
-    $sql .= " WHERE id_morador = " . $id_morador;
+    $sql .= " WHERE id_morador = $id_morador";
 
     // echo $sql;
     // exit();
@@ -47,7 +46,7 @@ if ($id_morador == "") {
     while ($dados = mysqli_fetch_array($resultsMorador)) {
 
         $nm_morador = $dados["nm_morador"];
-        $num_casa_morador = $dados["num_casa_morador"];
+        $fk_casa = $dados["fk_casa"];
         $documento_morador = $dados["documento_morador"];
         $dt_nascimento_morador = $dados["dt_nascimento_morador"];
         $tel_um_morador = $dados["tel_um_morador"];
@@ -56,6 +55,9 @@ if ($id_morador == "") {
         $tel_emergencia = $dados["tel_emergencia"];
         
         $flag_locatario = $dados["flag_locatario"];
+
+        // echo "valor locatario" . $flag_locatario;
+        // exit();
         $nm_locatario = $dados["nm_locatario"];
         $documento_locatario = $dados["documento_locatario"];
         $dt_nascimento_locatario = $dados["dt_nascimento_locatario"];
@@ -106,7 +108,7 @@ if ($id_morador == "") {
 <script>
     
     
-//Inicia o array com os ids dos carros
+//Inicia o array que irá receber os índices de cada veículo
 var arrayIDs = [];
 
 </script>
@@ -141,24 +143,23 @@ var arrayIDs = [];
                 <div class="form-group col-md-4">
                     <label for="cboNumeroDaCasa">N° da casa</label>
                         <select class="form-select" name="cboNumeroDaCasa" id="cboNumeroDaCasa">
-                            <option value=""></option>
+                            <option value="NULL"></option>
                             <?php
                                 $sql = "SELECT * FROM tb_casa ORDER BY ds_numero_casa";
 
                                 $results = mysqli_query($conn, $sql) or die("Erro ao retornar CASA");
 
                                 if ($results->num_rows) {
-                                    while ($dados = $results->fetch_array()) {
-                                        
-                                        
+                                    while ($dados = $results->fetch_array()) {    
+                                    
+                                        $id_casa = $dados['id_casa'];
+                                        $ds_numero_casa = $dados['ds_numero_casa'];
                                         $casaSelected = "";
-                                        $ds_numero_casa = $dados['ds_numero_casa'];      
-                                        
-                                        if ($ds_numero_casa ==  $num_casa_morador){
+                                            
+                                        if($fk_casa == $id_casa){
                                             $casaSelected = "selected";
-                                        }
-
-                                        echo "<option $casaSelected value=$ds_numero_casa>$ds_numero_casa</option>";
+                                        }                                      
+                                        echo "<option $casaSelected value=$id_casa>$ds_numero_casa</option>";
                                     }
                                 } else
                                     echo "Nenhuma casa encontrada";
@@ -292,12 +293,12 @@ var arrayIDs = [];
 
             <?php
 
-            //Carrega os veiculos cadastrados ao editar visitante
+            //Carrega os veiculos cadastrados ao editar morador
             if ($id_morador != "") {
 
                 $sql = "SELECT * FROM tb_morador mor";
                 $sql .= " JOIN tb_veiculo tvei ON tvei.fk_morador = mor.id_morador";
-                $sql .= " WHERE mor.id_morador = " . $id_morador;
+                $sql .= " WHERE mor.id_morador = $id_morador";
 
 
                 $result = mysqli_query($conn, $sql) or die("Erro ao retornar dados do VEICULO do morador.");
@@ -310,11 +311,14 @@ var arrayIDs = [];
                     $fk_cor_veiculo = $dados['fk_cor_veiculo'];
                     $fk_tipo_veiculo = $dados['fk_tipo_veiculo']; ?>
 
+                    <input type="hidden" name="hidIdVeiculo<?php echo $i ?>" id="hidIdVeiculo<?php echo $i ?>" value="<?php echo $id_veiculo ?>">
+
+
                     <div class="row" id="linhacarro<?php echo $i ?>">
                         <div class="form-group col-md-4">
                             <label for="cboTipoVeiculo<?php echo $i ?>">Tipo Veículo</label>
                             <select class="form-select" id="cboTipoVeiculo<?php echo $i ?>" name="cboTipoVeiculo<?php echo $i ?>"  onchange="placaBicicleta(<?php echo $i ?>)" >
-                                <option value="0"></option>
+                                <option value="NULL"></option>
                                 <?php
                                 $sql = "SELECT * FROM tb_tipo_veiculo ORDER BY ds_tipo_veiculo";
                                 $results = mysqli_query($conn, $sql) or die("Erro ao retornar TIPOS DE VEICULO");
@@ -349,7 +353,7 @@ var arrayIDs = [];
                         <div class="form-group col-md-3">
                             <label for="cboCorVeiculo<?php echo $i ?>">Cor Veículo</label>
                             <select class="form-select" name="cboCorVeiculo<?php echo $i ?>" id="cboCorVeiculo<?php echo $i ?>">
-                                <option value="0"></option>
+                                <option value="NULL"></option>
                                 <?php
 
                                 $sql = "SELECT * FROM tb_cor_veiculo ORDER BY ds_cor_veiculo";
@@ -412,7 +416,7 @@ var arrayIDs = [];
                 </button>
             <?php } else { ?>
                 <button type="button" class="btn btn-success btn-lg" name="btnEditarMorador" id="btnEditarMorador" onClick="">
-                    <img src="../../../bootstrap-icons/check-square-fill.svg" alt=""> Salvar&nbsp;
+                    <img src="../../../bootstrap-icons/check-square-fill.svg" alt=""> Salvar Edição&nbsp;
                 </button>
             <?php } ?>
 
@@ -477,7 +481,7 @@ var arrayIDs = [];
                     '<div class="form-group col-md-4">' +
                     '<label for="cboTipoVeiculo' + i + '">Tipo Veículo</label>' +
                     '<select class="form-select" id="cboTipoVeiculo' + i + '" name="cboTipoVeiculo' + i + '" onchange="placaBicicleta(' + i + ')">' +
-                    '<option value="0"></option>' +
+                    '<option value="NULL"></option>' +
                     <?php
                     $sql = "SELECT * FROM tb_tipo_veiculo ORDER BY ds_tipo_veiculo";
                     $results = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
@@ -503,7 +507,7 @@ var arrayIDs = [];
                     '<div class="form-group col-md-3">' +
                     '<label for="cboCorVeiculo' + i + '">Cor Veículo</label>' +
                     '<select class="form-select" name="cboCorVeiculo' + i + '" id="cboCorVeiculo' + i + '">' +
-                    '<option value="0"></option>' +
+                    '<option value="NULL"></option>' +
                     <?php
                     $sql = "SELECT * FROM tb_cor_veiculo ORDER BY ds_cor_veiculo";
                     $results = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
@@ -565,15 +569,17 @@ var arrayIDs = [];
 
         function removeLinhaVeiculoEdit(id_veiculo, id_morador){
 
-//            console.log("valor do id passado remocao edit: " + id_veiculo)
-//            console.log("valor do visitante: " + id_visitante);
-
             $("#hidIdDeletarVeiculo").val(id_veiculo);
             $("#hidIdMorador").val(id_morador);
             
             var form = document.getElementById("form_sf_system");
             form.action = "edit_morador.php";
             form.submit();
+
+            //---Funcionalidade copiada do visitante. Ainda não é necessário este tipo de validação para morador --
+
+            //Invoca função para validar a deleção dos veículos
+            // validaDelecaoVeiculo(id_veiculo);
         }
 
         function removeLinhaVeiculo(id){
@@ -593,10 +599,9 @@ var arrayIDs = [];
             return false;
         }
 
-
         $("#btnEditarMorador").click(function() {
 
-            //var contadorCarros = i;
+            var contadorCarros = i;
 
             /*Necessário, pois quando o usuario excluia algum carro da lista dinamica
             dava erro no insert*/
@@ -606,17 +611,122 @@ var arrayIDs = [];
                 $("#hidArrayIdCamposVeiculos").val(-1);
             }
 
-            //Atribui valor ao campo hiden para ser resgatado no grava via post
-            // $("#hidArrayIdCamposVeiculos").val(i);
+            validaCamposMorador();
+
+        });
+
+        //Invoca mensagem personalizada para deleção de veículos
+        function exibeMensagemVeiculo(msg) {
+        mensagem = "<div class='alert alert-danger text-center' role='alert'>" + msg + "</div>";
+        return mensagem
+        }
+
+        //Invoca mensagem personalizada para deleção de morador
+        function exibeMensagem(msg) {
+            mensagem = "<div class='alert alert-danger text-center' role='alert'>Falha ao criar morador: " + msg + "</div>";
+            return mensagem
+        }
+
+        function validaCamposMorador() {
+
+            var isChkLocatario = $("#chkLocatario").is(":checked");
+            var txtNomeMorador = $("#txtNomeMorador").val();
+            var cboNumeroDaCasa = $("#cboNumeroDaCasa").val();
+            var txtDocumentoMorador = $("#txtDocumentoMorador").val();
+            var txtTelefoneUmMorador = $("#txtTelefoneUmMorador").val();
+
+            var contadorCarros = i;
+
+            //Verifica se campos estão vazios para salvar
+            $("#txtNomeMorador").html("");
+            if (txtNomeMorador == "") {
+                msg = "<b>Digite um NOME</b>";
+                $("#containeralert").html(exibeMensagem(msg));
+                alert("Um ou mais campos com erros. Por favor revise-os");
+                return false;
+            }
+
+            //Verifica se campos estão vazios para salvar
+            if (cboNumeroDaCasa == "NULL") {
+                msg = "<b>Escolha uma CASA</b>";
+                $("#containeralert").html(exibeMensagem(msg));
+                alert("Um ou mais campos com erros. Por favor revise-os");
+                return false;
+            }
+
+            //Verifica se campos estão vazios para salvar
+            $("#txtDocumentoMorador").html("");
+            if (txtDocumentoMorador == "") {
+                msg = "<b>Digite um DOCUMENTO</b>";
+                $("#containeralert").html(exibeMensagem(msg));
+                alert("Um ou mais campos com erros. Por favor revise-os");
+                return false;
+            }
+
+            //Verifica se campos estão vazios para salvar
+            $("#txtTelefoneUmMorador").html("");
+            if (txtTelefoneUmMorador == "") {
+                msg = "<b>Digite um TELEFONE 1</b>";
+                $("#containeralert").html(exibeMensagem(msg));
+                alert("Um ou mais campos com erros. Por favor revise-os");
+                return false;
+            }
+
+            if (isChkLocatario) {
+
+                var txtNomeLocatario = $("#txtNomeLocatario").val();
+                var txtDocumentoLocatario = $("#txtDocumentoLocatario").val();
+                // var txtDataNascimentoLocatario = $("#txtDataNascimentoLocatario").val();
+
+                
+                $("#txtNomeLocatario").html("");
+                if (txtNomeLocatario == "") {
+                    msg = "<b>Digite um NOME para o locatário</b>";
+                    $("#containeralert").html(exibeMensagem(msg));
+                    alert("Um ou mais campos com erros. Por favor revise-os");
+                    return false;
+                }
+                
+                $("#txtDocumentoLocatario").html("");
+                if (txtDocumentoLocatario == "") {
+                    msg = "<b>Digite um DOCUMENTO para o locatário</b>";
+                    $("#containeralert").html(exibeMensagem(msg));
+                    alert("Um ou mais campos com erros. Por favor revise-os");
+                    return false;
+                }
+                
+            }
+
+            //Loop para validar os campos dos veículos cadastrados do visitante
+            for (j = 0; j < contadorCarros; j++) {
+
+                if ($("#cboTipoVeiculo" + j).val() == "NULL") {
+                    msg = "<b>Escolha um TIPO VEÍCULO do veículo " + (j + 1) + "</b>";
+                    $("#containeralert").html(exibeMensagem(msg));
+                    alert("Um ou mais campos com erros. Por favor revise-os");
+                    return false;
+                }
+
+                if ($("#txtPlacaVeiculoMorador" + j).val() == "") {
+                    msg = "<b>Digite a PLACA do veículo " + (j + 1) + "</b>";
+                    $("#containeralert").html(exibeMensagem(msg));
+                    alert("Um ou mais campos com erros. Por favor revise-os");
+                    return false;
+                }
+
+                if ($("#cboCorVeiculo" + j).val() == "NULL") {
+                    msg = "<b>Escolha a COR VEÍCULO do veículo " + (j + 1) + "</b>";
+                    $("#containeralert").html(exibeMensagem(msg));
+                    alert("Um ou mais campos com erros. Por favor revise-os");
+                    return false;
+                }
+
+            }
 
             var form = document.getElementById("form_sf_system");
             form.action = "grava_morador.php";
             form.submit();
-        });
 
-        function exibeMensagem(msg) {
-            mensagem = "<div class='alert alert-danger text-center' role='alert'>Falha ao criar morador: " + msg + "</div>";
-            return mensagem
         }
         
         
@@ -645,68 +755,7 @@ var arrayIDs = [];
 
         $("#btnSalvarNovoMorador").click(function() {
 
-            var txtNomeMorador = $("#txtNomeMorador").val();
             var txtDocumentoMorador = $("#txtDocumentoMorador").val();
-            var txtNomeLocatario = $("#txtNomeLocatario").val();
-            var txtDocumentoLocatario = $("#txtDocumentoLocatario").val();
-            var txtDataNascimentoMorador = $("#txtDataNascimentoMorador").val();
-            var txtDataNascimentoLocatario = $("#txtDataNascimentoLocatario").val();
-            
-            //var contadorCarros = i;
-
-            //Verifica se campos estão vazios para salvar
-            $("#txtNomeMorador").html("");
-            if (txtNomeMorador == "") {
-                msg = "<b>Digite um NOME do morador</b>";
-                $("#containeralert").html(exibeMensagem(msg));
-                alert("Um ou mais campos com erros. Por favor revise-os");
-                return false;
-            }
-
-            $("#txtDocumentoMorador").html("");
-            if (txtDocumentoMorador == "") {
-                msg = "<b>Digite um DOCUMENTO do morador</b>";
-                $("#containeralert").html(exibeMensagem(msg));
-                alert("Um ou mais campos com erros. Por favor revise-os");
-                return false;
-            }
-
-            $("#txtDataNascimentoMorador").html("");
-            if (txtDataNascimentoMorador == "") {
-                msg = "<b>Escolha uma DATA NASCIMENTO do morador</b>";
-                $("#containeralert").html(exibeMensagem(msg));
-                alert("Um ou mais campos com erros. Por favor revise-os");
-                return false;
-            }
-            
-            
-            
-            if ( $("#chkLocatario").is(":checked")) {
-                
-                $("#txtNomeLocatario").html("");
-                if (txtNomeLocatario == "") {
-                    msg = "<b>Digite um NOME para o locatário</b>";
-                    $("#containeralert").html(exibeMensagem(msg));
-                    alert("Um ou mais campos com erros. Por favor revise-os");
-                    return false;
-                }
-                
-                $("#txtDocumentoLocatario").html("");
-                if (txtDocumentoLocatario == "") {
-                    msg = "<b>Digite um DOCUMENTO para o locatário</b>";
-                    $("#containeralert").html(exibeMensagem(msg));
-                    alert("Um ou mais campos com erros. Por favor revise-os");
-                    return false;
-                }
-                
-                $("#txtDataNascimentoLocatario").html("");
-                if (txtDataNascimentoLocatario == "") {
-                    msg = "<b>Escolha uma DATA NASCIMENTO do locatário</b>";
-                    $("#containeralert").html(exibeMensagem(msg));
-                    alert("Um ou mais campos com erros. Por favor revise-os");
-                    return false;
-                }
-            }
 
             /*Necessário, pois quando o usuario excluia algum carro da lista dinamica
             dava erro no insert*/
@@ -719,14 +768,52 @@ var arrayIDs = [];
             //Atribui valor ao campo hiden para ser resgatado no grava via post
             $("#hidContadorVeiculos").val(i);
             
-            
 
             // Invoca a função via Ajax para verificar se existe visitante semelhante
             validaMorador(txtDocumentoMorador);
 
         });
 
+        //---Funcionalidade copiada do visitante. Ainda não é necessário este tipo de validação para morador --
+
+        //Ajax para deletar e apresentar a mensagem de erro caso nao possa deletar veículo vinculado a alguma visita 
+        // function validaDelecaoVeiculo(id_veiculo) {
+
+        //     $.ajax({
+        //         url: 'delete_veiculo_morador.php',
+        //         type: 'POST',
+        //         data: "id_veiculo=" + id_veiculo,
+        //         beforeSend: function() {
+        //             // loading_show();
+        //         },
+        //         success: function(data) {
+        //             // loading_hide();
+        //             $mensagem = data;
+        //             $("#containeralert").html($mensagem);
+        //             if ($mensagem != "") {
+        //                 msg = $mensagem;
+        //                 $("#containeralert").html(exibeMensagemVeiculo(msg));
+        //                 return false;
+        //             }
+
+        //             var form = document.getElementById("form_sf_system");
+        //             form.action = "edit_morador.php";
+        //             form.submit();
+        //             //Define um tempo para o elemento sumir da tela.
+        //             // setTimeout(function(){
+        //             //     $("#containeralert").fadeOut('Slow');
+        //             // },4000)
+        //         },
+        //         error: function(data) {
+        //             console.log("Ocorreu erro ao VALIDAR usuário via AJAX.");
+        //             // $('#cboCidade').html("Houve um erro ao carregar");
+        //         }
+        //     });
+
+        // }
+
         function validaMorador(txtDocumentoMorador) {
+
 
             $.ajax({
                 url: '/pesquisas_ajax/verifica_se_morador_existe.php',
@@ -738,18 +825,17 @@ var arrayIDs = [];
                 success: function(data) {
                     
                     var mensagem = data;
-
+                    
                     if (mensagem == "") {
-                        var form = document.getElementById("form_sf_system");;
-                        form.action = "grava_morador.php";
-                        form.submit();
-                    } else {
-                   
-                        mensagem = data;
+
+                        validaCamposMorador();
+
+                    } 
+                    else {
                         $("#containeralert").html(mensagem);
                         alert("Um ou mais campos com erros. Por favor revise-os");
-                        
                     }
+                    // }
                     //Define um tempo para o elemento sumir da tela.
                     // setTimeout(function(){
                     //     $("#containeralert").fadeOut('Slow');
@@ -764,8 +850,6 @@ var arrayIDs = [];
         }
 
         function exlcuirMorador(id_morador) {
-
-//            console.log(id_morador);
 
             $("#hidIdMorador").val(id_morador);
             $("#hidIdOperacaoDeletar").val(true);

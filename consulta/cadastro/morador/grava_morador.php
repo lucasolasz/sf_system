@@ -7,12 +7,22 @@ require_once $_SESSION['caminhopadrao'] . "conexao.php";
 $id_morador = $_POST["hidIdMorador"];
 $txtNomeMorador = $_POST["txtNomeMorador"];
 $cboNumeroDaCasa = $_POST["cboNumeroDaCasa"];
-$txtDocumentoMorador = $_POST["txtDocumentoMorador"];
+$txtDocumentoMorador = trim($_POST["txtDocumentoMorador"]);
 $txtDataNascimentoMorador = $_POST["txtDataNascimentoMorador"];
 $txtTelefoneUmMorador = $_POST["txtTelefoneUmMorador"];
 $txtTelefoneDoisMorador = $_POST["txtTelefoneDoisMorador"];
 $txtEmailMorador = $_POST["txtEmailMorador"];
 $txtTelefoneEmergenciaMorador = $_POST["txtTelefoneEmergenciaMorador"];
+
+// echo "id_morador: " . $id_morador . "<br>";
+// echo "inicio numero casa " . $cboNumeroDaCasa . "<br>" ;
+// exit();
+
+
+//Necessário, pois o banco nao aceita este campo vazio e sim NULL
+if($txtDataNascimentoMorador == ""){
+    $txtDataNascimentoMorador = "NULL";
+}
 
 //Precisei fazer isto, pois quando o checkbox não é selecionado ele vem como "undefined"
 if (!isset($_POST["chkLocatario"])){
@@ -23,11 +33,17 @@ if (!isset($_POST["chkLocatario"])){
 
 if ($chkLocatario != "") {
    
-    $txtNomeLocatario = $_POST["txtNomeLocatario"];
-    $txtDocumentoLocatario = $_POST["txtDocumentoLocatario"];
+    $txtNomeLocatario = trim($_POST["txtNomeLocatario"]);
+    $txtDocumentoLocatario = trim($_POST["txtDocumentoLocatario"]);
     $txtDataNascimentoLocatario = $_POST["txtDataNascimentoLocatario"];
-    $txtTelefoneUmLocatario = $_POST["txtTelefoneUmLocatario"];
-    $txtTelefoneDoisLocatario = $_POST["txtTelefoneDoisLocatario"];
+
+    //Necessário, pois o banco nao aceita este campo vazio e sim NULL
+    if($txtDataNascimentoLocatario == ""){
+        $txtDataNascimentoLocatario = "NULL";
+    }
+
+    $txtTelefoneUmLocatario = trim($_POST["txtTelefoneUmLocatario"]);
+    $txtTelefoneDoisLocatario = trim($_POST["txtTelefoneDoisLocatario"]);
     
 }
 
@@ -53,9 +69,12 @@ if ($stringIdsVeiculos != "-1"){
 
     $arrayPlacaVeiculo = [];
     $arrayTipoVeiculo = [];
+    $arrayIdVeiculo = [];
 
     //Alimenta dinamicamente a quantidade de placas
     for ($i = 0; $i<$contadorVeiculos; $i++){
+
+        $arrayIdVeiculo[$i] = $_POST['hidIdVeiculo' . $arrayIdsVeiculos[$i] .''];
 
         $arrayTipoVeiculo[$i] = $_POST['cboTipoVeiculo'. $arrayIdsVeiculos[$i] .''];
 
@@ -76,7 +95,7 @@ if ($id_morador == "") {
     
     $sql = "INSERT INTO tb_morador ("
         . "nm_morador,"
-        . " num_casa_morador,"
+        . " fk_casa,"
         . " documento_morador,"
         . " dt_nascimento_morador,"
         . " tel_um_morador,"
@@ -85,13 +104,23 @@ if ($id_morador == "") {
         . " tel_emergencia"
         . ") VALUES ("
         . "'$txtNomeMorador',"
-        . "'$cboNumeroDaCasa',"
-        . "'$txtDocumentoMorador',"
-        . "'$txtDataNascimentoMorador',"
-        . "'$txtTelefoneUmMorador',"
+        . "$cboNumeroDaCasa,"
+        . "'$txtDocumentoMorador',";
+
+        //Validação para data vazia
+        if ($txtDataNascimentoMorador == "NULL"){
+            $sql .= "$txtDataNascimentoMorador,";
+        } else {
+            $sql .= "'$txtDataNascimentoMorador',";
+        }      
+
+        $sql .= "'$txtTelefoneUmMorador',"
         . "'$txtTelefoneDoisMorador',"
         . "'$txtEmailMorador',"
         . "'$txtTelefoneEmergenciaMorador')";
+
+        // echo $sql;
+        // exit();
     
 
     if (!mysqli_query($conn, $sql)) {
@@ -112,14 +141,21 @@ if ($id_morador == "") {
         
         
         if ($chkLocatario != ""){        
-        $sql = "UPDATE tb_morador SET"
-              . " flag_locatario = '" . $chkLocatario . "'"
-              . " ,nm_locatario = '" . $txtNomeLocatario . "'"
-              . " ,documento_locatario = '" . $txtDocumentoLocatario . "'"
-              . " ,dt_nascimento_locatario = '" . $txtDataNascimentoLocatario . "'"
-              . " ,tel_um_locatario = '" . $txtTelefoneUmLocatario . "'"
-              . " ,tel_dois_locatario = '" . $txtTelefoneDoisLocatario . "'"
-              . " WHERE id_morador = " . $proximoIdMorador;
+            $sql = "UPDATE tb_morador SET"
+                . " flag_locatario = '$chkLocatario'"
+                . " ,nm_locatario = '$txtNomeLocatario'"
+                . " ,documento_locatario = '$txtDocumentoLocatario'";
+
+            //Validação para data vazia
+            if ($txtDataNascimentoLocatario == "NULL"){
+                $sql .= " ,dt_nascimento_locatario = $txtDataNascimentoLocatario";
+            } else {
+                $sql .= " ,dt_nascimento_locatario = '$txtDataNascimentoLocatario'";
+            }      
+
+            $sql .= " ,tel_um_locatario = '$txtTelefoneUmLocatario'"
+              . " ,tel_dois_locatario = '$txtTelefoneDoisLocatario'"
+              . " WHERE id_morador = $proximoIdMorador";
         
     
             mysqli_query($conn, $sql) or die("Erro ao INSERIR locatário");
@@ -140,9 +176,9 @@ if ($id_morador == "") {
                     . "fk_tipo_veiculo"
                     . ") VALUES ("
                     . "'$arrayPlacaVeiculo[$i]',"
-                    . "'$proximoIdMorador',"
-                    . "'$arrayCorVeiculo[$i]',"
-                    . "'$arrayTipoVeiculo[$i]')";
+                    . "$proximoIdMorador,"
+                    . "$arrayCorVeiculo[$i],"
+                    . "$arrayTipoVeiculo[$i])";
                 
                 mysqli_query($conn, $sql) or die("Erro ao INSERIR veiculo do morador");
             };
@@ -159,15 +195,17 @@ if ($id_morador == "") {
 
     //Update dos dados do morador
     $sql = "UPDATE tb_morador SET"
-        . " nm_morador = '" . $txtNomeMorador . "'"
-        . " , num_casa_morador = '" . $cboNumeroDaCasa . "'"
-        . " , documento_morador = '" . $txtDocumentoMorador . "'"
-        . " , dt_nascimento_morador = '" . $txtDataNascimentoMorador . "'"
-        . " , tel_um_morador = '" . $txtTelefoneUmMorador . "'"
-        . " , tel_dois_morador = '" . $txtTelefoneDoisMorador . "'"
-        . " , email_morador = '" . $txtEmailMorador . "'"
-        . " , tel_emergencia = '" . $txtTelefoneEmergenciaMorador . "'"
-        . " WHERE id_morador = " . $id_morador;
+        . " nm_morador = '$txtNomeMorador'"
+        . " , fk_casa = $cboNumeroDaCasa"
+        . " , documento_morador = '$txtDocumentoMorador'"
+        . " , dt_nascimento_morador = '$txtDataNascimentoMorador'"
+        . " , tel_um_morador = '$txtTelefoneUmMorador'"
+        . " , tel_dois_morador = '$txtTelefoneDoisMorador'"
+        . " , email_morador = '$txtEmailMorador'"
+        . " , tel_emergencia = '$txtTelefoneEmergenciaMorador'"
+        . " WHERE id_morador = $id_morador";
+
+        // echo "cheguei no update: " . $cboNumeroDaCasa;
 
     if (!mysqli_query($conn, $sql)) {
         // echo "Erro ao atualizar o banco";
@@ -183,21 +221,30 @@ if ($id_morador == "") {
 
     } else {
         
-        if ($chkLocatario != ""){        
-        $sql = "UPDATE tb_morador SET"
-              . " flag_locatario = '" . $chkLocatario . "'"
-              . ", nm_locatario = '" . $txtNomeLocatario . "'"
-              . ", documento_locatario = '" . $txtDocumentoLocatario . "'"
-              . ", dt_nascimento_locatario = '" . $txtDataNascimentoLocatario . "'"
-              . ", tel_um_locatario = '" . $txtTelefoneUmLocatario . "'"
-              . ", tel_dois_locatario = '" . $txtTelefoneDoisLocatario . "'"
-              . " WHERE id_morador = " . $id_morador;
+        if ($chkLocatario != ""){  
+                  
+            $sql = "UPDATE tb_morador SET"
+                . " flag_locatario = '$chkLocatario'"
+                . ", nm_locatario = '$txtNomeLocatario'"
+                . ", documento_locatario = '$txtDocumentoLocatario'";
+              
+                 //Validação para data vazia
+                if ($txtDataNascimentoLocatario == "NULL"){
+                    $sql .= " ,dt_nascimento_locatario = $txtDataNascimentoLocatario";
+                } else {
+                    $sql .= " ,dt_nascimento_locatario = '$txtDataNascimentoLocatario'";
+                }
+
+            $sql .= ", tel_um_locatario = '$txtTelefoneUmLocatario'"
+              . ", tel_dois_locatario = '$txtTelefoneDoisLocatario'"
+              . " WHERE id_morador = $id_morador";
         
             mysqli_query($conn, $sql) or die("Erro ao ATUALIZAR LOCATÁRIO. Contate o Administrador do Sistema");
         
             
         } else {
             
+            //apaga os dados do locatário
             $sql = "UPDATE tb_morador SET"
               . " flag_locatario = ''"
               . ", nm_locatario = null"
@@ -205,7 +252,7 @@ if ($id_morador == "") {
               . ", dt_nascimento_locatario = null"
               . ", tel_um_locatario = null"
               . ", tel_dois_locatario = null"
-              . " WHERE id_morador = " . $id_morador;
+              . " WHERE id_morador = $id_morador";
 
             mysqli_query($conn, $sql) or die("Erro ao APAGAR DADOS LOCATÁRIO. Contate o Administrador do Sistema");
             
@@ -220,18 +267,18 @@ if ($id_morador == "") {
                 
                 /*Preciso realizar comparacao das placas para quando adiciono um novo carro
                 em um visitante que ja possuia outro carro cadastrado */
-                $sql = "SELECT * FROM tb_veiculo WHERE fk_morador = " . $id_morador;
+                $sql = "SELECT * FROM tb_veiculo WHERE fk_morador = $id_morador";
             
                 $results = mysqli_query($conn, $sql) or die("Erro ao retornar PLACAS na EDICAO do morador");
                 
 
                 while ($dados = $results->fetch_array()) {
 
-                    $ds_placa_veiculo = $dados['ds_placa_veiculo'];  
+                    $id_veiculo = $dados['id_veiculo'];  
 
                     /*Ao encontrar algum update, significa que a placa ja esta cadastrada e não precisa ser inserida
                     para evitar erro no banco*/
-                    if($arrayPlacaVeiculo[$i] == $ds_placa_veiculo){
+                    if($arrayIdVeiculo[$i] == $id_veiculo){
 
                         //Variavel contadora auxiliar 
                         $temUpdate += 1;
@@ -245,12 +292,12 @@ if ($id_morador == "") {
                 if ($temUpdate > 0 ) {
 
                     $sql = "UPDATE tb_veiculo SET"
-                    . " ds_placa_veiculo = '" . $arrayPlacaVeiculo[$i] . "'"
-                    . " , fk_cor_veiculo = '" . $arrayCorVeiculo[$i] . "'"
-                    . " , fk_tipo_veiculo = '" . $arrayTipoVeiculo[$i] . "'"
-                    . " WHERE ds_placa_veiculo = '" . $arrayPlacaVeiculo[$i] . "'";
+                    . " ds_placa_veiculo = '$arrayPlacaVeiculo[$i]'"
+                    . " , fk_cor_veiculo = $arrayCorVeiculo[$i]"
+                    . " , fk_tipo_veiculo = $arrayTipoVeiculo[$i]"
+                    . " WHERE id_veiculo = $arrayIdVeiculo[$i]";
             
-                    mysqli_query($conn, $sql) or die("Erro ao ATUALIZAR veiculo do visitante");
+                    mysqli_query($conn, $sql) or die("Erro ao ATUALIZAR veiculo do morador");
                     
                 } else {
 
@@ -261,9 +308,9 @@ if ($id_morador == "") {
                     . "fk_tipo_veiculo"
                     . ") VALUES ("
                     . "'$arrayPlacaVeiculo[$i]',"
-                    . "'$id_morador',"
-                    . "'$arrayCorVeiculo[$i]',"
-                    . "'$arrayTipoVeiculo[$i]')";
+                    . "$id_morador,"
+                    . "$arrayCorVeiculo[$i],"
+                    . "$arrayTipoVeiculo[$i])";
 
                     mysqli_query($conn, $sql) or die("Erro ao INSERIR veiculo do morador na EDICAO");
 
