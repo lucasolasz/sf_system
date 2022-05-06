@@ -5,43 +5,14 @@ require_once $_SESSION['caminhopadrao'] . "conexao.php";
 
 $id_visitante = $_POST["hidIdVisitante"];
 
+//Variavel usada para restringir a delecao de um visitante
+$fk_tipo_usuario_logado = $_SESSION['fk_tipo_usuario'];
+
+//Inicio do contador global auxiliar para o array dos veículos
 $i = 0;
 
-
-if (isset($_POST['hidIdDeletarVeiculo'])){
-    
-    $id_veiculo = intval($_POST['hidIdDeletarVeiculo']);
-
-    // echo var_dump($deleta_veiculo);
-
-    // exit();
-
-    if($id_veiculo != 0){
-
-        $sql = "DELETE FROM tb_veiculo WHERE id_veiculo = " . $id_veiculo;
-        
-        $resultsDeleteVeiculo = mysqli_query($conn, $sql) or die("Erro ao DELETAR veiculo");
-
-    }
-
-
-}
-
-
-
-
-
-// echo $opc_adicionar;
-// __halt_compiler();
-// 
 //Se vazio esta cadastrando novo visitante
 if ($id_visitante == "") {
-
-    $nm_visitante = "";
-    $documento_visitante = "";
-    $telefone_um_visitante = "";
-    $telefone_dois_visitante = "";
-
 
     $titulo_tela = "Novo Visitante";
 } else {
@@ -49,10 +20,8 @@ if ($id_visitante == "") {
     $titulo_tela = "Editar Visitante";
 
     $sql = "SELECT * FROM tb_visitante tvis";
-    $sql .= " WHERE id_visitante = " . $id_visitante;
+    $sql .= " WHERE id_visitante = $id_visitante";
 
-    // echo $sql;
-    // exit();
     $resultsVisitante = mysqli_query($conn, $sql) or die("Erro ao retornar dados do VISITANTE");
 
     while ($dados = mysqli_fetch_array($resultsVisitante)) {
@@ -64,8 +33,6 @@ if ($id_visitante == "") {
     }
 }
 
-// echo $id_visitante;
-// exit();
 ?>
 
 
@@ -100,9 +67,8 @@ if ($id_visitante == "") {
 </style>
 
 <script>
-
-var arrayIDs = [];
-
+    //Inicia o array que irá receber os índices de cada veículo
+    var arrayIDs = [];
 </script>
 
 <body>
@@ -198,7 +164,7 @@ var arrayIDs = [];
 
                 $sql = "SELECT * FROM tb_visitante tvi";
                 $sql .= " JOIN tb_veiculo tvei ON tvei.fk_visitante = tvi.id_visitante";
-                $sql .= " WHERE tvi.id_visitante = " . $id_visitante;
+                $sql .= " WHERE tvi.id_visitante = $id_visitante";
 
 
                 $result = mysqli_query($conn, $sql) or die("Erro ao retornar dados do VEICULO");
@@ -206,16 +172,22 @@ var arrayIDs = [];
                 //Atribui valor retornado para a variavel
                 while ($dados = mysqli_fetch_array($result)) {
 
+
+
                     $id_veiculo = $dados['id_veiculo'];
                     $ds_placa_veiculo = $dados['ds_placa_veiculo'];
                     $fk_cor_veiculo = $dados['fk_cor_veiculo'];
                     $fk_tipo_veiculo = $dados['fk_tipo_veiculo']; ?>
 
+                    <input type="hidden" name="hidIdVeiculo<?php echo $i ?>" id="hidIdVeiculo<?php echo $i ?>" value="<?php echo $id_veiculo ?>">
+
                     <div class="row" id="linhacarro<?php echo $i ?>">
+
+
                         <div class="form-group col-md-4">
                             <label for="cboTipoVeiculo<?php echo $i ?>">Tipo Veículo</label>
-                            <select class="form-select" id="cboTipoVeiculo<?php echo $i ?>" name="cboTipoVeiculo<?php echo $i ?>"  onchange="placaBicicleta(<?php echo $i ?>)" >
-                                <option value="0"></option>
+                            <select class="form-select" id="cboTipoVeiculo<?php echo $i ?>" name="cboTipoVeiculo<?php echo $i ?>" onchange="placaBicicleta(<?php echo $i ?>)">
+                                <option value="NULL"></option>
                                 <?php
                                 $sql = "SELECT * FROM tb_tipo_veiculo ORDER BY ds_tipo_veiculo";
                                 $results = mysqli_query($conn, $sql) or die("Erro ao retornar TIPOS DE VEICULO");
@@ -243,14 +215,14 @@ var arrayIDs = [];
 
                         <div class="form-group col-md-4">
                             <label for="txtPlacaVeiculoVisitante<?php echo $i ?>">Placa do Veículo</label>
-                            <input type="text" class="form-control" name="txtPlacaVeiculoVisitante<?php echo $i ?>" id="txtPlacaVeiculoVisitante<?php echo $i ?>" value="<?php echo $ds_placa_veiculo ?>" maxlength="11">
+                            <input type="text" class="form-control placaVeiculo" name="txtPlacaVeiculoVisitante<?php echo $i ?>" id="txtPlacaVeiculoVisitante<?php echo $i ?>" value="<?php echo $ds_placa_veiculo ?>" maxlength="11">
                         </div>
 
 
                         <div class="form-group col-md-3">
                             <label for="cboCorVeiculo<?php echo $i ?>">Cor Veículo</label>
                             <select class="form-select" name="cboCorVeiculo<?php echo $i ?>" id="cboCorVeiculo<?php echo $i ?>">
-                                <option value="0"></option>
+                                <option value="NULL"></option>
                                 <?php
 
                                 $sql = "SELECT * FROM tb_cor_veiculo ORDER BY ds_cor_veiculo";
@@ -279,24 +251,24 @@ var arrayIDs = [];
                         <div class="form-group col-md-1">
                             <label for="remInput<?php echo $i ?>">Remover</label>
                             <a class="btn btn-danger" href="javascript:void(0)" id="remInput<?php echo $i ?>" onclick="removeLinhaVeiculoEdit(<?php echo $id_veiculo ?>, <?php echo $id_visitante ?>)">
-                            <img src="../../../bootstrap-icons/trash.svg" alt="">                                
+                                <img src="../../../bootstrap-icons/trash.svg" alt="">
                             </a>
                         </div>
                     </div>
 
                     <script>
                         arrayIDs.push(<?php echo $i ?>)
-                        console.log(arrayIDs);
+                        // console.log(arrayIDs);
                     </script>
-            <?php 
-                /*Incrementa o valor de i depois de exibir os campos. 
+            <?php
+                    /*Incrementa o valor de i depois de exibir os campos. 
                 Tive que fazer desta forma, pois o contador das linhas estava
                 iniciando com 1 e nao com 0.*/
-                $i++; 
+                    $i++;
                 }
-            } 
+            }
             ?>
-
+            <!-- div que irá receber as linhas de veículos -->
             <div class="container p-0" id="dynamicDiv">
 
             </div>
@@ -306,20 +278,20 @@ var arrayIDs = [];
             <br>
 
             <button type="button" class="btn btn-success btn-lg" name="btnCancelarNovoVisitante" id="btnCancelarNovoVisitante" onClick="">Cancelar</button>
-
+            <!--Só exibe o botão salvar caso seja um novo visitante -->
             <?php if ($id_visitante == "") { ?>
                 <button type="button" class="btn btn-success btn-lg" name="btnSalvarNovoVisitante" id="btnSalvarNovoVisitante" onClick="">
-                    <img src="../../../bootstrap-icons/check-square-fill.svg" alt="" > Salvar&nbsp;
+                    <img src="../../../bootstrap-icons/check-square-fill.svg" alt=""> Salvar&nbsp;
                 </button>
             <?php } else { ?>
                 <button type="button" class="btn btn-success btn-lg" name="btnEditarVisitante" id="btnEditarVisitante" onClick="">
-                    <img src="../../../bootstrap-icons/check-square-fill.svg" alt=""> Salvar&nbsp;
+                    <img src="../../../bootstrap-icons/check-square-fill.svg" alt=""> Salvar Edição&nbsp;
                 </button>
             <?php } ?>
 
 
-
-            <?php if ($id_visitante != "") { ?>
+            <!-- Só exibe o botão excluir se for administrador -->
+            <?php if ($id_visitante != "" && $fk_tipo_usuario_logado == 1) { ?>
                 <button type="button" class="btn btn-danger btn-lg" name="btnExcluir" id="btnExcluir" onClick="exlcuirVisitante(<?php echo $id_visitante ?>)">
                     <img src="../../../bootstrap-icons/trash.svg" alt=""> Excluir&nbsp;
                 </button>
@@ -331,7 +303,6 @@ var arrayIDs = [];
 
     <script>
         var i = <?php echo $i ?>;
-        
 
         $(document).ready(function() {
 
@@ -347,8 +318,8 @@ var arrayIDs = [];
             $("#txtDocumento").keyup(function() {
                 $("#txtDocumento").val(this.value.match(/[0-9]*/));
             });
-            
-            
+
+
         });
 
 
@@ -357,12 +328,13 @@ var arrayIDs = [];
             var scntDiv = $('#dynamicDiv');
 
             $(document).on('click', '#addInput', function() {
-                
+
                 $('<div class="row" id="linhacarro' + i + '">' +
+                    '<input type="hidden" name="hidIdVeiculo' + i + '" id="hidIdVeiculo' + i + '" value="">' +
                     '<div class="form-group col-md-4">' +
                     '<label for="cboTipoVeiculo' + i + '">Tipo Veículo</label>' +
                     '<select class="form-select" id="cboTipoVeiculo' + i + '" name="cboTipoVeiculo' + i + '" onchange="placaBicicleta(' + i + ')">' +
-                    '<option value="0"></option>' +
+                    '<option value="NULL"></option>' +
                     <?php
                     $sql = "SELECT * FROM tb_tipo_veiculo ORDER BY ds_tipo_veiculo";
                     $results = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
@@ -388,7 +360,7 @@ var arrayIDs = [];
                     '<div class="form-group col-md-3">' +
                     '<label for="cboCorVeiculo' + i + '">Cor Veículo</label>' +
                     '<select class="form-select" name="cboCorVeiculo' + i + '" id="cboCorVeiculo' + i + '">' +
-                    '<option value="0"></option>' +
+                    '<option value="NULL"></option>' +
                     <?php
                     $sql = "SELECT * FROM tb_cor_veiculo ORDER BY ds_cor_veiculo";
                     $results = mysqli_query($conn, $sql) or die("Erro ao retornar dados");
@@ -414,59 +386,48 @@ var arrayIDs = [];
                     '</div>' +
                     '</div>').appendTo(scntDiv);
 
-                    /*Função que Adiciona valor ao final do array.
-                    Evitou a necessidade de criar variavel de controle da posicao do array*/
-                    arrayIDs.push(i);
+                /*Função que Adiciona valor ao final do array.
+                Evitou a necessidade de criar variavel de controle da posicao do array*/
+                arrayIDs.push(i);
 
-//                    console.log("fora do edit:" + arrayIDs);
-                    
-                    /*Incrementa o valor de i depois de exibir os campos. 
-                    Tive que fazer desta forma, pois o contador das linhas estava
-                    iniciando com 1 e nao com 0.*/
-                    i++;
+                //console.log("fora do edit:" + arrayIDs);
+
+                /*Incrementa o valor de i depois de exibir os campos. 
+                Tive que fazer desta forma, pois o contador das linhas estava
+                iniciando com 1 e nao com 0.*/
+                i++;
 
                 return false;
             });
 
-            
+
         });
-        
-        
-        
+  
         function placaBicicleta(linha_da_placa) {
-        
+
             id_tipo_veiculo = $("#cboTipoVeiculo" + linha_da_placa).val();
-            
-            if (id_tipo_veiculo == 4){
+
+            if (id_tipo_veiculo == 4) {
                 $("#txtPlacaVeiculoVisitante" + linha_da_placa).val("S/PLACA");
                 $("#txtPlacaVeiculoVisitante" + linha_da_placa).prop('readonly', true);
-            } else{
+            } else {
                 $("#txtPlacaVeiculoVisitante" + linha_da_placa).val("");
                 $("#txtPlacaVeiculoVisitante" + linha_da_placa).prop('readonly', false);
             }
-            
+
         }
 
+        function removeLinhaVeiculoEdit(id_veiculo, id_visitante) {
 
-        function removeLinhaVeiculoEdit(id_veiculo, id_visitante){
+            //Invoca função para validar a deleção dos veículos
+            validaDelecaoVeiculo(id_veiculo);
 
-            console.log("valor do id passado remocao edit: " + id_veiculo)
-            console.log("valor do visitante: " + id_visitante);
-
-
-            $("#hidIdVisitante").val(id_visitante);
-            $("#hidIdDeletarVeiculo").val(id_veiculo);
-
-
-            var form = document.getElementById("form_sf_system");
-            form.action = "edit_visitante.php";
-            form.submit();
         }
 
-        function removeLinhaVeiculo(id){
+        function removeLinhaVeiculo(id) {
 
             // console.log("valor do id passado: " + id)
-            
+
             /*Remove valor do array pelo indice.
             Informe a posicao que sera removido e em seguida a quantidade de itens 
             a partir da posicao indicada*/
@@ -475,8 +436,8 @@ var arrayIDs = [];
             // console.log("Array : " + arrayIDs)
 
             //Remove a linha do HTML via Jquery
-            $("#remInput"+ id).parents('#linhacarro'+ id).remove();   
-           
+            $("#remInput" + id).parents('#linhacarro' + id).remove();
+
             return false;
         }
 
@@ -487,27 +448,30 @@ var arrayIDs = [];
 
             /*Necessário, pois quando o usuario excluia algum carro da lista dinamica
             dava erro no insert*/
-            if (arrayIDs.length > 0){
+            if (arrayIDs.length > 0) {
                 $("#hidArrayIdCamposVeiculos").val(arrayIDs);
             } else {
                 $("#hidArrayIdCamposVeiculos").val(-1);
             }
 
-            //Atribui valor ao campo hiden para ser resgatado no grava via post
-            // $("#hidArrayIdCamposVeiculos").val(i);
+            validaCamposVisitante();
 
-            var form = document.getElementById("form_sf_system");
-            form.action = "grava_visitante.php";
-            form.submit();
         });
 
+        //Invoca mensagem personalizada para deleção de veículos
+        function exibeMensagemVeiculo(msg) {
+            mensagem = "<div class='alert alert-danger text-center' role='alert'>" + msg + "</div>";
+            return mensagem
+        }
+
+        //Invoca mensagem personalizada para deleção de visitantes
         function exibeMensagem(msg) {
             mensagem = "<div class='alert alert-danger text-center' role='alert'>Falha ao criar visitante: " + msg + "</div>";
             return mensagem
         }
 
-
-        $("#btnSalvarNovoVisitante").click(function() {
+        //Campos de validação doss campos do visitante
+        function validaCamposVisitante() {
 
             var txtNomeVisitante = $("#txtNomeVisitante").val();
             var txtDocumento = $("#txtDocumento").val();
@@ -527,11 +491,46 @@ var arrayIDs = [];
                 $("#containeralert").html(exibeMensagem(msg));
                 return false;
             }
-            
+
+
+            //Loop para validar os campos dos veículos cadastrados do visitante
+            for (j = 0; j < contadorCarros; j++) {
+
+                if ($("#cboTipoVeiculo" + j).val() == "NULL") {
+                    msg = "<b>Escolha um TIPO VEÍCULO do veículo " + (j + 1) + "</b>";
+                    $("#containeralert").html(exibeMensagem(msg));
+                    return false;
+                }
+
+                if ($("#txtPlacaVeiculoVisitante" + j).val() == "") {
+                    msg = "<b>Digite a PLACA do veículo " + (j + 1) + "</b>";
+                    $("#containeralert").html(exibeMensagem(msg));
+                    return false;
+                }
+
+                if ($("#cboCorVeiculo" + j).val() == "NULL") {
+                    msg = "<b>Escolha a COR VEÍCULO do veículo " + (j + 1) + "</b>";
+                    $("#containeralert").html(exibeMensagem(msg));
+                    return false;
+                }
+
+            }
+
+            var form = document.getElementById("form_sf_system");
+            form.action = "grava_visitante.php";
+            form.submit();
+
+        }
+
+
+
+        $("#btnSalvarNovoVisitante").click(function() {
+
+            var txtNomeVisitante = $("#txtNomeVisitante").val();
 
             /*Necessário, pois quando o usuario excluia algum carro da lista dinamica
             dava erro no insert*/
-            if (arrayIDs.length > 0){
+            if (arrayIDs.length > 0) {
                 $("#hidArrayIdCamposVeiculos").val(arrayIDs);
             } else {
                 $("#hidArrayIdCamposVeiculos").val(-1);
@@ -539,15 +538,53 @@ var arrayIDs = [];
 
             //Atribui valor ao campo hiden para ser resgatado no grava via post
             $("#hidContadorVeiculos").val(i);
-            
-            
 
-            // Invoca a função via Ajax para verificar se existe visitante semelhante
+            // Invoca a função via Ajax para verificar se existe NOME visitante semelhante
             validaVisitante(txtNomeVisitante);
 
         });
 
+
+        //Ajax para deletar e apresentar a mensagem de erro caso nao possa deletar veículo vinculado a alguma visita 
+        function validaDelecaoVeiculo(id_veiculo) {
+
+            $.ajax({
+                url: 'delete_veiculo.php',
+                type: 'POST',
+                data: "id_veiculo=" + id_veiculo,
+                beforeSend: function() {
+                    // loading_show();
+                },
+                success: function(data) {
+                    // loading_hide();
+                    $mensagem = data;
+                    $("#containeralert").html($mensagem);
+                    if ($mensagem != "") {
+                        msg = $mensagem;
+                        $("#containeralert").html(exibeMensagemVeiculo(msg));
+                        return false;
+                    }
+
+                    var form = document.getElementById("form_sf_system");
+                    form.action = "edit_visitante.php";
+                    form.submit();
+                    //Define um tempo para o elemento sumir da tela.
+                    // setTimeout(function(){
+                    //     $("#containeralert").fadeOut('Slow');
+                    // },4000)
+                },
+                error: function(data) {
+                    console.log("Ocorreu erro ao VALIDAR usuário via AJAX.");
+                    // $('#cboCidade').html("Houve um erro ao carregar");
+                }
+            });
+
+        }
+
+        //Ajax para verificar se visitante esta cadastrado
         function validaVisitante(txtNomeVisitante) {
+
+            console.log("nome visitante: " + typeof(txtNomeVisitante));
 
             $.ajax({
                 url: '/pesquisas_ajax/verifica_se_visitante_existe.php',
@@ -558,12 +595,13 @@ var arrayIDs = [];
                 },
                 success: function(data) {
                     // loading_hide();
+
+                    console.log("valor data: " + data);
                     $mensagem = data;
                     $("#containeralert").html($mensagem);
                     if ($mensagem == "") {
-                        var form = document.getElementById("form_sf_system");
-                        form.action = "grava_visitante.php";
-                        form.submit();
+
+                        validaCamposVisitante();
                     }
                     //Define um tempo para o elemento sumir da tela.
                     // setTimeout(function(){
@@ -580,12 +618,12 @@ var arrayIDs = [];
 
         function exlcuirVisitante(id_visitante) {
 
-            console.log(id_visitante);
+            // console.log(id_visitante);
 
             $("#hidIdVisitante").val(id_visitante);
             $("#hidIdOperacaoDeletar").val(true);
             var form = document.getElementById("form_sf_system");
-            form.action = "cad_visitante.php";
+            form.action = "grava_visitante.php";
             form.submit();
 
         }

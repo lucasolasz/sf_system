@@ -9,7 +9,6 @@ $sql = "SELECT * FROM tb_visitante";
 $results = $conn->query($sql);
 
 if (isset($_SESSION['corMensagem'])) {
-
     $corMensagem = $_SESSION['corMensagem'];
 }
 
@@ -17,48 +16,6 @@ if (isset($_POST['hidIdVisitante'])){
     $id_visitante = $_POST['hidIdVisitante'];
 }
 
-
-if (isset($_POST['hidIdOperacaoDeletar'])) {
-    
-    $opercaoDeletar = $_POST['hidIdOperacaoDeletar'];
-
-    if ($opercaoDeletar){
-    
-        $sql = "DELETE FROM tb_visitante WHERE id_visitante = " . $id_visitante;
-        
-        $resultsVisitante = mysqli_query($conn, $sql) or die("Erro ao DELETAR visitante");
-
-        $sql = "DELETE FROM tb_veiculo WHERE fk_visitante = " . $id_visitante;
-
-        $resultsVisitante = mysqli_query($conn, $sql) or die("Erro ao DELETAR veiculo");
-        
-              
-        if (!mysqli_query($conn, $sql)) {
-            // echo "Erro ao deletar o visitante";
-            // echo "Erro SQL: " . mysqli_error($conn);
-    
-            $_SESSION['mensagem'] = "Erro ao DELETAR Visitante! Contate o administrador do sistema.";
-            $_SESSION['corMensagem'] = "danger";
-            mysqli_close($conn);
-            header("Location: cad_visitante.php");
-            exit();
-        } else {
-    
-            $_SESSION['mensagem'] = "Visitante DELETADO com sucesso!";
-            $_SESSION['corMensagem'] = "success";
-            mysqli_close($conn);
-            header("Location: cad_visitante.php");
-            exit();
-        };
-    }
-}
-
-
-
-
-// echo $corMensagem;
-
-// __halt_compiler();
 
 ?>
 
@@ -114,7 +71,7 @@ if (isset($_POST['hidIdOperacaoDeletar'])) {
         </div>
         
         <br>
-        
+        <!-- div para receber a tabela resposta do ajax -->
         <div>
             <div id="resultadoVisita"></div>
         </div>
@@ -122,7 +79,9 @@ if (isset($_POST['hidIdOperacaoDeletar'])) {
     </form>
 
     <script>
-                
+        
+        
+        //Ajax para gerar e buscar os visitantes cadastrados
         function buscarNomeVisitante(nm_visitante){
             $.ajax({
                 url: '/pesquisas_ajax/pesquisar_nome_visitante.php',

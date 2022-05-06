@@ -10,14 +10,45 @@ $documento_visitante = trim($_POST["txtDocumento"]);
 $telefone_um_visitante = trim($_POST["txtTelefoneUm"]);
 $telefone_dois_visitante = trim($_POST["txtTelefoneDois"]);
 
+//Deletar visitante
+$opercaoDeletar = $_POST['hidIdOperacaoDeletar'];
+//Se verdadeiro, inicia o processo de deleção
+if ($opercaoDeletar){
 
+    $sql = "DELETE FROM tb_visitante WHERE id_visitante = $id_visitante";
+
+    if (!mysqli_query($conn, $sql)) {
+        
+        $numeroErro = mysqli_errno($conn);
+
+        //Caso aconteça o erro 1451, a chave primaria está vinculada a outra tabela. 
+        if($numeroErro == 1451){
+            $_SESSION['mensagem'] = "Não é possível DELETAR Visitante. Ele está vinculado a alguma visita"; 
+        } else { 
+            $_SESSION['mensagem'] = "Erro ao DELETAR Visitante! Contate o administrador do sistema.";
+        }
+        
+        $_SESSION['corMensagem'] = "danger";
+        header("Location: cad_visitante.php");
+        exit();
+    } else {
+
+        $_SESSION['mensagem'] = "Visitante DELETADO com sucesso!";
+        $_SESSION['corMensagem'] = "success";
+        mysqli_close($conn);
+        header("Location: cad_visitante.php");
+        exit();
+    };
+}
 
 
 //Inicia array dinamico para captura de veiculos de visitantes cadastrados
+//Ele possui os indices do array. Cada indice é referente a contagem de um veiculo
 $stringIdsVeiculos = $_POST["hidArrayIdCamposVeiculos"];
 
-// echo var_dump($stringIdsVeiculos);
-// exit();
+
+// echo var_dump($stringIdsVeiculos) ."<br>";
+
 
 if ($stringIdsVeiculos != "-1"){
 
@@ -34,20 +65,24 @@ if ($stringIdsVeiculos != "-1"){
 
     $arrayPlacaVeiculo = [];
     $arrayTipoVeiculo = [];
+    $arrayIdVeiculo = [];
 
     //Alimenta dinamicamente a quantidade de placas
     for ($i = 0; $i<$contadorVeiculos; $i++){
 
+        $arrayIdVeiculo[$i] = $_POST['hidIdVeiculo' . $arrayIdsVeiculos[$i] .''];
+
         $arrayTipoVeiculo[$i] = $_POST['cboTipoVeiculo'. $arrayIdsVeiculos[$i] .''];
 
-        $arrayPlacaVeiculo[$i] = $_POST['txtPlacaVeiculoVisitante'. $arrayIdsVeiculos[$i] .''];
+        $arrayPlacaVeiculo[$i] = trim($_POST['txtPlacaVeiculoVisitante'. $arrayIdsVeiculos[$i] .'']);
 
         $arrayCorVeiculo[$i]  = $_POST['cboCorVeiculo'. $arrayIdsVeiculos[$i] .'']; 
 
 
-        // echo $arrayTipoVeiculo[$i] . "<br>";
-        // echo $arrayPlacaVeiculo[$i] . "<br>";
-        // echo $arrayCorVeiculo[$i] . "<br>";
+        // echo "id veiculo = " . $arrayIdVeiculo[$i] . "<br>";
+        // echo "tipo veiculo = " . $arrayTipoVeiculo[$i] . "<br>";
+        // echo "placa veiculo = " . $arrayPlacaVeiculo[$i] . "<br>";
+        // echo "cor veiculo = " . $arrayCorVeiculo[$i] . "<br>";
         // exit();
     }
 
@@ -55,7 +90,7 @@ if ($stringIdsVeiculos != "-1"){
 
 
 
-//Se vazio está adicionando 
+//Se vazio está adicionando um novo visitante
 if ($id_visitante == "") {
 
     $mensagem = "";
@@ -70,9 +105,6 @@ if ($id_visitante == "") {
         . "'$documento_visitante',"
         . "'$telefone_um_visitante',"
         . "'$telefone_dois_visitante')";
-
-    // echo $sql;
-    // exit();
 
     if (!mysqli_query($conn, $sql)) {
 
@@ -104,9 +136,9 @@ if ($id_visitante == "") {
                     . "fk_tipo_veiculo"
                     . ") VALUES ("
                     . "'$arrayPlacaVeiculo[$i]',"
-                    . "'$proximoIdVisitante',"
-                    . "'$arrayCorVeiculo[$i]',"
-                    . "'$arrayTipoVeiculo[$i]')";
+                    . "$proximoIdVisitante,"
+                    . "$arrayCorVeiculo[$i],"
+                    . "$arrayTipoVeiculo[$i])";
 
                 mysqli_query($conn, $sql) or die("Erro ao INSERIR veiculo do visitante");
             };
@@ -122,11 +154,11 @@ if ($id_visitante == "") {
 
     //Update dos dados do visitante
     $sql = "UPDATE tb_visitante SET"
-        . " nm_visitante = '" . $nm_visitante . "'"
-        . " , documento_visitante = '" . $documento_visitante . "'"
-        . " , telefone_um_visitante = '" . $telefone_um_visitante . "'"
-        . " , telefone_dois_visitante = '" . $telefone_dois_visitante . "'"
-        . " WHERE id_visitante = " . $id_visitante;
+        . " nm_visitante = '$nm_visitante'"
+        . " , documento_visitante = '$documento_visitante'"
+        . " , telefone_um_visitante = '$telefone_um_visitante'"
+        . " , telefone_dois_visitante = '$telefone_dois_visitante'"
+        . " WHERE id_visitante = $id_visitante";
 
     if (!mysqli_query($conn, $sql)) {
         // echo "Erro ao atualizar o banco";
@@ -151,18 +183,18 @@ if ($id_visitante == "") {
                 
                 /*Preciso realizar comparacao das placas para quando adiciono um novo carro
                 em um visitante que ja possuia outro carro cadastrado */
-                $sql = "SELECT * FROM tb_veiculo WHERE fk_visitante = " . $id_visitante;
+                $sql = "SELECT * FROM tb_veiculo WHERE fk_visitante =  $id_visitante ";
             
                 $results = mysqli_query($conn, $sql) or die("Erro ao retornar PLACAS na EDICAO");
                 
 
                 while ($dados = $results->fetch_array()) {
 
-                    $ds_placa_veiculo = $dados['ds_placa_veiculo'];  
+                    $id_veiculo = $dados['id_veiculo'];  
 
                     /*Ao encontrar algum update, significa que a placa ja esta cadastrada e não precisa ser inserida
                     para evitar erro no banco*/
-                    if($arrayPlacaVeiculo[$i] == $ds_placa_veiculo){
+                    if($arrayIdVeiculo[$i] == $id_veiculo){
 
                         //Variavel contadora auxiliar 
                         $temUpdate += 1;
@@ -176,10 +208,10 @@ if ($id_visitante == "") {
                 if ($temUpdate > 0 ) {
 
                     $sql = "UPDATE tb_veiculo SET"
-                    . " ds_placa_veiculo = '" . $arrayPlacaVeiculo[$i] . "'"
-                    . " , fk_cor_veiculo = '" . $arrayCorVeiculo[$i] . "'"
-                    . " , fk_tipo_veiculo = '" . $arrayTipoVeiculo[$i] . "'"
-                    . " WHERE ds_placa_veiculo = '" . $arrayPlacaVeiculo[$i] . "'";
+                    . " ds_placa_veiculo = '$arrayPlacaVeiculo[$i]'"
+                    . " , fk_cor_veiculo =  $arrayCorVeiculo[$i]"
+                    . " , fk_tipo_veiculo =  $arrayTipoVeiculo[$i]"
+                    . " WHERE id_veiculo = $arrayIdVeiculo[$i]";
             
                     mysqli_query($conn, $sql) or die("Erro ao ATUALIZAR veiculo do visitante");
                     
@@ -192,12 +224,11 @@ if ($id_visitante == "") {
                     . "fk_tipo_veiculo"
                     . ") VALUES ("
                     . "'$arrayPlacaVeiculo[$i]',"
-                    . "'$id_visitante',"
-                    . "'$arrayCorVeiculo[$i]',"
-                    . "'$arrayTipoVeiculo[$i]')";
+                    . "$id_visitante,"
+                    . "$arrayCorVeiculo[$i],"
+                    . "$arrayTipoVeiculo[$i])";
 
                     mysqli_query($conn, $sql) or die("Erro ao INSERIR veiculo do visitante na EDICAO");
-
                 }
 
             }
@@ -209,4 +240,5 @@ if ($id_visitante == "") {
     $_SESSION['corMensagem'] = "warning";
     mysqli_close($conn);
     header("Location: cad_visitante.php");
+    exit();
 }
