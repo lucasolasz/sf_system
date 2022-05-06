@@ -1,7 +1,9 @@
 
 CREATE TABLE `tb_casa` (
-  `id_casa` smallint(6) NOT NULL,
-  `ds_numero_casa` VARCHAR(10) DEFAULT NULL
+	`id_casa` int(2) unsigned NOT NULL AUTO_INCREMENT,
+	`ds_numero_casa` varchar(10) DEFAULT NULL,
+	PRIMARY KEY (`id_casa`),
+	UNIQUE KEY `id_casa` (`id_casa`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
