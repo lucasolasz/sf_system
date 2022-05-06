@@ -137,20 +137,6 @@ $fimPaginas = ((($paginaGet + $limitePagina) < $totalPaginas) ? $paginaGet + $li
 	<br>
 
 	<div class="container">
-		<div class="alert alert-<?php echo $corMensagem; ?> text-center" role="alert">
-			<?php
-			if (isset($_SESSION['mensagem'])) {
-				echo $_SESSION['mensagem'];
-				unset(
-					$_SESSION['mensagem'],
-					$_SESSION['corMensagem']
-				);
-			}
-			?>
-		</div>
-	</div>
-
-	<div class="container">
 		<h2>Relatório Entrada e Saída</h2>
 		<br>
 	</div>
@@ -326,6 +312,7 @@ $fimPaginas = ((($paginaGet + $limitePagina) < $totalPaginas) ? $paginaGet + $li
 							<th>Nome Visitante</th>
 							<th>Tipo Visita</th>
 							<th>Tipo Veículo</th>
+							<th>Placa Veículo</th>
 							<th>Casa</th>
 							<th>Data Entrada</th>
 						</tr>
@@ -356,16 +343,17 @@ $fimPaginas = ((($paginaGet + $limitePagina) < $totalPaginas) ? $paginaGet + $li
 									<td><?php echo $nm_visitante ?></td>
 									<td><?php echo $ds_tipo_visita ?></td>
 									<td><?php echo $ds_tipo_veiculo ?></td>
+									<td><?php echo $ds_placa_veiculo ?></td>
 									<td><?php echo $ds_numero_casa ?></td>
 									<td><?php echo $dt_entrada_visita ?></td>
 								</tr>
 						<?php
 							}
 						} else
-							echo "<tr><td colspan='7' style='text-align: center'>Nenhum dado encontrado para o filtro informado.</td></tr>"
+							echo "<tr><td colspan='8' style='text-align: center'>Nenhum dado encontrado para o filtro informado.</td></tr>"
 						?>
 						<tr>
-							<td colspan='7'>
+							<td colspan='8'>
 								<nav>
 									<ul class="pt-3 pagination justify-content-center pagination-sm">
 										<?php
