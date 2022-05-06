@@ -4,6 +4,10 @@ session_start();
 
 require_once $_SESSION['caminhopadrao'] . "conexao.php";
 
+//Define o timezone para são paulo
+date_default_timezone_set('America/Sao_Paulo');
+
+
 $id_usuarioLogado =  $_SESSION['usuarioID'];
 $nm_usuarioLogado = $_SESSION['usuarioNome'];
 $id_visita = $_POST["hidIdVisita"];
