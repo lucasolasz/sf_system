@@ -78,6 +78,7 @@ if ($id_visitante == "") {
     <form name="form_sf_system" id="form_sf_system" method="POST">
 
         <input type="hidden" name="hidIdVisitante" id="hidIdVisitante" value="<?php echo $id_visitante ?>">
+        <input type="hidden" name="hidIdOperacaoEntrada" id="hidIdOperacaoEntrada" value="">
         <input type="hidden" name="hidIdOperacaoDeletar" id="hidIdOperacaoDeletar" value="">
         <input type="hidden" name="hidIdDeletarVeiculo" id="hidIdDeletarVeiculo" value="">
         <input type="hidden" name="hidContadorVeiculos" id="hidContadorVeiculos" value="">
@@ -296,6 +297,14 @@ if ($id_visitante == "") {
                     <img src="../../../bootstrap-icons/trash.svg" alt=""> Excluir&nbsp;
                 </button>
             <?php } ?>
+
+
+            <?php if ($id_visitante == "") { ?>
+                <button type="button" class="btn btn-success btn-lg" name="btnEntradaVisitaEdit" id="btnEntradaVisitaEdit" onClick="entradaVisitaEdit(<?php echo $id_visitante ?>)">
+                        <img src="../../../bootstrap-icons/arrow-up-circle.svg" alt=""> Salvar e Entrada Visita&nbsp;
+                </button>
+           <?php  } ?>
+
 
         </div>
     </form>
@@ -614,6 +623,30 @@ if ($id_visitante == "") {
                 }
             });
 
+        }
+
+        //Salva e da entrada diretamente pela tela de cadastro
+        function entradaVisitaEdit(id_visitante) {
+
+            var txtNomeVisitante = $("#txtNomeVisitante").val();
+
+            /*Necessário, pois quando o usuario excluia algum carro da lista dinamica
+            dava erro no insert*/
+            if (arrayIDs.length > 0) {
+                $("#hidArrayIdCamposVeiculos").val(arrayIDs);
+            } else {
+                $("#hidArrayIdCamposVeiculos").val(-1);
+            }
+
+            //Atribui valor ao campo hiden para ser resgatado no grava via post
+            $("#hidContadorVeiculos").val(i);
+
+            //Envio dos dados para dar entrada diretamente
+            $("#hidIdOperacaoEntrada").val(true);
+
+            // Invoca a função via Ajax para verificar se existe NOME visitante semelhante
+            validaVisitante(txtNomeVisitante);
+                       
         }
 
         function exlcuirVisitante(id_visitante) {

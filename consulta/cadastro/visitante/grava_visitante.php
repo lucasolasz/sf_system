@@ -9,6 +9,7 @@ $nm_visitante = trim($_POST["txtNomeVisitante"]);
 $documento_visitante = trim($_POST["txtDocumento"]);
 $telefone_um_visitante = trim($_POST["txtTelefoneUm"]);
 $telefone_dois_visitante = trim($_POST["txtTelefoneDois"]);
+$hidIdOperacaoEntrada = $_POST["hidIdOperacaoEntrada"];
 
 //Deletar visitante
 $opercaoDeletar = $_POST['hidIdOperacaoDeletar'];
@@ -142,7 +143,17 @@ if ($id_visitante == "") {
 
                 mysqli_query($conn, $sql) or die("Erro ao INSERIR veiculo do visitante");
             };
-        }   
+        }
+
+
+        /*Caso o usuário clique em entrada visita diretamente pela tela de cadastro é interceptado 
+        para ir para a pagina de cadastro*/
+        if($hidIdOperacaoEntrada){
+            
+            $_SESSION['id_visitante'] = $proximoIdVisitante;
+            header("Location: /entrada_saida/edit_visita_em_andamento.php");
+            exit();
+        }
 
         $mensagem = "Visitante CADASTRADO com sucesso!";
 

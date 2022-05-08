@@ -3,7 +3,18 @@ session_start();
 
 require_once $_SESSION['caminhopadrao'] . "conexao.php";
 
-$id_visitante = $_POST["hidIdVisitante"];
+//Utilizei deta forma pois, agora tenho opção de dar entrada da visita assim que é cadastrada
+if (isset($_POST["hidIdVisitante"])){
+
+    $id_visitante = $_POST["hidIdVisitante"];
+    
+} else if (isset($_SESSION['id_visitante'])){
+
+    $id_visitante = $_SESSION['id_visitante'];
+    unset($_SESSION['id_visitante']);
+}
+
+
 
 // echo $id_visitante;
 // exit();
