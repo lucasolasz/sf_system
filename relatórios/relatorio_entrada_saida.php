@@ -308,13 +308,14 @@ $fimPaginas = ((($paginaGet + $limitePagina) < $totalPaginas) ? $paginaGet + $li
 					<thead>
 						<tr>
 							<th>Porteiro Entrada</th>
-							<th>Porteiro Saida</th>
+							<th>Data Entrada</th>
+							<th>Hora Entrada</th>
+							<th>Data Saída</th>
+							<th>Hora Saída</th>
 							<th>Nome Visitante</th>
-							<th>Tipo Visita</th>
 							<th>Tipo Veículo</th>
 							<th>Placa Veículo</th>
 							<th>Casa</th>
-							<th>Data Entrada</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -326,10 +327,19 @@ $fimPaginas = ((($paginaGet + $limitePagina) < $totalPaginas) ? $paginaGet + $li
 								$nm_visitante = $dados['nm_visitante'];
 								$ds_tipo_visita = $dados['ds_tipo_visita'];
 								$dt_hora_entrada_visita = $dados['dt_hora_entrada_visita'];
+								$dt_hora_saida_visita = $dados['dt_hora_saida_visita'];
 								$ds_numero_casa = $dados['ds_numero_casa'];
 								//Precisa-se formatar a data do padrao americano para o br
 								$data = $dados['dt_entrada_visita'];
+								$dataSaida = $dados['dt_saida_visita'];
 								$dt_entrada_visita = date('d/m/Y', strtotime($data));
+
+								if($dataSaida == ""){
+									$dt_saida_visita = "";
+								} else {
+									$dt_saida_visita = date('d/m/Y', strtotime($dataSaida));
+								}
+								
 								$obs_visita = $dados['observacao_visita'];
 								$ds_placa_veiculo = $dados['ds_placa_veiculo'];
 								$ds_nome_usuario_entrada = $dados['usuarioEntrada'];
@@ -339,21 +349,23 @@ $fimPaginas = ((($paginaGet + $limitePagina) < $totalPaginas) ? $paginaGet + $li
 						?>
 								<tr>
 									<td><?php echo $ds_nome_usuario_entrada ?></td>
-									<td><?php echo $ds_nome_usuario_saida ?></td>
+									<td><?php echo $dt_entrada_visita ?></td>
+									<td><?php echo $dt_hora_entrada_visita ?></td>
+									<td><?php echo $dt_saida_visita ?></td>
+									<td><?php echo $dt_hora_saida_visita ?></td>
 									<td><?php echo $nm_visitante ?></td>
-									<td><?php echo $ds_tipo_visita ?></td>
 									<td><?php echo $ds_tipo_veiculo ?></td>
 									<td><?php echo $ds_placa_veiculo ?></td>
 									<td><?php echo $ds_numero_casa ?></td>
-									<td><?php echo $dt_entrada_visita ?></td>
+									
 								</tr>
 						<?php
 							}
 						} else
-							echo "<tr><td colspan='8' style='text-align: center'>Nenhum dado encontrado para o filtro informado.</td></tr>"
+							echo "<tr><td colspan='9' style='text-align: center'>Nenhum dado encontrado para o filtro informado.</td></tr>"
 						?>
 						<tr>
-							<td colspan='8'>
+							<td colspan='9'>
 								<nav>
 									<ul class="pt-3 pagination justify-content-center pagination-sm">
 										<?php
