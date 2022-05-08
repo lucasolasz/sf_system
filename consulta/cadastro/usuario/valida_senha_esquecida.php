@@ -21,8 +21,7 @@ if (isset($_POST['hidOperacaoUpdateSenha'])){
        
        
        $sql = "UPDATE tb_usuario SET ds_senha = md5('" .  $senha . "') WHERE ds_documento_usuario = '" . $hidDocumento . "'";
-       echo $sql;
-       exit();
+
         if (!mysqli_query($conn, $sql)) {
             
             $_SESSION['loginErro'] = "Erro ao ALTERAR a senha. Contate o Administrador do sistema.";
@@ -65,7 +64,7 @@ if (isset($_POST['hidOperacaoUpdateSenha'])){
 
         if(empty($resultado)){
 
-            $_SESSION['loginErro'] = "Usuário ou senha inválido";
+            $_SESSION['loginErro'] = "Usuário ou documento inválido";
             header("Location: esqueci_senha.php");
 
         }elseif (isset($resultado)){
@@ -75,7 +74,7 @@ if (isset($_POST['hidOperacaoUpdateSenha'])){
             header("Location: redefine_senha.php");
         }else{
 
-            $_SESSION['loginErro'] = "Usuário ou senha inválido";
+            $_SESSION['loginErro'] = "Usuário ou documento inválido";
             header("Location: esqueci_senha.php");
         } 
 
